@@ -1,0 +1,54 @@
+/* Contenedor Principal */
+.content-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; /* Altura mínima de toda la pantalla */
+  overflow-y: auto; /* Permite scroll si el contenido es muy grande */
+}
+
+/* Contenedor Centrado */
+.centered-container {
+  width: 100%;
+  max-width: 500px; /* Ancho máximo de la tarjeta */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Tarjeta Principal */
+.input-card {
+  width: 100%;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  transition: all 0.3s ease-in-out; /* Transición suave al cambiar de tamaño */
+
+  /* Contenido del Card */
+  &-content {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    /* El contenido dentro del router-outlet se adapta dinámicamente */
+    ion-router-outlet {
+      width: 100%;
+      display: block; /* Evita que el contenido se desborde */
+    }
+  }
+}
+
+/* Media Queries para Diferentes Tamaños de Pantalla */
+@media (max-width: 768px) {
+  .centered-container {
+    max-width: 90%; /* Más ancho en pantallas pequeñas */
+  }
+}
+
+@media (max-width: 480px) {
+  .centered-container {
+    max-width: 100%; /* Ancho completo en móviles */
+  }
+}

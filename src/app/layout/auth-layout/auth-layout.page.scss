@@ -1,0 +1,40 @@
+.input-card {
+    width: 100%;
+    max-width: 400px;
+    margin: 10vh auto;
+    border-radius: 16px;
+    text-align: center;
+  
+    ion-card-header {
+      background: #0078d7;
+      color: white;
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+    }
+  
+    ion-card-title {
+      font-size: 20px;
+      font-weight: bold;
+    }
+  
+    ion-item {
+      --border-color: #cccccc;
+      --border-radius: 8px;
+      margin-bottom: 16px;
+    }
+  
+    ion-input {
+      font-size: 16px;
+      --padding-start: 16px;
+      --padding-end: 16px;
+    }
+  
+    ion-button {
+      --background: #0078d7;
+      --background-hover: #005bb5;
+      --color: white;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+  }
+  

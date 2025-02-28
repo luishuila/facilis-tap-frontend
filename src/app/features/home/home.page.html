@@ -1,0 +1,50 @@
+<!-- src/app/features/home/home.page.html -->
+<ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" scrollEvents="true">
+  <div class="scrollable-header" [ngStyle]="{'opacity': headerOpacity, 'transform': 'translateY(' + headerOffset + 'px)'}">
+    <ion-header>
+      <ion-toolbar class="toolbar-with-icon">
+        <div class="toolbar-container">
+          <ion-title class="centered-title">Facilistap</ion-title>
+          <ion-button fill="clear" routerLink="/navigation/search" routerDirection="root" class="icon-button">
+            <ion-icon name="search" class="clickable-icon"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-toolbar>
+    </ion-header>
+
+    
+    <app-swiper 
+      [slides]="slidesTres" 
+      [slidesPerView]="3" 
+      [spaceBetween]="8" 
+      [loop]="true" 
+      [navigation]="true">
+    </app-swiper>
+
+    <app-swiper 
+      [slides]="slidesTres" 
+      [slidesPerView]="3" 
+      [spaceBetween]="8" 
+      [loop]="true" 
+      [navigation]="true">
+    </app-swiper>
+  </div>
+  <!-- <ion-content class="ion-padding">
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  
+    <p>Pull this content down to trigger the refresh.</p>
+  </ion-content> -->
+  <div class="cards-container">
+    <app-card
+      *ngFor="let item of exampleData"
+      [imageUrl]="item.imageUrl"
+      [title]="item.title"
+      [description]="item.description"
+      [location]="item.location"
+      [showInfoIcon]="item.showInfoIcon"
+      [showLocationIcon]="item.showLocationIcon">
+    </app-card>
+  </div>
+</ion-content>

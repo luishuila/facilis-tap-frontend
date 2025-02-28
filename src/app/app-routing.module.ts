@@ -3,20 +3,34 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'home',
-    loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
+    path: '',  // La ruta principal no debe redirigir automáticamente
+    loadChildren: () => import('./layout/main-layout/main-layout.module').then(m => m.MainLayoutPageModule)
   },
   {
-    path: '',
+    path: 'auth',  // La ruta principal no debe redirigir automáticamente
+    loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthPageModule)
+  },
+  // {
+  //   path: 'home',
+  //   loadChildren: () => import('./features/home/home.module').then(m => m.HomePageModule)
+  // },
+  {
+    path: '**',  // La ruta de comodín debe ir al final
     redirectTo: 'home',
     pathMatch: 'full'
-  },
+  }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: PreloadAllModules,
+      initialNavigation: 'enabledBlocking',  // ✅ Cambiado a 'enabledBlocking' para mayor control
+      onSameUrlNavigation: 'ignore',
+      scrollPositionRestoration: 'enabled',
+      
+    })
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

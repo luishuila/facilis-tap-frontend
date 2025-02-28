@@ -1,0 +1,30 @@
+<!-- src/app/shared/components/info-card/info-card.component.html -->
+<ion-card class="info-card">
+  <ion-img [src]="imageUrl" alt="Imagen principal" class="card-image"></ion-img>
+
+  <ion-card-header class="card-header">
+    <ion-card-title>{{ title }}</ion-card-title>
+  </ion-card-header>
+
+  <ion-card-content class="card-content">
+    <p class="description">{{ description }}</p>
+
+    <div class="card-icons">
+      <ion-icon 
+        *ngIf="showInfoIcon" 
+        name="information-circle-outline" 
+        (click)="onInfoClick()"
+        class="icon info-icon">
+      </ion-icon>
+
+      <ion-icon 
+        *ngIf="showLocationIcon" 
+        name="location-outline" 
+        (click)="onLocationClick()"
+        class="icon location-icon">
+      </ion-icon>
+
+      <span *ngIf="location" class="location-text">{{ location }}</span>
+    </div>
+  </ion-card-content>
+</ion-card>

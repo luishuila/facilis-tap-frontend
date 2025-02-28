@@ -1,0 +1,22 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Dos</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Menú Personalizado -->
+  <div class="custom-menu" >
+    <ion-list>
+      <ion-item *ngFor="let item of menuItems" button [routerLink]="['/settings']">
+        <ion-icon slot="start" [name]="item.icon"></ion-icon>
+        <ion-label>{{ item.label }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <!-- Contenido Principal -->
+  <div class="main-content">
+    <p>This is the settings page content.</p>
+  </div>
+</ion-content>

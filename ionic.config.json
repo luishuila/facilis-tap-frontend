@@ -1,0 +1,7 @@
+{
+  "name": "facilistap",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

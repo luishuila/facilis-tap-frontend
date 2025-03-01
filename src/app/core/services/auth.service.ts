@@ -14,7 +14,6 @@ export class AuthService {
 
   login(email: string, password: string): Observable<any> {
     const body = { email, password };
-    alert(`${this.apiUrl}auth/login`)
     return this.http.post<any>(`http://10.0.2.2:3000/auth/login`, body).pipe(
       tap(response => {
         if (response.access_token) {

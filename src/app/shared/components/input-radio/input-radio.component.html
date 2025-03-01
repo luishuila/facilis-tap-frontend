@@ -1,0 +1,10 @@
+<fieldset class="input-item">
+  <legend *ngIf="label">{{ label }}</legend>
+  <ion-radio-group [(ngModel)]="value" (ionChange)="selectValue($event.detail.value)">
+    <ion-item class="custom-input" *ngFor="let option of options">
+      <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+      <ion-label>{{ option.label }}</ion-label>
+      <ion-radio [value]="option.value" [disabled]="disabled"></ion-radio>
+    </ion-item>
+  </ion-radio-group>
+</fieldset>

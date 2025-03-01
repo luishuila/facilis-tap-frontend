@@ -1,13 +1,95 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>register</ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">register</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <ion-card class="input-card">
+    <ion-card-content>
+      <div class="container">
+        <h1 class="heading">🚀 Create Account</h1>
+        <p class="para">Sign up to get started!</p>
+
+        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+
+          <app-input formControlName="name" label="First Name" type="text" placeholder="John" icon="person">
+          </app-input>
+
+       <p class="error-text" *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)">
+  <ion-label class="red-text">
+    <span *ngIf="registerForm.get('name')?.errors?.['required']">{{ validationMessages['name']['required'] }}</span>
+    <span *ngIf="registerForm.get('name')?.errors?.['minlength']">{{ validationMessages['name']['minlength'] }}</span>
+  </ion-label>
+</p>
+
+          <app-input formControlName="lastname" label="Last Name" type="text" placeholder="Doe" icon="person">
+          </app-input>
+          <p class="error-text" *ngIf="registerForm.get('lastname')?.invalid && (registerForm.get('lastname')?.touched || registerForm.get('lastname')?.dirty)">
+            <ion-label class="red-text">
+              <span *ngIf="registerForm.get('lastname')?.errors?.['required']">{{ validationMessages['lastname']['required'] }}</span>
+              <span *ngIf="registerForm.get('lastname')?.errors?.['minlength']">{{ validationMessages['lastname']['minlength'] }}</span>
+            </ion-label>
+          </p>
+          
+
+          <app-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail">
+          </app-input>
+          <p class="error-text" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
+            <ion-label class="red-text">
+              <span *ngIf="registerForm.get('email')?.errors?.['required']">{{ validationMessages['email']['required'] }}</span>
+              <span *ngIf="registerForm.get('email')?.errors?.['email']">{{ validationMessages['email']['email'] }}</span>
+            </ion-label>
+          </p>
+    
+
+          <app-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed">
+          </app-input>
+          <p class="error-text" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
+            <ion-label class="red-text">
+              <span *ngIf="registerForm.get('password')?.errors?.['required']">{{ validationMessages['password']['required'] }}</span>
+              <span *ngIf="registerForm.get('password')?.errors?.['minlength']">{{ validationMessages['password']['minlength'] }}</span>
+            </ion-label>
+          </p>
+
+          <app-input-date *ngIf="registerForm.get('birth')" 
+          formControlName="birth" 
+          label="Fecha de Nacimiento" 
+          type="date" 
+          icon="calendar">
+        </app-input-date>
+        <p class="error-text" *ngIf="registerForm.get('birth')?.invalid && (registerForm.get('birth')?.touched || registerForm.get('birth')?.dirty)">
+          <ion-label class="red-text">
+            <span *ngIf="registerForm.get('birth')?.errors?.['required']">{{ validationMessages['birth']['required'] }}</span>
+          </ion-label>
+        </p>
+
+        <app-input-radio
+        label="Sexo"
+        icon="male-female"
+        [options]="[
+          { label: 'Masculino', value: 'Male' },
+          { label: 'Femenino', value: 'Female' },
+          { label: 'Otro', value: 'other' }
+        ]"
+        formControlName="gender">
+      </app-input-radio>
+<p class="error-text" *ngIf="registerForm.get('gender')?.invalid && (registerForm.get('gender')?.touched || registerForm.get('gender')?.dirty)">
+  <ion-label class="red-text">{{ validationMessages['gender']['required'] }}</ion-label>
+</p>
+          <app-btn 
+            label="Register" 
+            color="primary" 
+            customClass="primary-btn" 
+            expand="block"
+            type="submit"
+            [disabled]="registerForm.invalid"
+            (clicked)="onRegister()">  
+          </app-btn>
+
+          <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+          <p class="signup-text">
+            Already have an account?&nbsp;
+            <a [routerLink]="['/auth/login']">Login</a>
+          </p>
+
+        </form>
+      </div>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

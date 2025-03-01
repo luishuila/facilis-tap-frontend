@@ -10,6 +10,8 @@ import { MapsComponent } from './components/maps/maps.component';
 import { BtnComponent } from './components/btn/btn.component';
 import { InputComponent } from './components/input/input.component';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { InputDateComponent } from './components/input-date/input-date.component';
+import { InputRadioComponent } from './components/input-radio/input-radio.component';
 
 @NgModule({
   imports: [
@@ -22,12 +24,16 @@ import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
     CardComponent,
      MapsComponent,
      BtnComponent,
-      InputComponent],
+      InputComponent,
+      InputDateComponent,
+      InputRadioComponent],
+      
   exports:[ SwiperComponent,
     CardComponent, 
     MapsComponent,
     BtnComponent,
-    InputComponent],
+    InputComponent,
+    InputDateComponent, InputRadioComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

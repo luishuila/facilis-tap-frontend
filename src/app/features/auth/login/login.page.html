@@ -6,7 +6,7 @@
         <p class="para">Sign in to continue!</p>
 
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-          <!-- Input de Email -->
+
           <app-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail">
           </app-input>
 
@@ -14,9 +14,9 @@
             icon="lock-closed">
           </app-input>
 
-          <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-          <!-- Botón de Login -->
+
+
           <app-btn 
           label="Login" 
           color="primary" 
@@ -26,11 +26,18 @@
           [disabled]="loginForm.invalid"
           (clicked)="onLogin()">  
         </app-btn>
-        
 
-          <!--  <p class="forget-text"><a href="#">Forgot Password?</a></p>
-          <p class="signup-text">I'm a new user&nbsp;<a href="#">Sign Up?</a></p>
-         <app-btn label="Google Signin" icon="logo-google" color="light" customClass="google-btn" expand="block"></app-btn> -->
+
+        <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+        <p class="forget-text"><a href="#">Forgot Password?</a></p>
+        <br>
+        <p class="signup-text" [routerLink]="['/auth/register']">
+          I'm a new user&nbsp;
+          <a >Sign Up?</a>
+        </p>
+
+
         </form>
       </div>
     </ion-card-content>
@@ -40,6 +47,9 @@
 
 <!-- 
 
+        <p class="forget-text"><a href="#">Forgot Password?</a></p>
+          <p class="signup-text">I'm a new user&nbsp;<a href="#">Sign Up?</a></p>
+         <app-btn label="Google Signin" icon="logo-google" color="light" customClass="google-btn" expand="block"></app-btn>
 <ion-content [fullscreen]="true">
   <ion-card class="input-card">
     <ion-card-content>

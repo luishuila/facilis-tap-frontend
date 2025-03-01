@@ -1,4 +1,6 @@
 import { Component, OnInit , Input } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/core/services/auth.service';
 
 interface MenuItem {
   label: string;
@@ -22,11 +24,16 @@ export class SettingsPage implements OnInit {
     { label: 'Settings', link: '/settings', icon: 'settings' }
   ];
 
-  constructor() {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}
 
   toggleMenu() {
-    this.menuOpen = !this.menuOpen; // Alterna la visibilidad del menú
+    this.menuOpen = !this.menuOpen; 
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/auth']); 
   }
 }

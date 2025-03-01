@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
 
 // import { SwiperModule } from 'swiper/angular';
 
@@ -9,15 +9,33 @@ import { IonicModule } from '@ionic/angular';
 import { MapsComponent } from './components/maps/maps.component';
 import { BtnComponent } from './components/btn/btn.component';
 import { InputComponent } from './components/input/input.component';
+import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @NgModule({
   imports: [
       IonicModule,
     CommonModule,
-    
+    FormsModule
   ],
-  declarations: [SwiperComponent,CardComponent, MapsComponent,BtnComponent,InputComponent],
-  exports:[ SwiperComponent,CardComponent, MapsComponent,BtnComponent,InputComponent]
+  declarations: [
+    SwiperComponent,
+    CardComponent,
+     MapsComponent,
+     BtnComponent,
+      InputComponent],
+  exports:[ SwiperComponent,
+    CardComponent, 
+    MapsComponent,
+    BtnComponent,
+    InputComponent],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => InputComponent),
+      multi: true
+    }
+  ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class SharedPageModule {}
 

@@ -1,22 +1,21 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './core/guards/auth.guard';
+
 
 const routes: Routes = [
   {
-    path: '',  // La ruta principal no debe redirigir automáticamente
-    loadChildren: () => import('./layout/main-layout/main-layout.module').then(m => m.MainLayoutPageModule)
+    path: '',  
+    loadChildren: () => import('./layout/main-layout/main-layout.module').then(m => m.MainLayoutPageModule),
+    canActivate: [authGuard]
   },
   {
-    path: 'auth',  // La ruta principal no debe redirigir automáticamente
+    path: 'auth', 
     loadChildren: () => import('./features/auth/auth.module').then(m => m.AuthPageModule)
   },
-  // {
-  //   path: 'home',
-  //   loadChildren: () => import('./features/home/home.module').then(m => m.HomePageModule)
-  // },
   {
-    path: '**',  // La ruta de comodín debe ir al final
-    redirectTo: 'home',
+    path: '**',
+    redirectTo: 'auth', 
     pathMatch: 'full'
   }
 ];

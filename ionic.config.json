@@ -3,5 +3,10 @@
   "integrations": {
     "capacitor": {}
   },
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true,
+    "allowNavigation": "['192.168.1.120', '10.0.2.2']"
+  },
   "type": "angular"
 }

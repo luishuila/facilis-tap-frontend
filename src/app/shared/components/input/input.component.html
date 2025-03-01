@@ -1,3 +1,19 @@
-<p>
-  input works!
-</p>
+<fieldset class="input-item">
+  <legend *ngIf="label">{{ label }}</legend>
+  <ion-item class="custom-input">
+    <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+    <ion-input 
+      [type]="(type === 'password' && !isPasswordVisible) ? 'password' : 'text'"
+      [placeholder]="placeholder"
+      [(ngModel)]="value"
+      (ionInput)="onInputChange($event)"
+      [disabled]="disabled">
+    </ion-input>
+    <ion-icon 
+      *ngIf="type === 'password'" 
+      slot="end" 
+      [name]="isPasswordVisible ? 'eye-off' : 'eye'" 
+      (click)="togglePasswordVisibility()">
+    </ion-icon>
+  </ion-item>
+</fieldset>

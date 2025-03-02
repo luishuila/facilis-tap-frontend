@@ -12,6 +12,8 @@ import { InputComponent } from './components/input/input.component';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { InputDateComponent } from './components/input-date/input-date.component';
 import { InputRadioComponent } from './components/input-radio/input-radio.component';
+import { InputTextareaComponent } from './components/input-textarea/input-textarea.component';
+import { SelectComponent } from './components/select/select.component';
 
 @NgModule({
   imports: [
@@ -26,14 +28,21 @@ import { InputRadioComponent } from './components/input-radio/input-radio.compon
      BtnComponent,
       InputComponent,
       InputDateComponent,
-      InputRadioComponent],
+      InputRadioComponent,
+      InputTextareaComponent,
+      SelectComponent
+    ],
       
   exports:[ SwiperComponent,
     CardComponent, 
     MapsComponent,
     BtnComponent,
     InputComponent,
-    InputDateComponent, InputRadioComponent],
+    InputDateComponent, 
+    InputRadioComponent,
+    InputTextareaComponent,
+    SelectComponent
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

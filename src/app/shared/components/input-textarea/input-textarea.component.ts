@@ -1,38 +1,36 @@
-import { Component, Input, forwardRef, Optional, Inject, inject } from '@angular/core';
+import { Component, Input, forwardRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractControl } from '@angular/forms';
 import { ValidationService } from '../../../core/services/validate/validation.service';
 
-
 @Component({
-  selector: 'app-input',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
-  standalone: false,
+  selector: 'app-input-textarea',
+  templateUrl: './input-textarea.component.html',
+  styleUrls: ['./input-textarea.component.scss'],  
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => InputTextareaComponent),
       multi: true
     }
-  ]
+  ],
+  standalone: false,
 })
-export class InputComponent implements ControlValueAccessor {
-  @Input() label: string = '';
-  @Input() type: string = 'text';
-  @Input() placeholder: string = '';
-  @Input() icon: string = ''; 
-  @Input() disabled: boolean = false;
-  @Input() formControlName!: string; 
 
+export class InputTextareaComponent  implements ControlValueAccessor {
+  @Input() label: string = '';
+  @Input() placeholder: string = 'Escribe aquí...';
+  @Input() icon: string = 'document-text'; 
+  @Input() disabled: boolean = false;
+  @Input() formControlName!: string;
+  
   value: string = '';
-  isPasswordVisible: boolean = false;
-  control: AbstractControl | null = null; 
-  private validationService = inject(ValidationService); 
-  private controlContainer = inject(ControlContainer); 
+  control: AbstractControl | null = null;
+  private validationService = inject(ValidationService);
+  private controlContainer = inject(ControlContainer);
+
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
-
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
@@ -59,9 +57,5 @@ export class InputComponent implements ControlValueAccessor {
     const newValue: string = inputElement?.value ?? ''; 
     this.value = newValue;
     this.onChange(this.value);
-  }
-
-  togglePasswordVisibility(): void {
-    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }

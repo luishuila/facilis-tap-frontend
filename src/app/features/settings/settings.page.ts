@@ -19,8 +19,9 @@ export class SettingsPage implements OnInit {
     { label: 'Home', link: '/navigation/home', icon: 'home' },
     { label: 'Quote', link: '/navigation/quote', icon: 'chatbubble-ellipses-outline' },
     { label: 'Radio', link: '/navigation/radio', icon: 'radio' },
-    { label: 'Library', link: '/navigation/library', icon: 'library' },
+    { label: 'Library', link: '/navigation/library', icon: 'library'},
     { label: 'Search', link: '/navigation/search', icon: 'search' },
+    { label: 'Configuracion', link: '/navigation/personalinformation', icon: 'search' },
     { label: 'Settings', link: '/settings', icon: 'settings' }
   ];
 

@@ -15,7 +15,7 @@ export class LoginPage implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-   private authService: AuthService,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -31,20 +31,19 @@ export class LoginPage implements OnInit {
   }
 
   onLogin() {
-   
     if (this.loginForm.invalid) {
-      this.errorMessage = 'Por favor, completa los campos correctamente';
-      return;
+      Object.values(this.loginForm.controls).forEach((datos:any)=>{
+       datos.markAsTouched();
+      })
+      return ;
     }
-    alert('Hola mund')
+    
     const { email, password } = this.loginForm.value;
     this.authService.login(email, password).subscribe(response => {
-      alert(response)
       if (response) {
-        alert('Si paso')
         this.router.navigate(['/']); 
       } else {
-        this.errorMessage = `Credenciales incorrectas2 ${response} `;
+        this.errorMessage = `Credenciales incorrectas`;
       }
     });
   }

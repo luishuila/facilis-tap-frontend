@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Informacion Personal</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-segment>
+  <ion-segment-button value="first" content-id="first">
+    <ion-label>Datos </ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="second" content-id="second">
+    <ion-label>Direccion</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="third" content-id="third">
+    <ion-label>Credeciales</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-segment-view>
+  <ion-segment-content id="first">
+    <app-update-users-information></app-update-users-information>
+  </ion-segment-content>
+  <ion-segment-content id="second">
+    <app-address-form
+    [addressForm]="addressForm"
+    [countries]="countries"
+    [departments]="departments"
+    [cities]="cities"
+    [propertyType]="propertyType"
+    (addressSaved)="onAddressSaved($event)">
+  </app-address-form>
+  </ion-segment-content>
+  <ion-segment-content id="third">   
+     <app-update-users-credentials></app-update-users-credentials>
+  </ion-segment-content>
+</ion-segment-view>

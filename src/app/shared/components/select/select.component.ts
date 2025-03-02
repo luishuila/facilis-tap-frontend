@@ -1,38 +1,36 @@
-import { Component, Input, forwardRef, Optional, Inject, inject } from '@angular/core';
+import { Component, Input, forwardRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractControl } from '@angular/forms';
 import { ValidationService } from '../../../core/services/validate/validation.service';
 
-
 @Component({
-  selector: 'app-input',
-  templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
+  selector: 'app-select',
+  templateUrl: './select.component.html',
+  styleUrls: ['./select.component.scss'],
   standalone: false,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => SelectComponent),
       multi: true
     }
   ]
 })
-export class InputComponent implements ControlValueAccessor {
+export class SelectComponent implements ControlValueAccessor {
   @Input() label: string = '';
-  @Input() type: string = 'text';
-  @Input() placeholder: string = '';
-  @Input() icon: string = ''; 
+  @Input() placeholder: string = 'Selecciona una opción';
+  @Input() icon: string = 'list'; 
   @Input() disabled: boolean = false;
-  @Input() formControlName!: string; 
+  @Input() formControlName!: string;
+  @Input() options: { value: string, label: string }[] = []; 
 
   value: string = '';
-  isPasswordVisible: boolean = false;
-  control: AbstractControl | null = null; 
-  private validationService = inject(ValidationService); 
-  private controlContainer = inject(ControlContainer); 
+  control: AbstractControl | null = null;
+  private validationService = inject(ValidationService);
+  private controlContainer = inject(ControlContainer);
+
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
-
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
@@ -54,14 +52,8 @@ export class InputComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onInputChange(event: Event): void {
-    const inputElement = event.target as HTMLInputElement;
-    const newValue: string = inputElement?.value ?? ''; 
-    this.value = newValue;
+  onSelectionChange(event: any): void {
+    this.value = event.detail.value;
     this.onChange(this.value);
-  }
-
-  togglePasswordVisibility(): void {
-    this.isPasswordVisible = !this.isPasswordVisible;
   }
 }

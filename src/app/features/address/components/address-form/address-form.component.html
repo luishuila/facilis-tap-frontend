@@ -1,0 +1,107 @@
+<ion-content [fullscreen]="true">
+  <ion-card class="input-card">
+    <ion-card-content>
+      <div class="container">
+        <h1 class="heading">📍 Registrar Dirección</h1>
+        <p class="para">Ingrese la información de su dirección</p>
+
+        <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+          <app-select 
+            formControlName="country" 
+            label="País" 
+            placeholder="Seleccione un país"
+            icon="globe"
+            [options]="countries">
+          </app-select>
+
+  
+        
+          <app-select 
+            formControlName="department" 
+            label="Departamento/Estado" 
+            placeholder="Seleccione un departamento"
+            icon="map"
+            [options]="departments">
+          </app-select>
+
+          <app-select 
+            formControlName="cityState" 
+            label="Ciudad" 
+            placeholder="Seleccione una ciudad"
+            icon="location"
+            [options]="cities">
+          </app-select>
+
+          <app-input 
+            formControlName="latitude" 
+            label="Latitud" 
+            type="text" 
+            placeholder="Ej: 4.6097" 
+            icon="location">
+          </app-input>
+
+          <app-input 
+            formControlName="length" 
+            label="Longitud" 
+            type="text" 
+            placeholder="Ej: -74.0817" 
+            icon="navigate">
+          </app-input>
+
+          <app-input 
+            formControlName="street" 
+            label="Calle" 
+            type="text" 
+            placeholder="Ej: Calle 123" 
+            icon="business">
+          </app-input>
+
+          <app-input 
+            formControlName="race" 
+            label="Carrera" 
+            type="text" 
+            placeholder="Ej: Carrera 45" 
+            icon="location">
+          </app-input>
+
+          <app-input 
+            formControlName="neighborhood" 
+            label="Barrio" 
+            type="text" 
+            placeholder="Ej: Chapinero" 
+            icon="home">
+          </app-input>
+
+         
+          <app-input-textarea
+            formControlName="description" 
+            label="Descripción (Opcional)" 
+            placeholder="Detalles adicionales sobre la dirección">
+          </app-input-textarea>
+
+          <app-select 
+          formControlName="propertyType" 
+          label="Property Type" 
+          placeholder="Select a property type"
+          icon="home"
+          [options]="propertyType">
+
+        </app-select>
+        
+        <app-btn 
+        label="Guardar Dirección" 
+        color="primary" 
+        customClass="primary-btn" 
+        expand="block"
+        type="submit"
+        [disabled]="addressForm.invalid"
+        (clicked)="saveAddress()"> 
+      </app-btn>
+      
+
+          <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+        </form>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

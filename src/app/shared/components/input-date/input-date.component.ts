@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Input, Output, ViewChild,forwardRef  } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild,forwardRef, inject  } from '@angular/core';
 import { IonDatetime, IonModal } from '@ionic/angular';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlContainer, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ValidationService } from 'src/app/core/services/validate/validation.service';
 
 @Component({
   selector: 'app-input-date',
@@ -24,10 +25,18 @@ export class InputDateComponent implements ControlValueAccessor {
   @Input() icon: string = 'calendar-clear-outline';
   @Input() placeholder: string = 'Selecciona una fecha';
   @Input() type: 'date' | 'time' | 'datetime' = 'date';  // Permite cambiar el tipo de selector
+  @Input() formControlName!: string; 
 
   selectedDate: string = '';
   onChange: any = () => {};
   onTouched: any = () => {};
+
+  private validationService = inject(ValidationService); 
+  private controlContainer = inject(ControlContainer); 
+  get hasError(): boolean {
+    return this.validationService.hasError(this.controlContainer, this.formControlName);
+  }
+
 
   openModal() {
     if (this.modal) {

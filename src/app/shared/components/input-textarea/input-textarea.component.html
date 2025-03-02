@@ -1,19 +1,14 @@
 <fieldset class="input-item" [ngClass]="{'has-error': hasError}">
   <legend *ngIf="label">{{ label }}</legend>
-  <ion-item class="custom-input">
+  <ion-item class="custom-textarea">
     <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
-    <ion-input 
-      [type]="(type === 'password' && !isPasswordVisible) ? 'password' : 'text'"
+
+    <ion-textarea
       [placeholder]="placeholder"
       [(ngModel)]="value"
+      [autoGrow]="true"
       (ionInput)="onInputChange($event)"
       [disabled]="disabled">
-    </ion-input>
-    <ion-icon 
-      *ngIf="type === 'password'" 
-      slot="end" 
-      [name]="isPasswordVisible ? 'eye-off' : 'eye'" 
-      (click)="togglePasswordVisibility()">
-    </ion-icon>
+    </ion-textarea>
   </ion-item>
 </fieldset>

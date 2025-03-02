@@ -17,7 +17,12 @@ const routes: Routes = [
     path: '**',
     redirectTo: 'auth', 
     pathMatch: 'full'
-  }
+  },
+  {
+    path: 'address',
+    loadChildren: () => import('./features/address/address.module').then( m => m.AddressPageModule)
+  },
+
 ];
 
 @NgModule({

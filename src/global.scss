@@ -16,3 +16,58 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
+
+
+
+
+
+
+.input-item {
+    width: 100%;
+    border: 1.5px solid #d1d1d1;
+    border-radius: 6px;
+    padding: 6px;
+    margin-bottom: 10px;
+    background: #fff;
+    transition: border-color 0.3s;
+    legend {
+      font-size: 12px;  // ✅ Fuente más pequeña
+      color: #666;
+      padding: 0 5px;
+    }
+    &.has-error {
+      border-color: red; // ✅ Se vuelve rojo si hay error
+    }
+  }
+  
+  .custom-input {
+    --border-radius: 6px;
+    --background: white;
+    --box-shadow: none;
+    width: 100%;
+    height: 40px;
+    padding: 4px;
+  }
+  
+  ion-input {
+    font-size: 14px;
+    width: 100%;
+    --padding-start: 6px;
+    --padding-end: 6px;
+    height: 35px;
+  }
+  
+  ion-icon {
+    color: #757575;
+    font-size: 16px;
+    cursor: pointer; 
+  }
+  
+  .error-message {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+    padding-left: 6px;
+  }
+  

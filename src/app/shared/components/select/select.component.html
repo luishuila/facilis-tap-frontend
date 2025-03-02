@@ -1,0 +1,16 @@
+<fieldset class="input-item" [ngClass]="{'has-error': hasError}">
+  <legend *ngIf="label">{{ label }}</legend>
+  <ion-item class="custom-select">
+    <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+
+    <ion-select 
+      [placeholder]="placeholder" 
+      [(ngModel)]="value"
+      (ionChange)="onSelectionChange($event)"
+      [disabled]="disabled">
+      <ion-select-option *ngFor="let option of options" [value]="option.value">
+        {{ option.label }}
+      </ion-select-option>
+    </ion-select>
+  </ion-item>
+</fieldset>

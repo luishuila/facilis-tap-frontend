@@ -1,4 +1,4 @@
-<fieldset class="input-item">
+<fieldset class="input-item" [ngClass]="{'has-error': hasError}"> 
   <legend *ngIf="label">{{ label }}</legend>
   <ion-item class="custom-input" (click)="openModal()">
     <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>

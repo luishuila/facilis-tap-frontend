@@ -1,5 +1,6 @@
-import { Component, Input, forwardRef } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, Input, forwardRef, inject } from '@angular/core';
+import { ControlContainer, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ValidationService } from 'src/app/core/services/validate/validation.service';
 
 @Component({
   selector: 'app-input-radio',
@@ -20,6 +21,13 @@ export class InputRadioComponent implements ControlValueAccessor {
   @Input() options: { label: string; value: any }[] = [];
   @Input() disabled: boolean = false;
   value: any = '';
+  @Input() formControlName!: string; 
+  
+  private validationService = inject(ValidationService); 
+  private controlContainer = inject(ControlContainer); 
+  get hasError(): boolean {
+    return this.validationService.hasError(this.controlContainer, this.formControlName);
+  }
 
   onChange: any = () => {};
   onTouched: any = () => {};

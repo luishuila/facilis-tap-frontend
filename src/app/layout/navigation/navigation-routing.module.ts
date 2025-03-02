@@ -35,7 +35,10 @@ const routes: Routes = [
         path: 'settings',
         loadChildren: () => import('../../features/settings/settings.module').then(m => m.SettingsPageModule)
       },
-
+      {
+        path: 'personalinformation',
+        loadChildren: () => import('../../features/users/users-update/users-update.module').then( m => m.UsersUpdatePageModule)
+      },
       {
         path: '',
         redirectTo: 'home',

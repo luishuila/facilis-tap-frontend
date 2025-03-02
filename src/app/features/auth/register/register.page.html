@@ -7,70 +7,76 @@
 
         <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
-          <app-input formControlName="name" label="First Name" type="text" placeholder="John" icon="person">
-          </app-input>
+          <app-input formControlName="name" label="First Name" type="text" placeholder="John" icon="person"></app-input>
+          <p class="error-text" *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)">
+            <ion-label class="red-text">
+              {{ validationUsersService.getErrorMessage(registerForm, 'name') }}
+            </ion-label>
+          </p>
 
-       <p class="error-text" *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)">
-  <ion-label class="red-text">
-    <span *ngIf="registerForm.get('name')?.errors?.['required']">{{ validationMessages['name']['required'] }}</span>
-    <span *ngIf="registerForm.get('name')?.errors?.['minlength']">{{ validationMessages['name']['minlength'] }}</span>
-  </ion-label>
-</p>
 
-          <app-input formControlName="lastname" label="Last Name" type="text" placeholder="Doe" icon="person">
-          </app-input>
+          <app-input formControlName="lastname" label="Last Name" type="text" placeholder="Doe" icon="person"></app-input>
           <p class="error-text" *ngIf="registerForm.get('lastname')?.invalid && (registerForm.get('lastname')?.touched || registerForm.get('lastname')?.dirty)">
             <ion-label class="red-text">
-              <span *ngIf="registerForm.get('lastname')?.errors?.['required']">{{ validationMessages['lastname']['required'] }}</span>
-              <span *ngIf="registerForm.get('lastname')?.errors?.['minlength']">{{ validationMessages['lastname']['minlength'] }}</span>
+              {{ validationUsersService.getErrorMessage(registerForm, 'lastname') }}
             </ion-label>
           </p>
-          
 
-          <app-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail">
-          </app-input>
+
+          <app-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail"></app-input>
           <p class="error-text" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
             <ion-label class="red-text">
-              <span *ngIf="registerForm.get('email')?.errors?.['required']">{{ validationMessages['email']['required'] }}</span>
-              <span *ngIf="registerForm.get('email')?.errors?.['email']">{{ validationMessages['email']['email'] }}</span>
+              {{ validationUsersService.getErrorMessage(registerForm, 'email') }}
             </ion-label>
           </p>
-    
 
-          <app-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed">
-          </app-input>
+
+          <app-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed"></app-input>
           <p class="error-text" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
             <ion-label class="red-text">
-              <span *ngIf="registerForm.get('password')?.errors?.['required']">{{ validationMessages['password']['required'] }}</span>
-              <span *ngIf="registerForm.get('password')?.errors?.['minlength']">{{ validationMessages['password']['minlength'] }}</span>
+              {{ validationUsersService.getErrorMessage(registerForm, 'password') }}
             </ion-label>
           </p>
 
-          <app-input-date *ngIf="registerForm.get('birth')" 
-          formControlName="birth" 
-          label="Fecha de Nacimiento" 
-          type="date" 
-          icon="calendar">
-        </app-input-date>
-        <p class="error-text" *ngIf="registerForm.get('birth')?.invalid && (registerForm.get('birth')?.touched || registerForm.get('birth')?.dirty)">
-          <ion-label class="red-text">
-            <span *ngIf="registerForm.get('birth')?.errors?.['required']">{{ validationMessages['birth']['required'] }}</span>
-          </ion-label>
-        </p>
 
-        <app-input-radio
-        label="Sexo"
-        icon="male-female"
-        [options]="[
-          { label: 'Masculino', value: 'Male' },
-          { label: 'Femenino', value: 'Female' },
-          { label: 'Otro', value: 'other' }
-        ]"
-        formControlName="gender">
-      </app-input-radio>
-<p class="error-text" *ngIf="registerForm.get('gender')?.invalid && (registerForm.get('gender')?.touched || registerForm.get('gender')?.dirty)">
-  <ion-label class="red-text">{{ validationMessages['gender']['required'] }}</ion-label>
-</p>
+          <app-input formControlName="confirmPassword" label="Confirm Password" type="password" placeholder="*******" icon="lock-closed"></app-input>
+          <p class="error-text" *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
+            <ion-label class="red-text">
+              {{ validationUsersService.getErrorMessage(registerForm, 'confirmPassword') }}
+            </ion-label>
+          </p>
+
+          <p class="error-text" *ngIf="registerForm.hasError('mismatch') && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
+            <ion-label class="red-text">
+              {{ validationUsersService.getPasswordMismatchError(registerForm) }}
+            </ion-label>
+          </p>
+
+
+          <app-input-date formControlName="birth" label="Fecha de Nacimiento" type="date" icon="calendar"></app-input-date>
+          <p class="error-text" *ngIf="registerForm.get('birth')?.invalid && (registerForm.get('birth')?.touched || registerForm.get('birth')?.dirty)">
+            <ion-label class="red-text">
+              {{ validationUsersService.getErrorMessage(registerForm, 'birth') }}
+            </ion-label>
+          </p>
+
+          <app-input-radio
+            label="Sexo"
+            icon="male-female"
+            [options]="[
+              { label: 'Masculino', value: 'Male' },
+              { label: 'Femenino', value: 'Female' },
+              { label: 'Otro', value: 'other' }
+            ]"
+            formControlName="gender">
+          </app-input-radio>
+          <p class="error-text" *ngIf="registerForm.get('gender')?.invalid && (registerForm.get('gender')?.touched || registerForm.get('gender')?.dirty)">
+            <ion-label class="red-text">
+              {{ validationUsersService.getErrorMessage(registerForm, 'gender') }}
+            </ion-label>
+          </p>
+
+
           <app-btn 
             label="Register" 
             color="primary" 
@@ -82,6 +88,7 @@
           </app-btn>
 
           <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
 
           <p class="signup-text">
             Already have an account?&nbsp;

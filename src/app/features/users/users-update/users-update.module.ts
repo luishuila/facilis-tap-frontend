@@ -11,6 +11,8 @@ import { UpdateUsersInformationComponent } from '../components/update-users-info
 import { SharedPageModule } from 'src/app/shared/shared.module';
 import { UpdateUsersCredentialsComponent } from '../components/update-users-credentials/update-users-credentials.component';
 import { AddressFormComponent } from '../../address/components/address-form/address-form.component';
+import { UsersComponentsModule } from '../components/users-components.module';
+import { AddressComponentsPageModule } from '../../address/components/address-components.module';
 
 @NgModule({
   imports: [
@@ -19,12 +21,13 @@ import { AddressFormComponent } from '../../address/components/address-form/addr
     IonicModule,
     UsersUpdatePageRoutingModule,
     SharedPageModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    UsersComponentsModule,
+    AddressComponentsPageModule
   ],
   declarations: [UsersUpdatePage,
-     UpdateUsersInformationComponent,
-     UpdateUsersCredentialsComponent,
-     AddressFormComponent
-    ]
+
+    ],
+    exports:[]
 })
 export class UsersUpdatePageModule {}

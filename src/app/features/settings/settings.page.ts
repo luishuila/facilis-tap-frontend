@@ -17,17 +17,20 @@ export class SettingsPage implements OnInit {
   menuOpen: boolean = false; // Controla la apertura/cierre del menú
   menuItems: MenuItem[] = [
     { label: 'Home', link: '/navigation/home', icon: 'home' },
-    { label: 'Quote', link: '/navigation/quote', icon: 'chatbubble-ellipses-outline' },
-    { label: 'Radio', link: '/navigation/radio', icon: 'radio' },
-    { label: 'Library', link: '/navigation/library', icon: 'library'},
     { label: 'Search', link: '/navigation/search', icon: 'search' },
     { label: 'Configuracion', link: '/navigation/personalinformation', icon: 'search' },
+    { label: 'Centro de Gestión', link: '/navigation/administratormenu', icon: 'library'},
     { label: 'Settings', link: '/settings', icon: 'settings' }
   ];
-
+  data:any
   constructor(private authService: AuthService, private router: Router) {}
-
-  ngOnInit() {}
+  ngOnInit() {
+    const storedUser = localStorage.getItem('users');
+    if (storedUser) {
+      this.data = JSON.parse(storedUser);
+     console.log(this.data)
+    }
+  }
 
   toggleMenu() {
     this.menuOpen = !this.menuOpen; 

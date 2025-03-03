@@ -17,14 +17,18 @@
 </ion-segment>
 <ion-segment-view>
   <ion-segment-content id="first">
-    <app-update-users-information></app-update-users-information>
+
+    <app-update-users-information 
+    [userForm]="userForm"
+    [genderOptions]="genderOptions"
+    (userSaved)="onUserSaved($event)">
+  </app-update-users-information>
+
+
   </ion-segment-content>
   <ion-segment-content id="second">
     <app-address-form
     [addressForm]="addressForm"
-    [countries]="countries"
-    [departments]="departments"
-    [cities]="cities"
     [propertyType]="propertyType"
     (addressSaved)="onAddressSaved($event)">
   </app-address-form>

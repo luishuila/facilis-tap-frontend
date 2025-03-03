@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>administratorMenu</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Menú Personalizado -->
+  <div class="custom-menu" [class.open]="menuOpen">
+    <ion-list>
+      <ion-item *ngFor="let item of menuItems" button [routerLink]="item.link">
+        <ion-icon slot="start" [name]="item.icon"></ion-icon>
+        <ion-label>{{ item.label }}</ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+
+</ion-content>

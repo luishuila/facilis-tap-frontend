@@ -8,7 +8,8 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { MainLayoutPageModule } from './layout/main-layout/main-layout.module';
 import { customAnimation } from './core/animations/custom-animation';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpInterceptorService } from './core/interceptors/http.service';
 @NgModule({
   declarations: [AppComponent],
   imports: [BrowserModule, 
@@ -17,6 +18,11 @@ import { customAnimation } from './core/animations/custom-animation';
      MainLayoutPageModule
     ],
   providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true
+    },
     provideHttpClient(withInterceptorsFromDi()),
   ],
   bootstrap: [AppComponent],

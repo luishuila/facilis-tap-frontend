@@ -11,17 +11,25 @@
             label="País" 
             placeholder="Seleccione un país"
             icon="globe"
-            [options]="countries">
+            [valueField]="'id'" 
+            [labelField]="'countryName'"
+            [options]="countries"
+            (ionChange)="onCountrySelected($event)"
+            >
           </app-select>
 
   
         
           <app-select 
-            formControlName="department" 
+            formControlName="stateCountries" 
             label="Departamento/Estado" 
             placeholder="Seleccione un departamento"
             icon="map"
-            [options]="departments">
+            [valueField]="'id'" 
+            [labelField]="'stateName'"
+            [options]="departments"
+            (ionChange)="onDepartmentsSelected($event)"
+            >
           </app-select>
 
           <app-select 
@@ -29,6 +37,8 @@
             label="Ciudad" 
             placeholder="Seleccione una ciudad"
             icon="location"
+            [valueField]="'id'" 
+            [labelField]="'cityName'"
             [options]="cities">
           </app-select>
 
@@ -99,9 +109,19 @@
       </app-btn>
       
 
-          <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+      <ion-footer class="ion-no-border">
+        <ion-toolbar>
+          <ion-title></ion-title>
+        </ion-toolbar>
+      </ion-footer>
+      <ion-footer class="ion-no-border">
+        <ion-toolbar>
+          <ion-title></ion-title>
+        </ion-toolbar>
+      </ion-footer>
         </form>
       </div>
     </ion-card-content>
   </ion-card>
+  
 </ion-content>

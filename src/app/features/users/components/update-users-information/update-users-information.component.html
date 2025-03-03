@@ -1,69 +1,51 @@
 <ion-content [fullscreen]="true">
   <ion-card class="input-card">
     <ion-card-content>
-      <div class="container">
-        <h1 class="heading">✏️ Actualizar Información Personal</h1>
+      <ion-toolbar>
+        <ion-title>✏️ Actualizar Información Personal</ion-title>
+      </ion-toolbar>
 
-        <form [formGroup]="userForm" (ngSubmit)="onSave()">
-          <!-- Nombre -->
-          <app-input formControlName="name" label="Nombre" type="text" placeholder="John" icon="person"></app-input>
-          <p class="error-text" *ngIf="userForm.get('name')?.invalid && userForm.get('name')?.touched">
-            <ion-label class="red-text">El nombre es obligatorio (mínimo 2 caracteres).</ion-label>
-          </p>
+      <form [formGroup]="userForm" (ngSubmit)="onSave()">
+        <!-- Nombre -->
+        <app-input formControlName="name" label="Nombre" type="text" placeholder="John" icon="person"></app-input>
 
-          <!-- Apellido -->
-          <app-input formControlName="lastname" label="Apellido" type="text" placeholder="Doe" icon="person"></app-input>
-          <p class="error-text" *ngIf="userForm.get('lastname')?.invalid && userForm.get('lastname')?.touched">
-            <ion-label class="red-text">El apellido es obligatorio.</ion-label>
-          </p>
+        <!-- Apellido -->
+        <app-input formControlName="lastname" label="Apellido" type="text" placeholder="Doe" icon="person"></app-input>
 
-          <!-- Nombre de usuario -->
-          <app-input formControlName="username" label="Usuario" type="text" placeholder="john_doe" icon="at"></app-input>
-          <p class="error-text" *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched">
-            <ion-label class="red-text">El usuario es obligatorio (mínimo 4 caracteres).</ion-label>
-          </p>
+        <!-- Nombre de usuario -->
+        <app-input formControlName="username" label="Usuario" type="text" placeholder="john_doe" icon="at"></app-input>
 
-          <!-- Email -->
- 
-          <!-- Nickname -->
-          <app-input formControlName="nickname" label="Apodo" type="text" placeholder="Johnny" icon="star"></app-input>
-          <!-- Fecha de Nacimiento -->
-          <app-input-date formControlName="birth" label="Fecha de Nacimiento" type="date" icon="calendar"></app-input-date>
+        <!-- Email -->
+        <app-input formControlName="email" label="Correo Electrónico" type="email" placeholder="correo@ejemplo.com"
+          icon="mail"></app-input>
 
-          <!-- NIT -->
-          <app-input formControlName="nit" label="NIT" type="text" placeholder="1234567890" icon="barcode"></app-input>
-          <p class="error-text" *ngIf="userForm.get('nit')?.invalid && userForm.get('nit')?.touched">
-            <ion-label class="red-text">El NIT es obligatorio y debe contener solo números.</ion-label>
-          </p>
+        <!-- Nickname -->
+        <app-input formControlName="nickname" label="Apodo" type="text" placeholder="Johnny" icon="star"></app-input>
 
+        <!-- Fecha de Nacimiento -->
+        <app-input-date formControlName="birth" label="Fecha de Nacimiento" type="date"
+          icon="calendar"></app-input-date>
 
-          <app-input formControlName="phones" label="Phones" type="text" placeholder="1234567890" icon="call"></app-input>
-          <!-- Género -->
-          <app-input-radio
-            label="Género"
-            icon="male-female"
-            [options]="[
-              { label: 'Masculino', value: 'Male' },
-              { label: 'Femenino', value: 'Female' },
-              { label: 'Otro', value: 'Other' }
-            ]"
-            formControlName="gender">
-          </app-input-radio>
+        <!-- NIT -->
+        <app-input formControlName="nit" label="NIT" type="text" placeholder="1234567890" icon="barcode"></app-input>
 
+        <!-- Teléfono -->
+        <app-input formControlName="phones" label="Teléfono" type="text" placeholder="1234567890"
+          icon="call"></app-input>
 
+        <!-- Género -->
+        <app-input-radio label="Género" icon="male-female" [options]="genderOptions" formControlName="gender">
+        </app-input-radio>
 
-          <!-- Botón Guardar -->
-          <app-btn 
-            label="Guardar Cambios" 
-            color="primary" 
-            customClass="primary-btn" 
-            expand="block"
-            type="submit"
-            [disabled]="userForm.invalid">  
-          </app-btn>
-
-        </form>
-      </div>
+        <!-- Botón Guardar -->
+        <app-btn label="Guardar Cambios" color="primary" customClass="primary-btn" expand="block" type="submit"
+          [disabled]="userForm.invalid">
+        </app-btn>
+        
+        <ion-footer class="ion-no-border"> <ion-toolbar> <ion-title></ion-title> </ion-toolbar> </ion-footer>
+        <ion-footer class="ion-no-border"> <ion-toolbar> <ion-title></ion-title> </ion-toolbar> </ion-footer>
+        <ion-footer class="ion-no-border"> <ion-toolbar> <ion-title></ion-title> </ion-toolbar> </ion-footer>
+      </form>
     </ion-card-content>
   </ion-card>
 </ion-content>

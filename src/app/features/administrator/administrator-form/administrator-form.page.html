@@ -1,0 +1,54 @@
+
+<ion-header [translucent]="true" >
+  <ion-toolbar>
+    <ion-title>administratorForm</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-segment>
+  <ion-segment-button value="first" content-id="first">
+    <ion-label>Actualiza datos personales</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="second" content-id="second">
+    <ion-label>Second</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="third" content-id="third">
+    <ion-label>Third</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-segment-view>
+
+
+  <ion-segment-content id="first" >
+    <ion-segment>
+      <ion-segment-button value="usersdats" content-id="usersdats">
+        <ion-label>First</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="address" content-id="address">
+        <ion-label>Second</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <ion-segment-view>
+      <ion-segment-content id="usersdats">
+        <app-update-users-information></app-update-users-information>
+      </ion-segment-content>
+      <ion-segment-content id="address">
+<!-- 
+        <app-address-form
+        [addressForm]="addressForm"
+        [propertyType]="propertyType"
+        (addressSaved)="onAddressSaved($event)">
+      </app-address-form> -->
+
+      </ion-segment-content>
+
+    </ion-segment-view>
+   
+
+
+  </ion-segment-content>
+  <ion-segment-content id="second">Second</ion-segment-content>
+  <ion-segment-content id="third">Third</ion-segment-content>
+</ion-segment-view>
+
+

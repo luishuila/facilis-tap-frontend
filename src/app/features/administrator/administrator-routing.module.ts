@@ -7,7 +7,19 @@ const routes: Routes = [
   {
     path: '',
     component: AdministratorPage
+  },  {
+    path: 'administrator-list',
+    loadChildren: () => import('./administrator-list/administrator-list.module').then( m => m.AdministratorListPageModule)
+  },
+  {
+    path: 'administrator-menu',
+    loadChildren: () => import('./administrator-menu/administrator-menu.module').then( m => m.AdministratorMenuPageModule)
+  },
+  {
+    path: 'administrator-form',
+    loadChildren: () => import('./administrator-form/administrator-form.module').then( m => m.AdministratorFormPageModule)
   }
+
 ];
 
 @NgModule({

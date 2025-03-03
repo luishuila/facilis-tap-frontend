@@ -8,8 +8,8 @@
       [(ngModel)]="value"
       (ionChange)="onSelectionChange($event)"
       [disabled]="disabled">
-      <ion-select-option *ngFor="let option of options" [value]="option.value">
-        {{ option.label }}
+      <ion-select-option *ngFor="let option of options" [value]="option[valueField]">
+        {{ option[labelField] }}
       </ion-select-option>
     </ion-select>
   </ion-item>

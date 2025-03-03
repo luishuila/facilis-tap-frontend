@@ -4,7 +4,14 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding center-avatar">
+  <ion-title><ion-avatar class="avatar-size  center-avatarC">
+    <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+
+  </ion-avatar>
+ {{data.name}}  {{data.username}}
+</ion-title>
+<samp>uiid:{{data.uiid}} </samp>
   <!-- Menú Personalizado -->
   <div class="custom-menu" [class.open]="menuOpen">
     <ion-list>
@@ -14,15 +21,21 @@
       </ion-item>
 
       <!-- 🔥 Botón para Cerrar Sesión -->
-      <ion-item button (click)="logout()">
-        <ion-icon slot="start" name="log-out-outline"></ion-icon>
-        <ion-label>Cerrar Sesión</ion-label>
-      </ion-item>
+ 
     </ion-list>
   </div>
 
-  <!-- Contenido Principal -->
-  <div class="main-content">
-    <p>This is the settings page content.</p>
-  </div>
 </ion-content>
+<ion-footer class="ion-no-border">
+  <ion-toolbar>
+    <ion-item button (click)="logout()">
+      <ion-icon slot="start" name="log-out-outline"></ion-icon>
+      <ion-label>Cerrar Sesión</ion-label>
+    </ion-item>
+    <ion-title></ion-title>
+  </ion-toolbar>
+  <ion-footer class="ion-no-border">
+    <ion-toolbar>
+      <ion-title></ion-title>
+    </ion-toolbar>
+</ion-footer>

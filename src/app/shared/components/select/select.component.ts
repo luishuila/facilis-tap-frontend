@@ -21,9 +21,11 @@ export class SelectComponent implements ControlValueAccessor {
   @Input() icon: string = 'list'; 
   @Input() disabled: boolean = false;
   @Input() formControlName!: string;
-  @Input() options: { value: string, label: string }[] = []; 
+  @Input() options: any[] = [];  // Recibe un array de cualquier tipo de objeto
+  @Input() valueField: string = 'value';  // Campo usado para `value`
+  @Input() labelField: string = 'label';  // Campo usado para `label`
 
-  value: string = '';
+  value: string | number = '';
   control: AbstractControl | null = null;
   private validationService = inject(ValidationService);
   private controlContainer = inject(ControlContainer);
@@ -32,15 +34,15 @@ export class SelectComponent implements ControlValueAccessor {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
 
-  onChange: (value: string) => void = () => {};
+  onChange: (value: string | number) => void = () => {};
   onTouched: () => void = () => {};
 
-  writeValue(value: string): void {
+  writeValue(value: string | number): void {
     this.value = value ?? ''; 
     this.onChange(this.value);
   }
 
-  registerOnChange(fn: (value: string) => void): void {
+  registerOnChange(fn: (value: string | number) => void): void {
     this.onChange = fn;
   }
 

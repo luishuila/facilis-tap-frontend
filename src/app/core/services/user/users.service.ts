@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { UserDto } from '../../models/User/IUser';
+import { UserDto, UserUpdateI } from '../../models/User/IUser';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -14,4 +14,9 @@ export class UsersService {
   findOne(id: string): Observable<UserDto> {
     return this.http.get<UserDto>(`${this.apiUrl}user/${id}`);
   }
+
+  updated(id: string, data:UserUpdateI): Observable<UserDto> {
+    return this.http.put<UserDto>(`${this.apiUrl}user/${id}`,data);
+  }
+
 }

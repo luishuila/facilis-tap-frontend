@@ -19,7 +19,9 @@
   <ion-segment-content id="first">
 
     <app-update-users-information 
+    *ngIf="validateUsers"
     [userForm]="userForm"
+    [isDisabled]="userForm.invalid"
     [genderOptions]="genderOptions"
     (userSaved)="onUserSaved($event)">
   </app-update-users-information>
@@ -27,9 +29,10 @@
 
   </ion-segment-content>
   <ion-segment-content id="second">
-    <app-address-form
+    <app-address-form *ngIf="validate"
     [addressForm]="addressForm"
     [propertyType]="propertyType"
+    [isDisabled]="false"
     (addressSaved)="onAddressSaved($event)">
   </app-address-form>
   </ion-segment-content>

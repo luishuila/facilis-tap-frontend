@@ -63,11 +63,7 @@
           <app-input-radio
             label="Sexo"
             icon="male-female"
-            [options]="[
-              { label: 'Masculino', value: 'Male' },
-              { label: 'Femenino', value: 'Female' },
-              { label: 'Otro', value: 'other' }
-            ]"
+            [options]="genderOptions"
             formControlName="gender">
           </app-input-radio>
           <p class="error-text" *ngIf="registerForm.get('gender')?.invalid && (registerForm.get('gender')?.touched || registerForm.get('gender')?.dirty)">

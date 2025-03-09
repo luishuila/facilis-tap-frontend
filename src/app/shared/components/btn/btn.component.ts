@@ -14,6 +14,7 @@ export class BtnComponent implements OnInit {
   @Input() customClass: string = '';  
   @Input() disabled: boolean = false; 
   @Output() clicked = new EventEmitter<void>(); 
+  @Input() type: string = 'submit';  
   constructor() { }
 
 

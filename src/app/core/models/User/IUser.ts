@@ -1,26 +1,51 @@
-export interface IUser {
-    name: string;
-    lastname: string;
-    email: string;
+import { GenderEnum } from "../../constant/enum";
+import { AddressDtoI } from "../address/IAddress";
+import { BaseUserModel } from "./BaseUserModel";
+
+
+export interface IUser   extends BaseUserModel {
     password: string;
-    birth: string; 
-    gender: 'Male' | 'Female' | 'Other';
-  }
-  export interface UserDto {
+}
+  export interface UserDto  extends BaseUserModel {
     id: string;
-    name: string;
-    lastname: string;
     username: string;
-    email: string;
     nickname?: string;
-    gender?:  'Male' | 'Female' | 'Other';
-    birth?: Date;
     nit: number;
     provider?: any[];
-    addresses?: any[];
+    addresses?: AddressDtoI[];
     appointments?: any[];
     employees?: any[];
     roles: any[];
     providers: any[];
     phones:string;
   }
+  export interface UserUpdateI extends BaseUserModel  {
+    nickname?: string;    
+    nit?:  number | null ;       
+    phones?: string;      
+    username?: string;   
+  }
+
+  // export interface UserDto {
+  //   id: string;
+  //   name: string;
+  //   lastname: string;
+  //   username: string;
+  //   email: string;
+  //   nickname?: string;
+  //   gender?:  GenderEnum;
+  //   birth?: Date;
+  //   nit: number;
+  //   // provider?: any[];
+  //   // addresses?: AddressDto[];
+  //   // appointments?: any[];
+  //   // employees?: any[];
+  //   // roles: any[];
+  //   // providers: any[];
+  //   phones:string;
+  // }
+
+
+
+
+  

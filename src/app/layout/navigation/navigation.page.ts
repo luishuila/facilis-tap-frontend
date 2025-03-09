@@ -29,7 +29,7 @@ export class NavigationPage implements OnInit {
     const storedUser = localStorage.getItem('users');
     if (storedUser) {
       this.menu = JSON.parse(storedUser);
-      this.userRoles = this.menu.roles.map((r: any) => r.role); 
+      this.userRoles = this.menu.roles.map((r: any) => r.name); 
     }
 
     this.loadTabs();

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/core/models/User/User';
 import { ValidationUsersService } from '../../../core/services/validate/validation-users-service';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { genderObject } from 'src/app/core/constant/constants';
 @Component({
   selector: 'app-register',
   templateUrl: './register.page.html',
@@ -13,7 +14,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 export class RegisterPage implements OnInit {
   registerForm: FormGroup; 
   errorMessage: string = '';
-
+  genderOptions = genderObject;
 
 
   constructor( private authService: AuthService,private fb: FormBuilder, private router: Router,public validationUsersService: ValidationUsersService) {
@@ -42,7 +43,7 @@ export class RegisterPage implements OnInit {
       return ;
     }
     const newUser = new User(this.registerForm.value);
-    console.log(newUser.toJson())
+
 
     this.authService.register(newUser).subscribe({
       next: (response) => {

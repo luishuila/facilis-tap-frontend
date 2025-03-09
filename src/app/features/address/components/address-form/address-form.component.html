@@ -7,33 +7,33 @@
 
         <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
           <app-select 
-            formControlName="country" 
+            formControlName="countryCode" 
             label="País" 
             placeholder="Seleccione un país"
             icon="globe"
-            [valueField]="'id'" 
+            [valueField]="'countryCode'" 
             [labelField]="'countryName'"
             [options]="countries"
-            (ionChange)="onCountrySelected($event)"
+            (ionChange)="onCountrySelected($event, null)"
             >
           </app-select>
 
   
         
           <app-select 
-            formControlName="stateCountries" 
+            formControlName="stateCode" 
             label="Departamento/Estado" 
             placeholder="Seleccione un departamento"
             icon="map"
-            [valueField]="'id'" 
+            [valueField]="'stateCode'" 
             [labelField]="'stateName'"
             [options]="departments"
-            (ionChange)="onDepartmentsSelected($event)"
+            (ionChange)="onDepartmentsSelected($event, null)"
             >
           </app-select>
 
           <app-select 
-            formControlName="cityState" 
+            formControlName="cityStates" 
             label="Ciudad" 
             placeholder="Seleccione una ciudad"
             icon="location"
@@ -43,7 +43,7 @@
           </app-select>
 
           <app-input 
-            formControlName="latitude" 
+            formControlName="lat" 
             label="Latitud" 
             type="text" 
             placeholder="Ej: 4.6097" 
@@ -51,7 +51,7 @@
           </app-input>
 
           <app-input 
-            formControlName="length" 
+            formControlName="lon" 
             label="Longitud" 
             type="text" 
             placeholder="Ej: -74.0817" 
@@ -81,8 +81,15 @@
             placeholder="Ej: Chapinero" 
             icon="home">
           </app-input>
+          
+          <app-input 
+          formControlName="zipcode" 
+          label="Codigo Postal" 
+          type="number" 
+          placeholder="Ej: Chapinero" 
+          icon="home">
+        </app-input>
 
-         
           <app-input-textarea
             formControlName="description" 
             label="Descripción (Opcional)" 
@@ -104,7 +111,7 @@
         customClass="primary-btn" 
         expand="block"
         type="submit"
-        [disabled]="addressForm.invalid"
+        [disabled]="isDisabled"
         (clicked)="saveAddress()"> 
       </app-btn>
       

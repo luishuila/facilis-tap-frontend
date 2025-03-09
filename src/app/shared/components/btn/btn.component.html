@@ -1,10 +1,10 @@
 <ion-button 
-[color]="color"
-[class]="customClass"
-[expand]="expand"
-[disabled]="disabled"
-(click)="onClick()"
-  >
+  [color]="color"
+  [class]="customClass"
+  [expand]="expand"
+  [disabled]="disabled"
+  [attr.type]="type"
+  (click)="onClick()">
   <ion-icon *ngIf="icon" [name]="icon" slot="start"></ion-icon>
   {{ label }}
 </ion-button>

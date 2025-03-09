@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { genderObject } from 'src/app/core/constant/constants';
 import { idUsers, usersData } from 'src/app/core/generate/idData';
-import { UserDto } from 'src/app/core/models/User/IUser';
+import { Address } from 'src/app/core/models/address/address';
+import { AddressDtoI } from 'src/app/core/models/address/IAddress';
+import { UserDto, UserUpdateI } from 'src/app/core/models/User/IUser';
+import { UserUpdate } from 'src/app/core/models/User/User';
+import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
+import { initializeAddressForm } from 'src/app/core/util/initializeAddressForm';
 @Component({
   selector: 'app-users-update',
   templateUrl: './users-update.page.html',
@@ -13,17 +19,9 @@ export class UsersUpdatePage implements OnInit {
 
   addressForm!: FormGroup;
   userForm!: FormGroup;
-
-  departments = [
-    { value: 'antioquia', label: 'Antioquia' },
-    { value: 'cundinamarca', label: 'Cundinamarca' },
-    { value: 'santander', label: 'Santander' },
-  ];
-  cities = [
-    { value: 'medellin', label: 'Medellín' },
-    { value: 'bogota', label: 'Bogotá' },
-    { value: 'cali', label: 'Cali' },
-  ];
+  validate: boolean  = false;
+  addressId:number| null = 0;
+  validateUsers: boolean  = false;
   propertyType = [
     { value: "HOUSE", label: 'House' },
     { value: "APARTMENT", label: 'Apartment' },
@@ -32,74 +30,93 @@ export class UsersUpdatePage implements OnInit {
   ];
 
 
-  genderOptions = [
-    { label: 'Masculino', value: 'Male' },
-    { label: 'Femenino', value: 'Female' },
-    { label: 'Otro', value: 'Other' }
-  ];
-
-  constructor(private fb: FormBuilder, private userService: UsersService) {}
+  genderOptions = genderObject;
+  user!: UserDto;
+  constructor(private fb: FormBuilder, private userService: UsersService, 
+    private addressService: AddressService
+  ) {}
 
   ngOnInit() {
     this.loadUser()
     this.addressForm = this.fb.group({
-      country: ['', Validators.required],
-      stateCountries: ['', Validators.required],
-      cityState: ['', Validators.required],
-      latitude: ['', [Validators.required, Validators.pattern('^-?\\d{1,3}\\.\\d+$')]],
-      length: ['', [Validators.required, Validators.pattern('^-?\\d{1,3}\\.\\d+$')]],
-      street: ['', [Validators.required, Validators.maxLength(50)]],
-      race: ['', [Validators.required, Validators.maxLength(100)]],
-      neighborhood: ['', [Validators.required, Validators.maxLength(100)]],
+      countryCode: [''],
+      stateCode: [''],
+      cityStates: [null],
+      lat: [''],
+      lon: [''],
+      street: [''],
+      race: [''],
+      neighborhood: [''],
       description: [''],
-      propertyType: ['', Validators.required],
+      zipcode: [''],
+      propertyType: [''],
+
     });
 
     this.userForm = this.fb.group({
       id: [{ value: '', disabled: true }], 
       name: ['', [Validators.required, Validators.minLength(2)]],
       lastname: ['', [Validators.required, Validators.minLength(2)]],
-      username: ['', [Validators.required, Validators.minLength(4)]],
+      username: ['', [Validators.minLength(4)]],
       email: ['', [Validators.required, Validators.email]],
       nickname: ['', [ Validators.minLength(2)]],
       gender: ['', [Validators.required]],
       birth: ['', [Validators.required]],
       phones:['',[ Validators.minLength(5), Validators.pattern('^[0-9]+$')] ],
-      nit: ['', [ Validators.minLength(5), Validators.pattern('^[0-9]+$')]] 
+      nit: [null, [Validators.minLength(5),,  Validators.pattern('^[0-9]+$')]] 
     });
 
-    
   }
-  user!: UserDto;
+  
 
   loadUser() {
-   
     this.userService.findOne(usersData().id).subscribe((data: UserDto) => {
+      this.validate = true;
+  
       if (data) {
         this.userForm.patchValue({
-          id: data.id || '', // UUID del usuario (deshabilitado)
-          name: data.name || '',
-          lastname: data.lastname || '',
-          username: data.username || '',
-          email: data.email || '',
-          nickname: data.nickname || '',
-          gender: data.gender || '',
-          birth: data.birth ? new Date(data.birth).toISOString().split('T')[0] : '', // Formato YYYY-MM-DD
-          phones: data.phones || '',
-          nit: data.nit || ''
+          ...data, 
+          birth: data.birth ? new Date(data.birth).toISOString().split('T')[0] : ''
         });
+        
+        const address = data.addresses?.[0] ?? {} as Partial<AddressDtoI>;
+        this.addressId =  data.addresses?.[0].id || 0;
+        console.log('this.addressForm.patchValue',address)
+        this.addressForm.patchValue({ 
+          ...address,
+          cityStates: address.cityStates?.id 
+        });
+        console.log('Después:', this.addressForm.value);
+        this.validateUsers = true
       }
-      console.log('Datos recibidos del usuario:', data);
     });
-    
   }
 
-  onUserSaved(userData: any) {
-    console.log('Usuario actualizado:', userData);
+  onUserSaved(userData: UserUpdateI) {
+
+
+    if (this.userForm.invalid) {
+      Object.values(this.userForm.controls).forEach(control => control.markAsTouched());
+      return;
+    }
+
+    const data = new UserUpdate({...userData})
+    this.userService.updated(usersData().id,data).subscribe(data=>{
+      console.log(data)
+    })
+    console.log('Usuario actualizado:', data);
  
   }
 
-  onAddressSaved(address: any) {
-    console.log('Dirección Guardada:', address);
+  onAddressSaved(address: AddressDtoI) {
+    // if (this.addressForm.invalid) {
+    //   Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
+    //   return;
+    // }
+    const data = new Address({...address})
+    this.addressService.update(this.addressId, data).subscribe(dat=>{
+      console.log('dat',dat)
+    })
+    console.log('data', data)
   }
 }

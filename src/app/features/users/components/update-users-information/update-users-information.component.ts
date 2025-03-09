@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { GenderEnum } from 'src/app/core/constant/enum';
 
 @Component({
   selector: 'app-update-users-information',
@@ -7,22 +8,20 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./update-users-information.component.scss'],
   standalone: false,
 })
-export class UpdateUsersInformationComponent {
-  
+export class UpdateUsersInformationComponent implements OnInit {
+
   @Input() userForm!: FormGroup;
-  @Input() genderOptions: { label: string; value: string }[] = [
-    { label: 'Masculino', value: 'Male' },
-    { label: 'Femenino', value: 'Female' },
-    { label: 'Otro', value: 'Other' }
-  ];
-  
+  @Input() genderOptions: {label:string,value:GenderEnum }[]  = []
+  @Input() isDisabled: boolean = false;
+  ngOnInit(): void {
+    console.log('userForm', this.userForm)
+  }
+   
   @Output() userSaved = new EventEmitter<any>();
 
   onSave() {
-    if (this.userForm.invalid) {
-      Object.values(this.userForm.controls).forEach(control => control.markAsTouched());
-      return;
-    }
+
+    console.log(typeof this.userForm.value.nit)
     this.userSaved.emit(this.userForm.value);
   }
 }

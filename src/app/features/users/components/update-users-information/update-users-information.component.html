@@ -27,7 +27,7 @@
           icon="calendar"></app-input-date>
 
         <!-- NIT -->
-        <app-input formControlName="nit" label="NIT" type="text" placeholder="1234567890" icon="barcode"></app-input>
+        <app-input formControlName="nit" label="NIT" type="number" placeholder="1234567890" icon="barcode"></app-input>
 
         <!-- Teléfono -->
         <app-input formControlName="phones" label="Teléfono" type="text" placeholder="1234567890"
@@ -38,9 +38,15 @@
         </app-input-radio>
 
         <!-- Botón Guardar -->
-        <app-btn label="Guardar Cambios" color="primary" customClass="primary-btn" expand="block" type="submit"
-          [disabled]="userForm.invalid">
-        </app-btn>
+        <app-btn 
+        label="Guardar Cambios" 
+        color="primary" 
+        customClass="primary-btn" 
+        expand="block" 
+        [disabled]="isDisabled"
+        (clicked)="onSave()">
+      </app-btn>
+      
         
         <ion-footer class="ion-no-border"> <ion-toolbar> <ion-title></ion-title> </ion-toolbar> </ion-footer>
         <ion-footer class="ion-no-border"> <ion-toolbar> <ion-title></ion-title> </ion-toolbar> </ion-footer>

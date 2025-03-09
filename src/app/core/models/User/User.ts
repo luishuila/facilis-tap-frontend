@@ -1,30 +1,28 @@
-import { IUser } from './IUser';
 
-export class User implements IUser {
-  name: string;
-  lastname: string;
-  email: string;
-  password: string;
-  birth: string;
-  gender: 'Male' | 'Female' | 'Other';
+import { BaseUser } from './BaseUserModel';
+import { IUser, UserUpdateI } from './IUser';
 
+
+
+
+export class User extends BaseUser implements IUser {
+  password: string = '';
   constructor(data: Partial<IUser> = {}) {
-    this.name = data.name || '';
-    this.lastname = data.lastname || '';
-    this.email = data.email || '';
+    super();  
+    Object.assign(this, data); 
     this.password = data.password || '';
-    this.birth = data.birth || '';
-    this.gender = data.gender || 'Other';
   }
+}
 
-  toJson(): IUser {
-    return {
-      name: this.name,
-      lastname: this.lastname,
-      email: this.email,
-      password: this.password,
-      birth: this.birth,
-      gender: this.gender
-    };
+
+export class UserUpdate extends BaseUser implements UserUpdateI {
+  nickname?: string = '';
+  nit?: number | null = null;
+  phones?: string = '';
+  username?: string = '';
+  constructor(data: Partial<UserUpdateI> = {}) {
+    super();
+    this.nit = data.nit !== undefined ? Number(data.nit) || null : null;
+    Object.assign(this, data);
   }
 }

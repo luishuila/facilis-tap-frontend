@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output ,OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { CityDto, CountryDto, StateCountryDto } from 'src/app/core/models/address/address';
+import { CityDto, CountryDto, StateCountryDto } from 'src/app/core/models/address/IAddress';
 import { AddressService } from 'src/app/core/services/address/address.service';
 
 @Component({
@@ -9,11 +9,11 @@ import { AddressService } from 'src/app/core/services/address/address.service';
   styleUrls: ['./address-form.component.scss'],
   standalone: false,
 })
-export class AddressFormComponent {
+export class AddressFormComponent implements OnChanges {
   @Input() addressForm!: FormGroup; 
   @Input() propertyType: { value: string; label: string }[] = [];
   @Output() addressSaved = new EventEmitter<any>();
-
+  @Input() isDisabled:boolean = false;
 
   countries:CountryDto[] = [];
   cities: CityDto[] = [];
@@ -25,10 +25,27 @@ export class AddressFormComponent {
     this.addressService.findCountry().subscribe(data => {
       this.countries = data
     });
-    
-
   }
-
+  ngOnChanges() {
+    console.log('address-->',this.addressForm)
+    // navigator.geolocation.getCurrentPosition(
+    //   function(position) {
+    //     console.log("Latitud:", position.coords.latitude);
+    //     console.log("Longitud:", position.coords.longitude);
+    //   },
+    //   function(error) {
+    //     console.error("Error obteniendo ubicación:", error.message);
+    //   }
+    // );
+   
+      if(this.addressForm.value.countryCode){
+           this.onCountrySelected(null, this.addressForm.value.countryCode)
+      }
+      if(this.addressForm.value.stateCode){
+        this.onDepartmentsSelected(null,  this.addressForm.value.stateCode)
+      }
+    
+  }
   errorMessage: string = '';
 
   saveAddress() {
@@ -45,30 +62,42 @@ export class AddressFormComponent {
     }
   }
 
-  onCountrySelected(event: any) {
-    const selectedCountryId = event.detail.value;
-    console.log('País seleccionado:', selectedCountryId);
+  onCountrySelected(event: any,id:any ) {
+    console.log(event)
+    let selectedCountryId :any
+    if (!event || !event.detail || !event.detail.value) {
+      selectedCountryId= id
+    }else{
+      selectedCountryId = event.detail.value;
+    }
+     
     if(selectedCountryId == undefined){
       return;
     }
-    // Limpiar departamentos antes de actualizar
     this.departments = [];
-    this.addressForm.controls['stateCountries'].setValue('');
-
+    // this.addressForm.controls['stateCode'].setValue('');
+    
     this.addressService.findDepartmentsByCountry(selectedCountryId).subscribe(data => {
+      console.log("findDepartmentsByCountry:", data);
       this.departments = data
     });
+
   }
 
-  onDepartmentsSelected(event: any) {
-    const selectedDepartmentsId = event.detail.value;
+  onDepartmentsSelected(event: any, id:any ) {
+    let selectedDepartmentsId :any
+    if (!event || !event.detail || !event.detail.value) {
+      selectedDepartmentsId= id
+    }else{
+      selectedDepartmentsId = event.detail.value;
+    }
     console.log('selectedDepartmentsId:', selectedDepartmentsId);
     if(selectedDepartmentsId == undefined){
       return;
     }
     this.cities = [];
     
-    this.addressForm.controls['cityState'].setValue('');
+    // this.addressForm.controls['cityState'].setValue('');
     this.addressService.findCityByDepartments(selectedDepartmentsId).subscribe(data => {
       this.cities = data
     });

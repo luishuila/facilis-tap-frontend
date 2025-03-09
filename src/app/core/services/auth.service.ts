@@ -17,7 +17,6 @@ export class AuthService {
     const body = { email, password };
     return this.http.post<any>(`${this.apiUrl}auth/login`, body).pipe(
       tap(response => {
-        console.log('response--->', response)
         if (response.data.access_token) {
           console.log('response.data.access_token--->', response.data.access_token)
           localStorage.setItem('users', JSON.stringify(response.data.user));
@@ -32,7 +31,7 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}auth/register`, data).pipe(
       tap(response => {
         if (response.data.access_token) {
-          localStorage.setItem('users',  response.data.user)
+          localStorage.setItem('users',  JSON.stringify(response.data.user))
           localStorage.setItem('access_token', response.data.access_token);
           localStorage.setItem('refresh_token', response.data.refresh_token);
         }

@@ -3,7 +3,7 @@
   <ion-item class="custom-input">
     <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
     <ion-input 
-      [type]="(type === 'password' && !isPasswordVisible) ? 'password' : 'text'"
+      [type]="(type === 'password' && !isPasswordVisible) ? 'password' : type"
       [placeholder]="placeholder"
       [(ngModel)]="value"
       (ionInput)="onInputChange($event)"

@@ -1,24 +1,13 @@
-export interface CountryDto {
-    id: number;
-    countryCode: string;
-    countryName: string;
-    countryContinent: string;
-    stateCode: string;
-    img: string | null;
-  }
-  export interface StateCountryDto {
-    id: number;
-    stateCode: string;
-    stateName: string;
-    regionState: string;
-    countryCode: string;
-    country: CountryDto
-  }
+import { PropertyType } from "../../constant/enum";
+import { BaseAddress } from "./BaseAddressModel";
+import {AddressUdpatedDtoI } from "./IAddress";
 
-  export interface CityDto {
-    id: number;
-    cityName: string;
-    stateCode: string;
-    state: StateCountryDto
+export class Address  extends BaseAddress implements AddressUdpatedDtoI {
+
+  
+    constructor(data: Partial<AddressUdpatedDtoI>) {
+     super();
+      Object.assign(this, data);
+    }
   }
   

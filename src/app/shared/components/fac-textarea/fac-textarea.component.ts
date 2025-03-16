@@ -3,20 +3,20 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractCont
 import { ValidationService } from '../../../core/services/validate/validation.service';
 
 @Component({
-  selector: 'app-input-textarea',
-  templateUrl: './input-textarea.component.html',
-  styleUrls: ['./input-textarea.component.scss'],  
+  selector: 'fac-textarea',
+  templateUrl: './fac-textarea.component.html',
+  styleUrls: ['./fac-textarea.component.scss'],  
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputTextareaComponent),
+      useExisting: forwardRef(() => FacTextareaComponent),
       multi: true
     }
   ],
   standalone: false,
 })
 
-export class InputTextareaComponent  implements ControlValueAccessor {
+export class FacTextareaComponent  implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() placeholder: string = 'Escribe aquí...';
   @Input() icon: string = 'document-text'; 

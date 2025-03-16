@@ -7,45 +7,45 @@
 
       <form [formGroup]="userForm" (ngSubmit)="onSave()">
         <!-- Nombre -->
-        <app-input formControlName="name" label="Nombre" type="text" placeholder="John" icon="person"></app-input>
+        <fac-input formControlName="name" label="Nombre" type="text" placeholder="John" icon="person"></fac-input>
 
         <!-- Apellido -->
-        <app-input formControlName="lastname" label="Apellido" type="text" placeholder="Doe" icon="person"></app-input>
+        <fac-input formControlName="lastname" label="Apellido" type="text" placeholder="Doe" icon="person"></fac-input>
 
         <!-- Nombre de usuario -->
-        <app-input formControlName="username" label="Usuario" type="text" placeholder="john_doe" icon="at"></app-input>
+        <fac-input formControlName="username" label="Usuario" type="text" placeholder="john_doe" icon="at"></fac-input>
 
         <!-- Email -->
-        <app-input formControlName="email" label="Correo Electrónico" type="email" placeholder="correo@ejemplo.com"
-          icon="mail"></app-input>
+        <fac-input formControlName="email" label="Correo Electrónico" type="email" placeholder="correo@ejemplo.com"
+          icon="mail"></fac-input>
 
         <!-- Nickname -->
-        <app-input formControlName="nickname" label="Apodo" type="text" placeholder="Johnny" icon="star"></app-input>
+        <fac-input formControlName="nickname" label="Apodo" type="text" placeholder="Johnny" icon="star"></fac-input>
 
         <!-- Fecha de Nacimiento -->
-        <app-input-date formControlName="birth" label="Fecha de Nacimiento" type="date"
-          icon="calendar"></app-input-date>
+        <fac-date formControlName="birth" label="Fecha de Nacimiento" type="date"
+          icon="calendar"></fac-date>
 
         <!-- NIT -->
-        <app-input formControlName="nit" label="NIT" type="number" placeholder="1234567890" icon="barcode"></app-input>
+        <fac-input formControlName="nit" label="NIT" type="number" placeholder="1234567890" icon="barcode"></fac-input>
 
         <!-- Teléfono -->
-        <app-input formControlName="phones" label="Teléfono" type="text" placeholder="1234567890"
-          icon="call"></app-input>
+        <fac-input formControlName="phones" label="Teléfono" type="text" placeholder="1234567890"
+          icon="call"></fac-input>
 
         <!-- Género -->
-        <app-input-radio label="Género" icon="male-female" [options]="genderOptions" formControlName="gender">
-        </app-input-radio>
+        <fac-radio label="Género" icon="male-female" [options]="genderOptions" formControlName="gender">
+        </fac-radio>
 
         <!-- Botón Guardar -->
-        <app-btn 
+        <fac-btn 
         label="Guardar Cambios" 
         color="primary" 
         customClass="primary-btn" 
         expand="block" 
         [disabled]="isDisabled"
         (clicked)="onSave()">
-      </app-btn>
+      </fac-btn>
       
         
         <ion-footer class="ion-no-border"> <ion-toolbar> <ion-title></ion-title> </ion-toolbar> </ion-footer>

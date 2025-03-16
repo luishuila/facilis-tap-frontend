@@ -7,7 +7,7 @@
 
         <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
-          <app-input formControlName="name" label="First Name" type="text" placeholder="John" icon="person"></app-input>
+          <fac-input formControlName="name" label="First Name" type="text" placeholder="John" icon="person"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'name') }}
@@ -15,7 +15,7 @@
           </p>
 
 
-          <app-input formControlName="lastname" label="Last Name" type="text" placeholder="Doe" icon="person"></app-input>
+          <fac-input formControlName="lastname" label="Last Name" type="text" placeholder="Doe" icon="person"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('lastname')?.invalid && (registerForm.get('lastname')?.touched || registerForm.get('lastname')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'lastname') }}
@@ -23,7 +23,7 @@
           </p>
 
 
-          <app-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail"></app-input>
+          <fac-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'email') }}
@@ -31,7 +31,7 @@
           </p>
 
 
-          <app-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed"></app-input>
+          <fac-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'password') }}
@@ -39,7 +39,7 @@
           </p>
 
 
-          <app-input formControlName="confirmPassword" label="Confirm Password" type="password" placeholder="*******" icon="lock-closed"></app-input>
+          <fac-input formControlName="confirmPassword" label="Confirm Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'confirmPassword') }}
@@ -53,19 +53,19 @@
           </p>
 
 
-          <app-input-date formControlName="birth" label="Fecha de Nacimiento" type="date" icon="calendar"></app-input-date>
+          <fac-date formControlName="birth" label="Fecha de Nacimiento" type="date" icon="calendar"></fac-date>
           <p class="error-text" *ngIf="registerForm.get('birth')?.invalid && (registerForm.get('birth')?.touched || registerForm.get('birth')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'birth') }}
             </ion-label>
           </p>
 
-          <app-input-radio
+          <fac-radio
             label="Sexo"
             icon="male-female"
             [options]="genderOptions"
             formControlName="gender">
-          </app-input-radio>
+          </fac-radio>
           <p class="error-text" *ngIf="registerForm.get('gender')?.invalid && (registerForm.get('gender')?.touched || registerForm.get('gender')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'gender') }}
@@ -73,7 +73,7 @@
           </p>
 
 
-          <app-btn 
+          <fac-btn 
             label="Register" 
             color="primary" 
             customClass="primary-btn" 
@@ -81,7 +81,7 @@
             type="submit"
             [disabled]="registerForm.invalid"
             (clicked)="onRegister()">  
-          </app-btn>
+          </fac-btn>
 
           <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
 

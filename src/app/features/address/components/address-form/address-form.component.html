@@ -6,7 +6,7 @@
         <p class="para">Ingrese la información de su dirección</p>
 
         <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
-          <app-select 
+          <fac-select 
             formControlName="countryCode" 
             label="País" 
             placeholder="Seleccione un país"
@@ -16,11 +16,11 @@
             [options]="countries"
             (ionChange)="onCountrySelected($event, null)"
             >
-          </app-select>
+          </fac-select>
 
   
         
-          <app-select 
+          <fac-select 
             formControlName="stateCode" 
             label="Departamento/Estado" 
             placeholder="Seleccione un departamento"
@@ -30,9 +30,9 @@
             [options]="departments"
             (ionChange)="onDepartmentsSelected($event, null)"
             >
-          </app-select>
+          </fac-select>
 
-          <app-select 
+          <fac-select 
             formControlName="cityStates" 
             label="Ciudad" 
             placeholder="Seleccione una ciudad"
@@ -40,72 +40,72 @@
             [valueField]="'id'" 
             [labelField]="'cityName'"
             [options]="cities">
-          </app-select>
+          </fac-select>
 
-          <app-input 
+          <fac-input 
             formControlName="lat" 
             label="Latitud" 
             type="text" 
             placeholder="Ej: 4.6097" 
             icon="location">
-          </app-input>
+          </fac-input>
 
-          <app-input 
+          <fac-input 
             formControlName="lon" 
             label="Longitud" 
             type="text" 
             placeholder="Ej: -74.0817" 
             icon="navigate">
-          </app-input>
+          </fac-input>
 
-          <app-input 
+          <fac-input 
             formControlName="street" 
             label="Calle" 
             type="text" 
             placeholder="Ej: Calle 123" 
             icon="business">
-          </app-input>
+          </fac-input>
 
-          <app-input 
+          <fac-input 
             formControlName="race" 
             label="Carrera" 
             type="text" 
             placeholder="Ej: Carrera 45" 
             icon="location">
-          </app-input>
+          </fac-input>
 
-          <app-input 
+          <fac-input 
             formControlName="neighborhood" 
             label="Barrio" 
             type="text" 
             placeholder="Ej: Chapinero" 
             icon="home">
-          </app-input>
+          </fac-input>
           
-          <app-input 
+          <fac-input 
           formControlName="zipcode" 
           label="Codigo Postal" 
           type="number" 
           placeholder="Ej: Chapinero" 
           icon="home">
-        </app-input>
+        </fac-input>
 
-          <app-input-textarea
+          <fac-input-textarea
             formControlName="description" 
             label="Descripción (Opcional)" 
             placeholder="Detalles adicionales sobre la dirección">
-          </app-input-textarea>
+          </fac-input-textarea>
 
-          <app-select 
+          <fac-select 
           formControlName="propertyType" 
           label="Property Type" 
           placeholder="Select a property type"
           icon="home"
           [options]="propertyType">
 
-        </app-select>
+        </fac-select>
         
-        <app-btn 
+        <fac-btn 
         label="Guardar Dirección" 
         color="primary" 
         customClass="primary-btn" 
@@ -113,7 +113,7 @@
         type="submit"
         [disabled]="isDisabled"
         (clicked)="saveAddress()"> 
-      </app-btn>
+      </fac-btn>
       
 
       <ion-footer class="ion-no-border">

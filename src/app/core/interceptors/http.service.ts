@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Observable, throwError, defer } from 'rxjs';
-import { catchError, finalize, switchMap, tap } from 'rxjs/operators';
+import { catchError, finalize, switchMap, tap, map } from 'rxjs/operators';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { AuthService } from '../services/auth.service';
+import { AesService } from '../services/aes/aes.service';
+import { usersData } from '../generate/idData';
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -11,13 +13,39 @@ export class HttpInterceptorService implements HttpInterceptor {
   constructor(
     private loadingCtrl: LoadingController,
     private toastCtrl: ToastController,
-    private authService: AuthService
+    private authService: AuthService,
+    private aesService: AesService 
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     if (req.url.includes('/login') || req.url.includes('/register')) {
-      console.log('Skipping token for login request');
-      return next.handle(req).pipe(
+      console.log('🚀 Interceptando solicitud de login/register...');
+
+      let clonedReq = req;
+
+          
+      if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
+
+        const encryptedBody = this.aesService.encryptData(req.body);
+        clonedReq = req.clone({ body: { data: encryptedBody } });
+      }
+      return next.handle(clonedReq).pipe(
+        tap(event => console.log('🔹 Respuesta sin procesar:', event)), 
+        map(event => {
+          if (event instanceof HttpResponse && event.body?.data) {
+       
+            try {
+              const decryptedData = this.aesService.decryptData(event.body.data);
+              
+   
+
+              return event.clone({ body: { ...event.body, data: decryptedData } });
+            } catch (error) {
+              console.error('❌ Error al desencriptar en login/register:', error);
+            }
+          }
+          return event;
+        }),
         catchError(error => this.handleError(error))
       );
     }
@@ -29,12 +57,37 @@ export class HttpInterceptorService implements HttpInterceptor {
             loading.present();
 
             let clonedReq = req;
+
+            let encryptedBody =  'MY_SECRET_KEY_32_BYTES';
+            if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
+ 
+               const descript = usersData().id||'MY_SECRET_KEY_32_BYTES'
+             // encryptedBody = this.aesService.encryptData(req.body, descript);
+             let data =  this.aesService.encryptData(req.body, descript);
+              clonedReq = req.clone({ body: { data: data } });
+            }
+
             if (token?.access_token) {
-              clonedReq = req.clone({ setHeaders: { Authorization: `Bearer ${token.access_token}` } });
+              clonedReq = clonedReq.clone({ setHeaders: { 
+                'key': usersData().id||'MY_SECRET_KEY_32_BYTES',
+                Authorization: `Bearer ${token.access_token}`
+               }});
             }
 
             return next.handle(clonedReq).pipe(
-              tap(event => console.log('✅ Request processed:', event)),
+              tap(event => event),
+              map(event => {
+                if (event instanceof HttpResponse && event.body?.data) {
+                  const descript = usersData().id||'MY_SECRET_KEY_32_BYTES'
+                  const decryptedData = this.aesService.decryptData(event.body.data,descript);
+                  try {
+                    return event.clone({ body: { ...event.body, data: decryptedData } });
+                  } catch (error) {
+                    console.error('❌ Error al desencriptar datos en respuesta global:', error);
+                  }
+                }
+                return event;
+              }),
               catchError(error => this.handleError(error)),
               finalize(() => loading.dismiss())
             );
@@ -61,8 +114,13 @@ export class HttpInterceptorService implements HttpInterceptor {
     }
 
     if (!navigator.onLine) errorMessage = 'Sin conexión a Internet.';
-    console.log()
-    const toast = await this.toastCtrl.create({ message: `${errorMessage} ${error.error.message}` , duration: 3000, position: 'bottom', color: 'danger' });
+
+    const toast = await this.toastCtrl.create({
+      message: `${errorMessage} ${error.error.message || ''}`,
+      duration: 3000,
+      position: 'bottom',
+      color: 'danger'
+    });
     await toast.present();
 
     return throwError(() => error);

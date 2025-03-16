@@ -1,12 +1,12 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-card',
-  templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
+  selector: 'fac-card',
+  templateUrl: './fac-card.component.html',
+  styleUrls: ['./fac-card.component.scss'],
   standalone: false,
 })
-export class CardComponent  implements OnInit {
+export class FacCardComponent  implements OnInit {
   @Input() imageUrl: string = '';
   @Input() title: string = '';
   @Input() description: string = '';

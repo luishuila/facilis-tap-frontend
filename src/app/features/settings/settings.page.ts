@@ -4,8 +4,10 @@ import { AuthService } from 'src/app/core/services/auth.service';
 
 interface MenuItem {
   label: string;
-  link: string;
+  link: string|null;
   icon: string;
+  item:MenuItem[]|null;
+  key:any | null;
 }
 @Component({
   selector: 'app-settings',
@@ -16,11 +18,13 @@ interface MenuItem {
 export class SettingsPage implements OnInit {
   menuOpen: boolean = false; // Controla la apertura/cierre del menú
   menuItems: MenuItem[] = [
-    { label: 'Home', link: '/navigation/home', icon: 'home' },
-    { label: 'Search', link: '/navigation/search', icon: 'search' },
-    { label: 'Configuracion', link: '/navigation/personalinformation', icon: 'search' },
-    { label: 'Centro de Gestión', link: '/navigation/administratormenu', icon: 'library'},
-    { label: 'Settings', link: '/settings', icon: 'settings' }
+    { label: 'Home', link: '/navigation/home', icon: 'home', item:[ ] , key:''},
+    { label: 'Search', link: '/navigation/search', icon: 'search',item:[] , key:''},
+    { label: 'Configuracion', link: '/navigation/personalinformation', icon: 'search' ,item:[], key:''},
+    { label: 'Settings', link: '/settings', icon: 'settings' ,item:[],  key:''},
+    { label: 'Centro de Gestión', link: null,  icon: 'library' , key:'' , item:[
+      { label: 'Inicia tu Negocio', link: '/navigation/admin', icon: 'settings' ,item:[] ,  key:'administrator'}
+    ]},
   ];
   data:any
   constructor(private authService: AuthService, private router: Router) {}
@@ -30,6 +34,7 @@ export class SettingsPage implements OnInit {
       this.data = JSON.parse(storedUser);
      console.log(this.data)
     }
+    
   }
 
   toggleMenu() {

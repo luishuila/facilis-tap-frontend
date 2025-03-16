@@ -4,19 +4,19 @@ import { ControlContainer, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angu
 import { ValidationService } from 'src/app/core/services/validate/validation.service';
 
 @Component({
-  selector: 'app-input-date',
-  templateUrl: './input-date.component.html',
-  styleUrls: ['./input-date.component.scss'],
+  selector: 'fac-date',
+  templateUrl: './fac-date.component.html',
+  styleUrls: ['./fac-date.component.scss'],
   standalone: false,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputDateComponent),
+      useExisting: forwardRef(() => FacDateComponent),
       multi: true,
     },
   ],
 })
-export class InputDateComponent implements ControlValueAccessor {
+export class FacDateComponent implements ControlValueAccessor {
   @Output() dateSelected = new EventEmitter<string>();
   @ViewChild('dateTime', { static: false }) dateTime!: IonDatetime;
   @ViewChild('modal', { static: false }) modal!: IonModal;

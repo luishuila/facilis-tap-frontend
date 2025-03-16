@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { AddressDtoI, AddressUdpatedDtoI, CityDto, CountryDto, StateCountryDto } from '../../models/address/IAddress';
-import { Observable } from 'rxjs';
+import { AddressDtoI, AddressUdpatedDtoI, CityDto, CountryDto, StateCountryDto } from '../../models/address/AddressI';
+import { map, Observable } from 'rxjs';
+import { ApiResponse } from '../../models/api/apiResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -12,17 +13,28 @@ export class AddressService {
 
   constructor(private http: HttpClient) {}
   findCountry(): Observable<CountryDto[]> {
-    return this.http.get<CountryDto[]>(`${this.apiUrl}country`);
+    return this.http.get<ApiResponse<CountryDto[]>>(`${this.apiUrl}country`).pipe(
+      map((response: ApiResponse<CountryDto[]>) => response.data)
+    );
   }
-
+  
   findDepartmentsByCountry(countryId: string): Observable<StateCountryDto[]> {
-    return this.http.get<StateCountryDto[]>(`${this.apiUrl}statecountry/${countryId}/country`);
+    return this.http.get<ApiResponse<StateCountryDto[]>>(`${this.apiUrl}statecountry/${countryId}/country`).pipe(
+      map((response: ApiResponse<StateCountryDto[]>) => response.data)
+    );
   }
+  
   findCityByDepartments(idDepartments: string): Observable<CityDto[]> {
-    return this.http.get<CityDto[]>(`${this.apiUrl}citystate/${idDepartments}/state`);
+    return this.http.get<ApiResponse<CityDto[]>>(`${this.apiUrl}citystate/${idDepartments}/state`).pipe(
+      map((response: ApiResponse<CityDto[]>) => response.data)
+    );
   }
+  
 
-  update(id:number|null, data:AddressUdpatedDtoI){
-    return this.http.put<AddressDtoI[]>(`${this.apiUrl}address/${id}`,data);
+  update(id: number | null, data: AddressUdpatedDtoI): Observable<AddressDtoI[]> {
+    return this.http.put<ApiResponse<AddressDtoI[]>>(`${this.apiUrl}address/${id}`, data).pipe(
+      map((response: ApiResponse<AddressDtoI[]>) => response.data)
+    );
   }
+  
 }

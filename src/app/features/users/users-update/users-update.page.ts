@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { genderObject } from 'src/app/core/constant/constants';
 import { idUsers, usersData } from 'src/app/core/generate/idData';
-import { Address } from 'src/app/core/models/address/address';
-import { AddressDtoI } from 'src/app/core/models/address/IAddress';
-import { UserDto, UserUpdateI } from 'src/app/core/models/User/IUser';
+import { Address } from 'src/app/core/models/address/Address';
+import { AddressDtoI } from 'src/app/core/models/address/AddressI';
+import { UserDto, UserUpdateI } from 'src/app/core/models/User/UserI';
 import { UserUpdate } from 'src/app/core/models/User/User';
 import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
@@ -101,7 +101,7 @@ export class UsersUpdatePage implements OnInit {
     }
 
     const data = new UserUpdate({...userData})
-    this.userService.updated(usersData().id,data).subscribe(data=>{
+    this.userService.update(usersData().id,data).subscribe(data=>{
       console.log(data)
     })
     console.log('Usuario actualizado:', data);
@@ -109,10 +109,7 @@ export class UsersUpdatePage implements OnInit {
   }
 
   onAddressSaved(address: AddressDtoI) {
-    // if (this.addressForm.invalid) {
-    //   Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
-    //   return;
-    // }
+
     const data = new Address({...address})
     this.addressService.update(this.addressId, data).subscribe(dat=>{
       console.log('dat',dat)

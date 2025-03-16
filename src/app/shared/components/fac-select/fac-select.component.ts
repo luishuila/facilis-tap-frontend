@@ -3,19 +3,19 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractCont
 import { ValidationService } from '../../../core/services/validate/validation.service';
 
 @Component({
-  selector: 'app-select',
-  templateUrl: './select.component.html',
-  styleUrls: ['./select.component.scss'],
+  selector: 'fac-select',
+  templateUrl: './fac-select.component.html',
+  styleUrls: ['./fac-select.component.scss'],
   standalone: false,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectComponent),
+      useExisting: forwardRef(() => FacSelectComponent),
       multi: true
     }
   ]
 })
-export class SelectComponent implements ControlValueAccessor {
+export class FacSelectComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() placeholder: string = 'Selecciona una opción';
   @Input() icon: string = 'list'; 

@@ -1,5 +1,5 @@
 import { GenderEnum } from "../../constant/enum";
-import { AddressDtoI } from "../address/IAddress";
+import { AddressDtoI } from "../address/AddressI";
 import { BaseUserModel } from "./BaseUserModel";
 
 

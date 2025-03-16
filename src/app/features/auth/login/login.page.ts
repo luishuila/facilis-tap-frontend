@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { UsersService } from 'src/app/core/services/user/users.service';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +18,9 @@ export class LoginPage implements OnInit {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+ 
+  }
 
   ngOnInit() {
     this.initForm(); 
@@ -25,8 +28,8 @@ export class LoginPage implements OnInit {
 
   initForm() {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      email: [''],
+      password: ['']
     });
   }
 

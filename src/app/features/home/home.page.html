@@ -37,7 +37,7 @@
     <p>Pull this content down to trigger the refresh.</p>
   </ion-content> -->
   <div class="cards-container">
-    <app-card
+    <fac-card
       *ngFor="let item of exampleData"
       [imageUrl]="item.imageUrl"
       [title]="item.title"
@@ -45,6 +45,6 @@
       [location]="item.location"
       [showInfoIcon]="item.showInfoIcon"
       [showLocationIcon]="item.showLocationIcon">
-    </app-card>
+    </fac-card>
   </div>
 </ion-content>

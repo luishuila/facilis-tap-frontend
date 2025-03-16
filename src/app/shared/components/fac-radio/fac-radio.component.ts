@@ -3,19 +3,19 @@ import { ControlContainer, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angu
 import { ValidationService } from 'src/app/core/services/validate/validation.service';
 
 @Component({
-  selector: 'app-input-radio',
-  templateUrl: './input-radio.component.html',
-  styleUrls: ['./input-radio.component.scss'],
+  selector: 'fac-radio',
+  templateUrl: './fac-radio.component.html',
+  styleUrls: ['./fac-radio.component.scss'],
   standalone: false,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputRadioComponent),
+      useExisting: forwardRef(() => FacRadioComponent),
       multi: true,
     },
   ],
 })
-export class InputRadioComponent implements ControlValueAccessor {
+export class FacRadioComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() icon: string = 'radio-button-on';
   @Input() options: { label: string; value: any }[] = [];

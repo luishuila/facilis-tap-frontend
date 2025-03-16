@@ -15,15 +15,34 @@
   <!-- Menú Personalizado -->
   <div class="custom-menu" [class.open]="menuOpen">
     <ion-list>
-      <ion-item *ngFor="let item of menuItems" button [routerLink]="item.link">
-        <ion-icon slot="start" [name]="item.icon"></ion-icon>
-        <ion-label>{{ item.label }}</ion-label>
-      </ion-item>
-
-      <!-- 🔥 Botón para Cerrar Sesión -->
- 
+      <ng-container *ngFor="let item of menuItems">
+        <!-- Elementos principales del menú -->
+        <ion-item *ngIf="item.link" button [routerLink]="item.link">
+          <ion-icon slot="start" [name]="item.icon"></ion-icon>
+          <ion-label>{{ item.label }}</ion-label>
+        </ion-item>
+  
+        <ion-accordion-group *ngIf="!item.link">
+          <ion-accordion [value]="item.label">
+            <ion-item slot="header">
+              <ion-icon slot="start" [name]="item.icon"></ion-icon>
+              <ion-label>{{ item.label }}</ion-label>
+            </ion-item>
+            <div slot="content">
+              <ion-list>
+                <ion-item *ngFor="let subItem of item.item" button [routerLink]="subItem.link">
+                  <ion-icon slot="start" [name]="subItem.icon"></ion-icon>
+                  <ion-label>{{ subItem.label }}</ion-label>
+                </ion-item>
+              </ion-list>
+            </div>
+          </ion-accordion>
+        </ion-accordion-group>
+      </ng-container>
     </ion-list>
   </div>
+  
+  
 
 </ion-content>
 <ion-footer class="ion-no-border">

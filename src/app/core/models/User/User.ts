@@ -1,6 +1,6 @@
 
 import { BaseUser } from './BaseUserModel';
-import { IUser, UserUpdateI } from './IUser';
+import { IUser, UserUpdateI } from './UserI';
 
 
 

@@ -4,16 +4,16 @@ import { CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
 
 import { SwiperComponent } from './components/swiper/swiper.component';
 import { CommonModule } from '@angular/common';
-import { CardComponent } from './components/card/card.component';
+import { FacCardComponent } from './components/fac-card/fac-card.component';
 import { IonicModule } from '@ionic/angular';
 import { MapsComponent } from './components/maps/maps.component';
-import { BtnComponent } from './components/btn/btn.component';
-import { InputComponent } from './components/input/input.component';
+import { FacBtnComponent } from './components/fac-btn/fac-btn.component';
+import { FacInputComponent } from './components/fac-input/fac-input.component';
 import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { InputDateComponent } from './components/input-date/input-date.component';
-import { InputRadioComponent } from './components/input-radio/input-radio.component';
-import { InputTextareaComponent } from './components/input-textarea/input-textarea.component';
-import { SelectComponent } from './components/select/select.component';
+import { FacDateComponent } from './components/fac-date/fac-date.component';
+import { FacRadioComponent } from './components/fac-radio/fac-radio.component';
+import { FacTextareaComponent } from './components/fac-textarea/fac-textarea.component';
+import { FacSelectComponent } from './components/fac-select/fac-select.component';
 
 @NgModule({
   imports: [
@@ -23,30 +23,30 @@ import { SelectComponent } from './components/select/select.component';
   ],
   declarations: [
     SwiperComponent,
-    CardComponent,
+    FacCardComponent,
      MapsComponent,
-     BtnComponent,
-      InputComponent,
-      InputDateComponent,
-      InputRadioComponent,
-      InputTextareaComponent,
-      SelectComponent
+     FacBtnComponent,
+     FacInputComponent,
+      FacDateComponent,
+      FacRadioComponent,
+      FacTextareaComponent,
+      FacSelectComponent
     ],
       
   exports:[ SwiperComponent,
-    CardComponent, 
+    FacCardComponent, 
     MapsComponent,
-    BtnComponent,
-    InputComponent,
-    InputDateComponent, 
-    InputRadioComponent,
-    InputTextareaComponent,
-    SelectComponent
+    FacBtnComponent,
+    FacInputComponent,
+    FacDateComponent, 
+    FacRadioComponent,
+    FacTextareaComponent,
+    FacSelectComponent
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputComponent),
+      useExisting: forwardRef(() => FacInputComponent),
       multi: true
     }
   ],

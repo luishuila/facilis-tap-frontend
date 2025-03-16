@@ -3,7 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IUser } from '../models/User/IUser';
+import { IUser } from '../models/User/UserI';
+import { ApiResponse } from '../models/api/apiResponse';
+import { loginResponse } from '../models/auth/auth';
 
 @Injectable({
   providedIn: 'root'
@@ -13,32 +15,34 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<any> {
+  login(email: string, password: string): Observable<ApiResponse<loginResponse>> {
     const body = { email, password };
-    return this.http.post<any>(`${this.apiUrl}auth/login`, body).pipe(
-      tap(response => {
-        if (response.data.access_token) {
-          console.log('response.data.access_token--->', response.data.access_token)
-          localStorage.setItem('users', JSON.stringify(response.data.user));
-          localStorage.setItem('access_token', response.data.access_token);
-          localStorage.setItem('refresh_token', response.data.access_token);
+    
+    return this.http.post<ApiResponse<loginResponse>>(`${this.apiUrl}auth/login`, body).pipe(
+      tap((response: ApiResponse<loginResponse>) => {
+        if (response.data && response.data.access_token) {
+          console.log('response.data.access_token--->', response.data.access_token);
+          this.saveAccessToken(response.data)
         }
       })
     );
   }
-
-  register(data: IUser): Observable<any> {
+  register(data: IUser): Observable<ApiResponse<loginResponse>>{
     return this.http.post<any>(`${this.apiUrl}auth/register`, data).pipe(
-      tap(response => {
+      tap((response: ApiResponse<loginResponse>) => {
         if (response.data.access_token) {
-          localStorage.setItem('users',  JSON.stringify(response.data.user))
-          localStorage.setItem('access_token', response.data.access_token);
-          localStorage.setItem('refresh_token', response.data.refresh_token);
+          this.saveAccessToken(response.data)
         }
       })
     );
   }
 
+  async saveAccessToken(data:loginResponse){
+    localStorage.setItem('users', JSON.stringify(data.user ?? {})); 
+    localStorage.setItem('access_token', data?.access_token ?? '');  
+    localStorage.setItem('refresh_token', data?.refresh_token ?? ''); 
+    
+  }
   async getAccessToken() {
     return {
       access_token: localStorage.getItem('access_token'),

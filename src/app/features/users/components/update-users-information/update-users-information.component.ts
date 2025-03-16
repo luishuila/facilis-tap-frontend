@@ -20,8 +20,6 @@ export class UpdateUsersInformationComponent implements OnInit {
   @Output() userSaved = new EventEmitter<any>();
 
   onSave() {
-
-    console.log(typeof this.userForm.value.nit)
     this.userSaved.emit(this.userForm.value);
   }
 }

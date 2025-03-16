@@ -1,6 +1,6 @@
 import { PropertyType } from "../../constant/enum";
 import { GenericModel } from "../../core/GenericModel";
-import { CityDto } from "./IAddress";
+import { CityDto } from "./AddressI";
 
 export interface BaseAddressModel {
     lat?: string | null;

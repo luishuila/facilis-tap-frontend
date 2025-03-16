@@ -15,4 +15,7 @@ ion-accordion-group {
     max-height: 100%;
     overflow: visible;
   }
-  
+  .disabled-segment {
+    pointer-events: none; /* Bloquea clics y selección */
+    opacity: 0.5; /* Hace que se vea deshabilitado */
+  }

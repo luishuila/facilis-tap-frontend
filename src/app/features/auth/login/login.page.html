@@ -7,17 +7,17 @@
 
         <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
-          <app-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail">
-          </app-input>
+          <fac-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail">
+          </fac-input>
 
-          <app-input formControlName="password" label="Password" type="password" placeholder="*******"
+          <fac-input formControlName="password" label="Password" type="password" placeholder="*******"
             icon="lock-closed">
-          </app-input>
+          </fac-input>
 
 
 
 
-          <app-btn 
+          <fac-btn 
           label="Login" 
           color="primary" 
           customClass="primary-btn" 
@@ -25,7 +25,7 @@
           type="submit"
         
           (clicked)="onLogin()">  
-        </app-btn>
+        </fac-btn>
 
 
         <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
@@ -49,7 +49,7 @@
 
         <p class="forget-text"><a href="#">Forgot Password?</a></p>
           <p class="signup-text">I'm a new user&nbsp;<a href="#">Sign Up?</a></p>
-         <app-btn label="Google Signin" icon="logo-google" color="light" customClass="google-btn" expand="block"></app-btn>
+         <fac-btn label="Google Signin" icon="logo-google" color="light" customClass="google-btn" expand="block"></fac-btn>
 <ion-content [fullscreen]="true">
   <ion-card class="input-card">
     <ion-card-content>
@@ -58,16 +58,16 @@
         <p class="para">Sign in to continue!</p>
         <form>
         
-          <app-input label="Email Id" type="email" placeholder="name@domain.com" icon="mail"></app-input>
+          <fac-input label="Email Id" type="email" placeholder="name@domain.com" icon="mail"></fac-input>
 
 
-          <app-input label="Password" type="password" placeholder="*******" icon="lock-closed"></app-input>
+          <fac-input label="Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
 
 
  
 
         
-          <app-btn label="Login" color="primary" customClass="primary-btn" expand="block"></app-btn>
+          <fac-btn label="Login" color="primary" customClass="primary-btn" expand="block"></fac-btn>
 
           
         </form>

@@ -32,11 +32,7 @@ const routes: Routes = [
         loadChildren: () => import('../../features/administrator/administrator.module').then(m => m.AdministratorPageModule)
       },
       {
-        path: 'administratormenu',
-        loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
-      },
-      {
-        path: 'administratormenu',
+        path: 'admin',
         loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
       },
       {

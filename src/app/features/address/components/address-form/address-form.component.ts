@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output ,OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { CityDto, CountryDto, StateCountryDto } from 'src/app/core/models/address/IAddress';
+import { CityDto, CountryDto, StateCountryDto } from 'src/app/core/models/address/AddressI';
 import { AddressService } from 'src/app/core/services/address/address.service';
 
 @Component({

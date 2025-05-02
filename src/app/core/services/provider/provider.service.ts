@@ -32,5 +32,9 @@ export class ProviderService {
     );
   }
   
-
+  findOneAll() : Observable<ProviderDto[]> {
+    return this.http.get<ApiResponse<ProviderDto[]>>(`${this.apiUrl}providers/one-all`).pipe(
+      map((response:ApiResponse<ProviderDto[]>) => response.data) 
+    );
+  }
 }

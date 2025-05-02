@@ -5,15 +5,15 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-segment>
+<ion-segment (ionChange)="segmentChanged($event)">
   <ion-segment-button value="first" content-id="first"  *ngIf="!(userValidate == false && addressValidate==false)">
     <ion-label>Actualiza datos personales</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="second" content-id="second"   [class.disabled-segment]="userValidate || addressValidate">
-    <ion-label>Second</ion-label>
+  <ion-segment-button value="register" content-id="provider"   [class.disabled-segment]="userValidate || addressValidate">
+    <ion-label>Registrar Proveedor</ion-label>
   </ion-segment-button>
-  <ion-segment-button value="third" content-id="third"  [class.disabled-segment]="userValidate || addressValidate">
-    <ion-label>Third</ion-label>
+  <ion-segment-button value="addressProvider" content-id="provider"  [class.disabled-segment]="userValidate || addressValidate">
+    <ion-label>registra direccion </ion-label>
   </ion-segment-button>
 </ion-segment>
 <ion-segment-view>
@@ -22,10 +22,10 @@
   <ion-segment-content id="first"  *ngIf="!(userValidate == false && addressValidate==false)">
     <ion-segment>
       <ion-segment-button value="usersId" content-id="usersId"  *ngIf="userValidate">
-        <ion-label>First</ion-label>
+        <ion-label>Usuarios</ion-label>
       </ion-segment-button>
       <ion-segment-button value="addressId" content-id="addressId" *ngIf="addressValidate" [class.disabled-segment]="userValidate " >
-        <ion-label>Second</ion-label>
+        <ion-label>direccion</ion-label>
       </ion-segment-button>
     </ion-segment>
     <ion-segment-view>
@@ -59,7 +59,7 @@
 
 
   </ion-segment-content>
-  <ion-segment-content id="second" >
+  <ion-segment-content id="provider" *ngIf="selectedSegment === 'register'" >
     <app-provider-form
     [providerForm]="providerForm"
     [isDisabled]="false"
@@ -67,7 +67,14 @@
     >
     </app-provider-form>
   </ion-segment-content>
-  <ion-segment-content id="third">Third</ion-segment-content>
+  <ion-segment-content id="provider"  *ngIf="selectedSegment === 'addressProvider'">      
+        <app-address-form *ngIf="validate"
+    [addressForm]="addressProviderForm"
+    [propertyType]="propertyType"
+    [isDisabled]="false"
+    (addressSaved)="onAddressSaved($event)">
+  </app-address-form>
+</ion-segment-content>
 </ion-segment-view>
 
 

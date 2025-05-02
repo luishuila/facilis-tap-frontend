@@ -1,0 +1,27 @@
+<!-- <ion-content [fullscreen]="true" color="light">
+  <div class="container">
+           <fac-item-sliding [items]="employeeList" [valueOptional]="'users[0].name'" [valueOptionalP]="'providers[0].name'"> </fac-item-sliding> 
+  </div>
+</ion-content> -->
+
+<ion-content [fullscreen]="true">
+  <ion-card class="input-card">
+    <ion-card-content>
+      <fac-btn 
+      label="Crear" 
+      color="primary" 
+      customClass="primary-btn" 
+      expand="block"
+      type="submit"
+      (clicked)="url(null)"
+    > </fac-btn>
+    <br>
+      <div class="container">
+   
+      
+        <fac-item-list  (clicked)="url($event)" [items]="employeeList" [valueOptional]="'users[0].name'" [valueOptionalP]="'providers[0].name'"> </fac-item-list>
+
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

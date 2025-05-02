@@ -81,12 +81,12 @@ export class UsersUpdatePage implements OnInit {
         
         const address = data.addresses?.[0] ?? {} as Partial<AddressDtoI>;
         this.addressId =  data.addresses?.[0].id || 0;
-        console.log('this.addressForm.patchValue',address)
+
         this.addressForm.patchValue({ 
           ...address,
           cityStates: address.cityStates?.id 
         });
-        console.log('Después:', this.addressForm.value);
+
         this.validateUsers = true
       }
     });
@@ -104,7 +104,7 @@ export class UsersUpdatePage implements OnInit {
     this.userService.update(usersData().id,data).subscribe(data=>{
       console.log(data)
     })
-    console.log('Usuario actualizado:', data);
+
  
   }
 

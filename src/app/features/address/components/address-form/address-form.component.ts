@@ -24,10 +24,11 @@ export class AddressFormComponent implements OnChanges {
   constructor(private addressService: AddressService) {
     this.addressService.findCountry().subscribe(data => {
       this.countries = data
+
     });
   }
   ngOnChanges() {
-    console.log('address-->',this.addressForm)
+ 
     // navigator.geolocation.getCurrentPosition(
     //   function(position) {
     //     console.log("Latitud:", position.coords.latitude);
@@ -63,7 +64,6 @@ export class AddressFormComponent implements OnChanges {
   }
 
   onCountrySelected(event: any,id:any ) {
-    console.log(event)
     let selectedCountryId :any
     if (!event || !event.detail || !event.detail.value) {
       selectedCountryId= id
@@ -78,7 +78,6 @@ export class AddressFormComponent implements OnChanges {
     // this.addressForm.controls['stateCode'].setValue('');
     
     this.addressService.findDepartmentsByCountry(selectedCountryId).subscribe(data => {
-      console.log("findDepartmentsByCountry:", data);
       this.departments = data
     });
 
@@ -91,7 +90,7 @@ export class AddressFormComponent implements OnChanges {
     }else{
       selectedDepartmentsId = event.detail.value;
     }
-    console.log('selectedDepartmentsId:', selectedDepartmentsId);
+    // console.log('selectedDepartmentsId:', selectedDepartmentsId);
     if(selectedDepartmentsId == undefined){
       return;
     }

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , ViewChild} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { genderObject } from 'src/app/core/constant/constants';
 import { usersData } from 'src/app/core/generate/idData';
@@ -9,9 +9,11 @@ import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
 import { Address } from 'src/app/core/models/address/Address';
 import { ProviderCreateDto } from 'src/app/core/models/Provider/ProviderI';
-import { ProviderCreate } from 'src/app/core/models/Provider/Provider';
+import { IonSegment } from '@ionic/angular';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 import { MenuService } from 'src/app/core/services/util/menu.service';
+import { ProviderCreate } from 'src/app/core/models/Provider/Provider';
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-administrator-menu',
   templateUrl: './administrator-menu.page.html',
@@ -22,7 +24,7 @@ export class AdministratorMenuPage implements OnInit {
   addressForm!: FormGroup;
   userForm!: FormGroup;
   providerForm!: FormGroup;
-
+  addressProviderForm!: FormGroup;
   validate: boolean = false;
   addressId: number | null = 0;
   validateUsers: boolean = false;
@@ -35,13 +37,15 @@ export class AdministratorMenuPage implements OnInit {
 
   userValidate = true;
   addressValidate = true;
-
+  selectedSegment: string = 'register';
   genderOptions = genderObject;
   user!: UserDto;
+  @ViewChild(IonSegment, { static: false }) segment!: IonSegment;
   constructor(private fb: FormBuilder, private userService: UsersService,
     private addressService: AddressService,
     private providerService: ProviderService,
-    private menuService: MenuService
+    private menuService: MenuService,
+    private _activatedRoute:ActivatedRoute
   ) { }
 
   ngOnInit() {
@@ -79,16 +83,38 @@ export class AdministratorMenuPage implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: [''],
       img: [''],
-      website: [''],
+      website: ['',[Validators.required]],
       nit: [null, Validators.required],
       invima: [''],
       companyIdentifier: [''],
       logoUrl: [''],
       description: ['']
     });
+
+    this.addressProviderForm = this.fb.group({
+      countryCode: [''],
+      stateCode: [''],
+      cityStates: [null],
+      lat: ['', [Validators.required]],
+      lon: [''],
+      street: [''],
+      race: [''],
+      neighborhood: [''],
+      description: [''],
+      zipcode: [''],
+      propertyType: [''],
+
+    });
+  
+    if (this._activatedRoute.snapshot.paramMap.get('id')) {
+      console.log(this._activatedRoute.snapshot.paramMap.get('id'))
+    }
   }
 
-
+  segmentChanged(event: any) {
+    this.selectedSegment = event.detail.value;
+  }
+  
   loadUser() {
     this.userService.findOne(usersData().id).subscribe((data: UserDto) => {
       this.validate = true;
@@ -158,6 +184,8 @@ export class AdministratorMenuPage implements OnInit {
   }
 
   onProviderSaved(provider: ProviderCreateDto) {
+
+ 
     if (this.providerForm.invalid) {
       Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
       return;
@@ -167,8 +195,17 @@ export class AdministratorMenuPage implements OnInit {
       console.log('data--->', response.users[0])
       localStorage.setItem('users', JSON.stringify(response.users[0] ?? {})); 
       this.menuService.loadInitialMenu();
+      this.onSegment('addressProvider')
     })
 
+  }
+
+  onSegment(event:string){
+    setTimeout(() => {
+      if (this.segment) {
+        this.segment.value = event; 
+        this.selectedSegment = event;
+      }},1000)
   }
 }
 

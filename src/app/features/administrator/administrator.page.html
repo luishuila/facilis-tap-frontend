@@ -4,10 +4,29 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">administrator</ion-title>
-    </ion-toolbar>
-  </ion-header>
-</ion-content>
+
+
+<ion-segment>
+  <ion-segment-button value="first" content-id="first">
+    <ion-label>Provedores </ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="second" content-id="second">
+    <ion-label>Employee</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="third" content-id="third">
+    <ion-label>Services</ion-label>
+  </ion-segment-button>
+</ion-segment>
+<ion-segment-view>
+  <ion-segment-content id="first">
+    <app-provider-list></app-provider-list>
+  </ion-segment-content>
+  <ion-segment-content id="second">
+    
+    <app-employee-list></app-employee-list>
+  </ion-segment-content>
+  <ion-segment-content id="third">   
+  
+  </ion-segment-content>
+
+</ion-segment-view>

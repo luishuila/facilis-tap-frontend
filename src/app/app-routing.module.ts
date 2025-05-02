@@ -22,6 +22,10 @@ const routes: Routes = [
     path: 'address',
     loadChildren: () => import('./features/address/address.module').then( m => m.AddressPageModule)
   },
+  {
+    path: 'services',
+    loadChildren: () => import('./features/services/services.module').then( m => m.ServicesPageModule)
+  },
 
 ];
 

@@ -1,4 +1,4 @@
-import { Component, Input, forwardRef, inject } from '@angular/core';
+import { Component, Input, OnInit, forwardRef, inject } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractControl } from '@angular/forms';
 import { ValidationService } from '../../../core/services/validate/validation.service';
 
@@ -15,15 +15,16 @@ import { ValidationService } from '../../../core/services/validate/validation.se
     }
   ]
 })
-export class FacSelectComponent implements ControlValueAccessor {
+export class FacSelectComponent implements ControlValueAccessor, OnInit {
+
   @Input() label: string = '';
   @Input() placeholder: string = 'Selecciona una opción';
   @Input() icon: string = 'list'; 
   @Input() disabled: boolean = false;
   @Input() formControlName!: string;
-  @Input() options: any[] = [];  // Recibe un array de cualquier tipo de objeto
-  @Input() valueField: string = 'value';  // Campo usado para `value`
-  @Input() labelField: string = 'label';  // Campo usado para `label`
+  @Input() options: any[] = [];  
+  @Input() valueField: string = 'value';  
+  @Input() labelField: string = 'label';  
 
   value: string | number = '';
   control: AbstractControl | null = null;
@@ -33,7 +34,9 @@ export class FacSelectComponent implements ControlValueAccessor {
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
-
+  ngOnInit(): void {
+    // console.log('options', this.options)
+  }
   onChange: (value: string | number) => void = () => {};
   onTouched: () => void = () => {};
 

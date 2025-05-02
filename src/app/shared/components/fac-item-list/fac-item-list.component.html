@@ -1,0 +1,9 @@
+<ion-item detail="true" *ngFor="let item of items" button (click)="onClick(item.id)">
+  <ion-avatar aria-hidden="true" slot="start">
+    <img alt="" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
+</ion-avatar>
+  <ion-label>
+    <h3>{{textExpInit}} {{getNestedValue(item, valueOptional)}} {{textExp}} {{getNestedValue(item, valueOptionalH)}} </h3>
+    <p>{{textExpPInit}} {{getNestedValue(item, valueOptionalP)}} {{textExpP}} {{getNestedValue(item, valueOptionalPA)}} </p>
+  </ion-label>
+</ion-item>

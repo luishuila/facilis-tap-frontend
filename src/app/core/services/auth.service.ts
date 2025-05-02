@@ -41,7 +41,6 @@ export class AuthService {
     localStorage.setItem('users', JSON.stringify(data.user ?? {})); 
     localStorage.setItem('access_token', data?.access_token ?? '');  
     localStorage.setItem('refresh_token', data?.refresh_token ?? ''); 
-    
   }
   async getAccessToken() {
     return {

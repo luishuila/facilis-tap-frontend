@@ -6,6 +6,7 @@
         <p class="para">Ingrese la información de su dirección</p>
 
         <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+   
           <fac-select 
             formControlName="countryCode" 
             label="País" 
@@ -90,11 +91,11 @@
           icon="home">
         </fac-input>
 
-          <fac-input-textarea
+          <fac-textarea
             formControlName="description" 
             label="Descripción (Opcional)" 
             placeholder="Detalles adicionales sobre la dirección">
-          </fac-input-textarea>
+          </fac-textarea>
 
           <fac-select 
           formControlName="propertyType" 

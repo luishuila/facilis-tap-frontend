@@ -14,9 +14,13 @@ import { FacDateComponent } from './components/fac-date/fac-date.component';
 import { FacRadioComponent } from './components/fac-radio/fac-radio.component';
 import { FacTextareaComponent } from './components/fac-textarea/fac-textarea.component';
 import { FacSelectComponent } from './components/fac-select/fac-select.component';
+import { FacItemSlidingComponent } from './components/fac-item-sliding/fac-item-sliding.component';
 
+import { FacItemListComponent } from './components/fac-item-list/fac-item-list.component';
+import { FacModalSelectComponent } from './components/fac-modal-select/fac-modal-select.component';
 @NgModule({
   imports: [
+    
       IonicModule,
     CommonModule,
     FormsModule
@@ -30,7 +34,10 @@ import { FacSelectComponent } from './components/fac-select/fac-select.component
       FacDateComponent,
       FacRadioComponent,
       FacTextareaComponent,
-      FacSelectComponent
+      FacSelectComponent,
+      FacItemSlidingComponent,
+      FacItemListComponent,
+      FacModalSelectComponent
     ],
       
   exports:[ SwiperComponent,
@@ -41,7 +48,10 @@ import { FacSelectComponent } from './components/fac-select/fac-select.component
     FacDateComponent, 
     FacRadioComponent,
     FacTextareaComponent,
-    FacSelectComponent
+    FacSelectComponent,
+    FacItemSlidingComponent,
+    FacItemListComponent,
+    FacModalSelectComponent
   ],
   providers: [
     {

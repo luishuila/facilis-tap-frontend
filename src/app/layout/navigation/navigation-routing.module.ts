@@ -32,7 +32,19 @@ const routes: Routes = [
         loadChildren: () => import('../../features/administrator/administrator.module').then(m => m.AdministratorPageModule)
       },
       {
+        path: 'employee-information/:id',
+        loadChildren: () => import('../../features/employee/employee-information/employee-information.module').then( m => m.EmployeeInformationPageModule)
+      },
+      {
+        path: 'employee-information',
+        loadChildren: () => import('../../features/employee/employee-information/employee-information.module').then( m => m.EmployeeInformationPageModule)
+      },
+      {
         path: 'admin',
+        loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
+      },
+      {
+        path: 'admin-edite/:id',
         loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
       },
       {
@@ -43,6 +55,7 @@ const routes: Routes = [
         path: 'personalinformation',
         loadChildren: () => import('../../features/users/users-update/users-update.module').then( m => m.UsersUpdatePageModule)
       },
+    
       {
         path: '',
         redirectTo: 'home',

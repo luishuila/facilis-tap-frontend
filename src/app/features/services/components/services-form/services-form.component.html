@@ -1,0 +1,123 @@
+<ion-content [fullscreen]="true">
+  <ion-card class="input-card">
+    <ion-card-content>
+      <div class="container">
+        <h1 class="heading">🏢 Registrar Servicios</h1>
+        <p class="para">Ingrese la información del Servicios</p>
+
+<form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
+  <div formArrayName="data">
+    <div *ngFor="let service of services.controls; let i = index" [formGroupName]="i">
+      <fieldset style="margin-bottom: 1rem; border: 1px solid #ccc; padding: 1rem;">
+        <div *ngIf="isValidates" >
+          <fac-select 
+          formControlName="providers" 
+          label="providers" 
+          placeholder="providers"
+          icon=""
+          [valueField]="'id'" 
+          [labelField]="'name'"
+          [items]="providerList"
+          (ionChange)="onProvidersSelected($event)"
+          >
+        </fac-select>
+        </div>
+
+      
+        <br />
+        <fac-select 
+        formControlName="servicesTypes" 
+        label="Servicios" 
+        placeholder="Servicios"
+        icon=""
+        [valueField]="'id'" 
+        [labelField]="'name'"
+        [items]="servicesType"
+  
+        >
+      </fac-select>
+      <br />
+
+        <fac-input 
+        formControlName="name" 
+        label="Nombre" 
+        type="text" 
+        placeholder="Ingrese el nombre del proveedor" 
+        icon="person">
+      </fac-input>
+      <br />
+      <fac-textarea 
+      formControlName="description" 
+      label="Descripción" 
+      placeholder="Ingrese una descripción" 
+      icon="document-text">
+    </fac-textarea> 
+        <br />
+
+        <fac-input 
+        formControlName="serviceTime" 
+        label="serviceTime" 
+        type="text" 
+        placeholder="serviceTime" 
+        icon="person">
+      </fac-input>
+
+      <fac-input 
+      formControlName="price" 
+      label="price" 
+      type="number" 
+      placeholder="price" 
+      icon="person">
+    </fac-input>
+        <br />
+
+  
+
+        <fac-btn 
+        label="Eliminar" 
+        color="primary" 
+        customClass="primary-btn" 
+        expand="block"
+        type="submit"
+ 
+        (clicked)="removeServiceForm(i)"> 
+      </fac-btn>
+    
+      </fieldset>
+    </div>
+  </div>
+  <fac-btn 
+  label="+ Agregar Servicio" 
+  color="primary" 
+  customClass="primary-btn" 
+  expand="block"
+
+  (clicked)="addServiceForm()"> 
+</fac-btn>
+
+<fac-btn 
+label="Guardar" 
+color="primary" 
+customClass="primary-btn" 
+expand="block"
+type="submit"
+
+(clicked)="onSubmit()"> 
+</fac-btn>
+
+
+        <ion-footer class="ion-no-border">
+          <ion-toolbar>
+            <ion-title></ion-title>
+          </ion-toolbar>
+        </ion-footer>
+        <ion-footer class="ion-no-border">
+          <ion-toolbar>
+            <ion-title></ion-title>
+          </ion-toolbar>
+        </ion-footer>
+        </form>
+      </div>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

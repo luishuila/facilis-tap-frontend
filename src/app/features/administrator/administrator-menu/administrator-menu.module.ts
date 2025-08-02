@@ -11,6 +11,7 @@ import { UsersComponentsModule } from '../../users/components/users-components.m
 import { SharedPageModule } from 'src/app/shared/shared.module';
 import { AddressComponentsPageModule } from '../../address/components/address-components.module';
 import { ProviderComponentsPageModule } from '../../provider/components/provider-components.module';
+import { ServicesComponentsModule } from '../../services/components/services-components.module';
 
 @NgModule({
   imports: [
@@ -25,7 +26,8 @@ import { ProviderComponentsPageModule } from '../../provider/components/provider
     SharedPageModule,
     ReactiveFormsModule,
     AddressComponentsPageModule,
-    ProviderComponentsPageModule
+    ProviderComponentsPageModule,
+    ServicesComponentsModule
   ],
   declarations: [AdministratorMenuPage]
 })

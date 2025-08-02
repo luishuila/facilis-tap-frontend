@@ -1,16 +1,30 @@
-<fieldset class="input-item" [ngClass]="{'has-error': hasError}">
+<fieldset class="input-item" [ngClass]="{'has-error': hasError}" *ngIf="!selectModal">
   <legend *ngIf="label">{{ label }}</legend>
   <ion-item class="custom-select">
     <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
 
-    <ion-select 
-      [placeholder]="placeholder" 
-      [(ngModel)]="value"
-      (ionChange)="onSelectionChange($event)"
+    <ion-select [placeholder]="placeholder" [(ngModel)]="value" (ionChange)="onSelectionChange($event)"
       [disabled]="disabled">
-      <ion-select-option *ngFor="let option of options" [value]="option[valueField]">
+      <ion-select-option *ngFor="let option of items" [value]="option[valueField]">
         {{ option[labelField] }}
       </ion-select-option>
     </ion-select>
   </ion-item>
 </fieldset>
+
+<fieldset class="input-item" [ngClass]="{'has-error': hasError}" *ngIf="selectModal">
+  <ion-list [inset]="true">
+    <ion-item [button]="true" [detail]="false" id="select-modal-trigger">
+      <ion-label>{{ label }}</ion-label>
+      <div slot="end">{{ selectedText }}</div>
+    </ion-item>
+  </ion-list>
+</fieldset>
+
+<ion-modal trigger="select-modal-trigger" #modal *ngIf="selectModal">
+  <ng-template>
+    <fac-modal-select class="ion-page" [title]="title" [items]="items" [textField]="labelField"
+      [valueField]="valueField" [selectedItems]="selectedItems" (selectionChange)="onSelectionChangeModal($event)"
+      (selectionCancel)="modal.dismiss()"></fac-modal-select>
+  </ng-template>
+</ion-modal>

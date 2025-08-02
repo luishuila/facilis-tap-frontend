@@ -40,6 +40,10 @@ const routes: Routes = [
         loadChildren: () => import('../../features/employee/employee-information/employee-information.module').then( m => m.EmployeeInformationPageModule)
       },
       {
+        path: 'employee-independent',
+        loadChildren: () => import('../../features/employee/employee-independent/employee-independent.module').then( m => m.EmployeeIndependentPageModule)
+      },
+      {
         path: 'admin',
         loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
       },
@@ -52,10 +56,28 @@ const routes: Routes = [
         loadChildren: () => import('../../features/settings/settings.module').then(m => m.SettingsPageModule)
       },
       {
+        path: 'services',
+        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
+      },
+      {
+        path: 'services',
+        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
+      },
+      {
+        path: 'services/empleyees/:id',
+        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
+      },
+      {
+        path: 'services/:id',
+        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
+      },
+      {
         path: 'personalinformation',
         loadChildren: () => import('../../features/users/users-update/users-update.module').then( m => m.UsersUpdatePageModule)
       },
     
+
+      
       {
         path: '',
         redirectTo: 'home',

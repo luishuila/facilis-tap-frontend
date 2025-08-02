@@ -1,4 +1,5 @@
 import { GenderEnum } from "../../constant/enum";
+import { BaseModels } from "../../core/BaseModels";
 import { GenericModel } from "../../core/GenericModel";
 
 export interface BaseProviderModel {
@@ -17,7 +18,7 @@ export interface BaseProviderModel {
 }
 
 
-export class BaseProvider extends GenericModel<BaseProviderModel> {
+export class BaseProvider extends BaseModels<BaseProviderModel> {
 
   constructor(data: Partial<BaseProviderModel> = {}) {
     super(data);

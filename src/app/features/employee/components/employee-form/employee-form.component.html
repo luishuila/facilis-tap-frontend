@@ -1,3 +1,112 @@
-<p>
-  employee-form works!
-</p>
+<ion-content [fullscreen]="true">
+  <ion-card class="input-card">
+    <ion-card-content>
+      <div class="container">
+        <h1 class="heading">🏢 Registrar Employee</h1>
+        <p class="para">Ingrese la información del Employee</p>
+
+
+  <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()">
+
+    <div *ngIf="independent"> 
+      <fac-input 
+      formControlName="usersId" 
+      label="uiid de usuarios" 
+      type="text" 
+      placeholder="uiid de usuarios" 
+      icon="person">
+    </fac-input>
+  </div>
+  <div *ngIf="independent"> 
+      <fac-select 
+      formControlName="providersId" 
+      label="providersId" 
+      placeholder="providersId"
+      icon=""
+      [valueField]="'id'" 
+      [labelField]="'name'"
+      [items]="providersList"
+      >
+    </fac-select>
+  </div>
+
+
+
+      <fac-input 
+        formControlName="idcard" 
+        label="idcard" 
+        type="number" 
+        placeholder="idcard" 
+        icon="person">
+      </fac-input>
+
+
+
+      <fac-input 
+        formControlName="employeeCode" 
+        label="employeeCode" 
+        type="text" 
+        placeholder="employeeCode" 
+        icon="person">
+      </fac-input>
+
+
+      <fac-input 
+        formControlName="position" 
+        label="position" 
+        type="text" 
+        placeholder="position" 
+        icon="person">
+      </fac-input>
+      <div *ngIf="independent"> 
+        <fac-date formControlName="hireDate" label="Fecha de Contratación" type="date" icon="calendar"></fac-date>
+      </div>
+      <div *ngIf="independent"> 
+      <fac-input 
+      formControlName="salary" 
+      label="salary" 
+      type="number" 
+      placeholder="salary" 
+      icon="person">
+    </fac-input>
+  </div>
+
+
+    <fac-input 
+        formControlName="supervisor" 
+        label="supervisor" 
+        type="text" 
+        placeholder="supervisor" 
+        icon="supervisor">
+      </fac-input>
+
+
+      <fac-input 
+      formControlName="department" 
+      label="department" 
+      type="text" 
+      placeholder="department" 
+      icon="person">
+    </fac-input>
+
+    <fac-select 
+    formControlName="contractType" 
+    label="contractType" 
+    placeholder="contractType"
+    icon=""
+    [items]="contractTypes"
+    >
+  </fac-select>
+ 
+    <ion-button 
+      type="submit" 
+      expand="block" 
+      [disabled]="employeeForm.invalid"
+      class="ion-margin">
+      {{ !employee.id ? 'Guardar' : 'Actualizar' }}
+    </ion-button>
+  </form>
+</div>
+</ion-card-content>
+</ion-card>
+</ion-content>

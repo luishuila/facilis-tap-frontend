@@ -1,4 +1,5 @@
 
+import { AddressDtoI } from '../address/AddressI';
 import { BaseProvider } from './BaseProviderModel';
 import { ProviderCreateDto } from './ProviderI';
 
@@ -9,6 +10,7 @@ import { ProviderCreateDto } from './ProviderI';
 export class ProviderCreate extends BaseProvider implements ProviderCreateDto {
   nit?: number | null = null;
   userId?: string| null;
+  addresses?:AddressDtoI[] | null = [];
   constructor(data: Partial<ProviderCreateDto> = {}) {
     super();
     Object.assign(this, data); 

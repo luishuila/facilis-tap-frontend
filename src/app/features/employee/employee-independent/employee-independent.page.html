@@ -1,0 +1,77 @@
+<!-- <ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>employee-configuration</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">employee-configuration</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-content> -->
+
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>employee-configuration</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-segment>
+  <ion-segment-button value="third" content-id="third">
+    <ion-label>Employee</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="second" content-id="second" [class.disabled-segment]="!employee.id">
+    <ion-label>Services</ion-label>
+  </ion-segment-button>
+
+  <ion-segment-button value="first" content-id="first" [class.disabled-segment]="!employee.id">
+    <ion-label>Provedores </ion-label>
+  </ion-segment-button>
+</ion-segment>
+
+<ion-segment-view>
+
+  <ion-segment-content id="third">   
+
+    <ion-segment-content id="first"  >
+      <ion-segment>
+        <ion-segment-button value="usersId" content-id="usersId"  >
+          <ion-label>Employee</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="addressId" content-id="addressId"  [class.disabled-segment]="!employee.id" >
+          <ion-label>Employee Direccion</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <ion-segment-view>
+  
+        <ion-segment-content id="usersId" >
+          <app-employee-form [independent]="false"     (employeeSaved)="onSegmentChanger($event)"></app-employee-form>
+        </ion-segment-content>
+  
+        <ion-segment-content id="addressId" >
+          <ion-segment-content id="second">
+            <app-address-form *ngIf="validate"
+            [addressForm]="addressForm"
+            [propertyType]="propertyType"
+            [isDisabled]="false"
+            (addressSaved)="onAddressSaved($event)">
+          </app-address-form>
+          </ion-segment-content>
+        </ion-segment-content>
+      </ion-segment-view>
+    </ion-segment-content>
+    
+  </ion-segment-content>
+
+  <ion-segment-content id="first">
+    <h1>hOLA MUNDO</h1>
+  </ion-segment-content>
+
+  <ion-segment-content id="second">
+    <app-services-list [isValidates]="false"></app-services-list>
+  </ion-segment-content>
+
+
+</ion-segment-view>

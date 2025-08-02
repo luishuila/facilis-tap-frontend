@@ -11,10 +11,10 @@
     <ion-label>Provedores </ion-label>
   </ion-segment-button>
   <ion-segment-button value="second" content-id="second">
-    <ion-label>Employee</ion-label>
+    <ion-label>Services</ion-label>
   </ion-segment-button>
   <ion-segment-button value="third" content-id="third">
-    <ion-label>Services</ion-label>
+    <ion-label>Employee</ion-label>
   </ion-segment-button>
 </ion-segment>
 <ion-segment-view>
@@ -22,11 +22,10 @@
     <app-provider-list></app-provider-list>
   </ion-segment-content>
   <ion-segment-content id="second">
-    
-    <app-employee-list></app-employee-list>
+    <app-services-list></app-services-list>
   </ion-segment-content>
   <ion-segment-content id="third">   
-  
+    <app-employee-list></app-employee-list>
   </ion-segment-content>
 
 </ion-segment-view>

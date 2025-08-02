@@ -1,14 +1,31 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
 
 @Component({
   selector: 'app-services-list',
   templateUrl: './services-list.component.html',
   styleUrls: ['./services-list.component.scss'],
+  standalone: false
 })
-export class ServicesListComponent  implements OnInit {
+export class ServicesListComponent implements OnInit {
+  servicesList:any[]=[];
+  @Input() isValidates:boolean = true;
+  constructor(private servicesTypeService: ServicesTypeService, private router: Router
+  
+  ) {
 
-  constructor() { }
+    this.servicesTypeService.findOneAllServices().subscribe(data=>{
+      this.servicesList = data
+    })
+  }
 
-  ngOnInit() {}
-
+  ngOnInit() { }
+  url(urls:any){
+    if (this.isValidates) {
+      this.router.navigate([`navigation/services`]); 
+    }else{
+      this.router.navigate([`navigation/services/empleyees/true`]); 
+    }
+  }
 }

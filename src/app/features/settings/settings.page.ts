@@ -23,7 +23,8 @@ export class SettingsPage implements OnInit {
     { label: 'Configuracion', link: '/navigation/personalinformation', icon: 'search' ,item:[], key:''},
     { label: 'Settings', link: '/settings', icon: 'settings' ,item:[],  key:''},
     { label: 'Centro de Gestión', link: null,  icon: 'library' , key:'' , item:[
-      { label: 'Inicia tu Negocio', link: '/navigation/admin', icon: 'settings' ,item:[] ,  key:'administrator'}
+      { label: 'Inicia tu Negocio', link: '/navigation/admin', icon: 'settings' ,item:[] ,  key:'administrator'},
+      { label: 'Servicio independiente', link: '/navigation/employee-independent', icon: 'settings' ,item:[] ,  key:'administrator'}
     ]},
   ];
   data:any

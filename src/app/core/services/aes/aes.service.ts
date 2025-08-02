@@ -9,26 +9,29 @@ export class AesService {
   // private readonly secretKey = 'MY_SECRET_KEY_32_BYTES'; 
 
 
-  encryptData<T>(data: T , secretKey:string = 'MY_SECRET_KEY_32_BYTES' ): ApiResponse<T> {
+  encryptData<T>(data: T , secretKey:string = 'MY_SECRET_KEY_32_BYTES' ): any {
     const parsedData: ApiResponse<T> = typeof data === 'string' ? JSON.parse(data) : data;
-    return parsedData;
-    // try {
+     return parsedData;
+    try {
 
       
 
-    //   const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
-    //   console.log('🔐 Datos encriptados:', encryptedData);
-    //   return encryptedData;
-    // } catch (error) {
-    //   console.error('❌ Error al encriptar datos:', error);
-    //   return '';
-    // }
+      const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(data), secretKey).toString();
+
+      console.log('🔐 Datos encriptados:', encryptedData);
+      return encryptedData;
+    } catch (error) {
+      console.error('❌ Error al encriptar datos:', error);
+      return '';
+    }
   }
 
-  decryptData<T>(encryptedData: string, secretKey:string = 'MY_SECRET_KEY_32_BYTES'): ApiResponse<T> | null {
+  
+  decryptData<T>(encryptedData: string, secretKey:string = 'MY_SECRET_KEY_32_BYTES'): any {
+    return encryptedData;
     try {
       const parsedData:any = encryptedData;
-      return parsedData;
+      // return parsedData;
 
       const bytes = CryptoJS.AES.decrypt(encryptedData, secretKey);
       const decryptedString = bytes.toString(CryptoJS.enc.Utf8);
@@ -38,6 +41,8 @@ export class AesService {
       }
 
       const decryptedData: ApiResponse<T> = JSON.parse(decryptedString);
+      console.log('decryptedData-->', decryptedData);
+      console.log('secretKey-->', secretKey);
       return decryptedData;
     } catch (error) {
       console.error('❌ Error al desencriptar:', error);

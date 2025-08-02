@@ -18,7 +18,7 @@ export class NavigationPage implements OnInit {
   private allTabs = [
     { tab: 'home', link: '/navigation/home', icon: 'home', label: 'Home', roles: [roleEnum.USER] },
     { tab: 'quote', link: '/navigation/quote', icon: 'calendar', label: 'Quote', roles: [roleEnum.USER] },
-    { tab: 'employee', link: '/navigation/employee', icon: 'person', label: 'Employee', roles: [roleEnum.EMPLOYEE] },
+    { tab: 'employee', link: '/navigation/employee', icon: 'person', label: 'Employee', roles: [roleEnum.USER] },
     { tab: 'provider', link: '/navigation/provider', icon: 'business', label: 'Provider', roles: [roleEnum.ADMINISTRATOR] },
     { tab: 'administrator', link: '/navigation/administrator', icon: 'person-circle', label: 'Administrator', roles: [roleEnum.ADMINISTRATOR] },
     { tab: 'settings', link: '/navigation/settings', icon: 'menu', label: 'Menu', roles: [roleEnum.USER] }

@@ -7,6 +7,10 @@ const routes: Routes = [
   {
     path: '',
     component: ServicesPage
+  },
+  {
+    path: '/:id',
+    component: ServicesPage
   }
 ];
 

@@ -14,7 +14,7 @@
             icon="globe"
             [valueField]="'countryCode'" 
             [labelField]="'countryName'"
-            [options]="countries"
+            [items]="countries"
             (ionChange)="onCountrySelected($event, null)"
             >
           </fac-select>
@@ -28,7 +28,7 @@
             icon="map"
             [valueField]="'stateCode'" 
             [labelField]="'stateName'"
-            [options]="departments"
+            [items]="departments"
             (ionChange)="onDepartmentsSelected($event, null)"
             >
           </fac-select>
@@ -40,7 +40,7 @@
             icon="location"
             [valueField]="'id'" 
             [labelField]="'cityName'"
-            [options]="cities">
+            [items]="cities">
           </fac-select>
 
           <fac-input 
@@ -102,7 +102,7 @@
           label="Property Type" 
           placeholder="Select a property type"
           icon="home"
-          [options]="propertyType">
+          [items]="propertyType">
 
         </fac-select>
         

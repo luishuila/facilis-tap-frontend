@@ -1,11 +1,12 @@
 
 
 export let idUsers:string = '' 
+export let idUuid:string = '' 
 export interface User {
     id: string; 
     name: string;
     roles: Role[];
-    uuid: string;
+    uiid: string;
     username: string;
   }
   
@@ -19,6 +20,7 @@ export interface Role {
     const storedUser:User = JSON.parse( localStorage.getItem('users') ||'');
     if (storedUser) {
         idUsers = storedUser.id;
+        idUuid = storedUser.uiid;
     }
     return storedUser;
   }

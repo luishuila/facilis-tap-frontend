@@ -1,6 +1,7 @@
 import { BaseProviderModel } from "./BaseProviderModel";
 
 
+
 export interface ProviderCreateDto extends BaseProviderModel {
    userId?: string| null;
 

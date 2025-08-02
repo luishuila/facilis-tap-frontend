@@ -21,6 +21,7 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { EmployeeListComponent } from './employee-list/employee-list.component';
+import { EmployeeFormComponent } from './employee-form/employee-form.component';
 
 
 
@@ -44,7 +45,7 @@ import { EmployeeListComponent } from './employee-list/employee-list.component';
     IonTitle,
     IonToolbar
   ],
-  declarations: [EmployeeListComponent],
-  exports:[EmployeeListComponent]
+  declarations: [EmployeeListComponent,EmployeeFormComponent],
+  exports:[EmployeeListComponent,EmployeeFormComponent]
 })
-export class EmployeeComponentsPageModule {}
+export class EmployeeComponentsModule {}

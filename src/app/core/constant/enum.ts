@@ -19,3 +19,9 @@ export enum roleEnum {
   CLIENT = 'CLIENT',
   USER = 'USER'        
 }
+
+export enum ContractTypeEnum {
+  INDEFINITE = 'Indefinite',
+  TEMPORARY = 'Temporary',
+  FREELANCE = 'Freelance'
+}

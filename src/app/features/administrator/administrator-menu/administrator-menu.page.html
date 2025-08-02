@@ -9,12 +9,15 @@
   <ion-segment-button value="first" content-id="first"  *ngIf="!(userValidate == false && addressValidate==false)">
     <ion-label>Actualiza datos personales</ion-label>
   </ion-segment-button>
+
   <ion-segment-button value="register" content-id="provider"   [class.disabled-segment]="userValidate || addressValidate">
     <ion-label>Registrar Proveedor</ion-label>
   </ion-segment-button>
+
   <ion-segment-button value="addressProvider" content-id="provider"  [class.disabled-segment]="userValidate || addressValidate">
     <ion-label>registra direccion </ion-label>
   </ion-segment-button>
+  
 </ion-segment>
 <ion-segment-view>
 
@@ -33,12 +36,12 @@
       <ion-segment-content id="usersId"  *ngIf="userValidate">
 
         <app-update-users-information 
-        *ngIf="validateUsers"
-        [userForm]="userForm"
+         *ngIf="validateUsers"
+         [userForm]="userForm"
        
-        [genderOptions]="genderOptions"
-        (userSaved)="onUserSaved($event)">
-      </app-update-users-information>
+         [genderOptions]="genderOptions"
+         (userSaved)="onUserSaved($event)">
+         </app-update-users-information>
       </ion-segment-content>
 
       <ion-segment-content id="addressId" *ngIf="addressValidate">
@@ -59,20 +62,25 @@
 
 
   </ion-segment-content>
+
+
+
+  
   <ion-segment-content id="provider" *ngIf="selectedSegment === 'register'" >
+    <!-- <app-services-form></app-services-form> -->
     <app-provider-form
     [providerForm]="providerForm"
     [isDisabled]="false"
-    (providerSaved)="onProviderSaved($event)"
+    (providerSaved)="onSegmentChanger($event,1)"
     >
-    </app-provider-form>
+    </app-provider-form> 
   </ion-segment-content>
   <ion-segment-content id="provider"  *ngIf="selectedSegment === 'addressProvider'">      
         <app-address-form *ngIf="validate"
     [addressForm]="addressProviderForm"
     [propertyType]="propertyType"
-    [isDisabled]="false"
-    (addressSaved)="onAddressSaved($event)">
+    [isDisabled]="addProveder"
+    (addressSaved)="onSegmentChanger($event,2)">
   </app-address-form>
 </ion-segment-content>
 </ion-segment-view>

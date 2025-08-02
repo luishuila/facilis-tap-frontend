@@ -1,7 +1,8 @@
-import { Component, Input, OnInit, forwardRef, inject } from '@angular/core';
+import { Component, Input, OnInit, forwardRef, inject, Output ,EventEmitter ,ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractControl } from '@angular/forms';
 import { ValidationService } from '../../../core/services/validate/validation.service';
-
+import {  FormGroup } from '@angular/forms';
+import { IonModal } from '@ionic/angular/standalone';
 @Component({
   selector: 'fac-select',
   templateUrl: './fac-select.component.html',
@@ -22,9 +23,12 @@ export class FacSelectComponent implements ControlValueAccessor, OnInit {
   @Input() icon: string = 'list'; 
   @Input() disabled: boolean = false;
   @Input() formControlName!: string;
-  @Input() options: any[] = [];  
   @Input() valueField: string = 'value';  
   @Input() labelField: string = 'label';  
+  @Input() title: string = 'Select Items';
+  @Input() items: any[] = [];
+  @Input() selectedItems: string[] = [];
+  @Input() selectModal: boolean = false;
 
   value: string | number = '';
   control: AbstractControl | null = null;
@@ -34,9 +38,35 @@ export class FacSelectComponent implements ControlValueAccessor, OnInit {
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
-  ngOnInit(): void {
-    // console.log('options', this.options)
+
+  @ViewChild('modal') modal!: IonModal;
+
+
+
+
+
+  @Output() selectionChange = new EventEmitter<string[]>();
+
+  selectedText = '0 Items';
+
+  updateSelectedText() {
+    this.selectedText = `${this.selectedItems.length} Items`;
   }
+
+  onSelectionChangeModal(values: string[]) {
+    this.selectedItems = values;
+    this.updateSelectedText();
+    this.selectionChange.emit(values);
+    this.modal.dismiss();
+  }
+
+  ngOnInit() {
+    this.updateSelectedText();
+  }
+
+  // ngOnInit(): void {
+  //   // console.log('options', this.options)
+  // }
   onChange: (value: string | number) => void = () => {};
   onTouched: () => void = () => {};
 

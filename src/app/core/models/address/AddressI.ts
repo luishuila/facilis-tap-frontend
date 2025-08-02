@@ -27,7 +27,7 @@ export interface CountryDto {
   }
   
   export interface AddressDtoI  extends  BaseAddressModel{
-    id: number | null;
+    id?: number | null;
     lat?: string | null;
     lon?: string | null;
     zipcode?: number | null;
@@ -41,6 +41,7 @@ export interface CountryDto {
     propertyType?: PropertyType | null;
     users?: string | null;
     countryCode?: string | null;
+    
 }
 
 

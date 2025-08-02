@@ -52,8 +52,8 @@ export class SwiperComponent implements OnChanges, AfterViewInit {
       observer: true,
       observeParents: true,
       on: {
-        init: () => console.log('Swiper initialized'),
-        slideChange: () => console.log('Slide changed'),
+        init: () => console.log(),
+        slideChange: () => console.log(),
       }
     };
 

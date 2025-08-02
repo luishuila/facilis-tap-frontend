@@ -18,10 +18,12 @@ export class ProviderFormComponent implements OnInit {
   @Output() providerSaved = new EventEmitter<any>();
   selectModal:any
   constructor(private servicesTypeService:ServicesTypeService){
-    this.servicesTypeService.findAll().subscribe(data=>this.selectModal=data)
+    this.servicesTypeService.findAll().subscribe(data=>{
+      this.selectModal=data
+    })
   }
-  selectedFruitsText = '0 Items';
-  selectedFruits: string[] = [];
+
+  selectedServices: any[] = [];
 
   formatData(data: any[]): string {
     if (data.length === 1) {
@@ -31,15 +33,14 @@ export class ProviderFormComponent implements OnInit {
     return `${data.length} items`;
   }
  
-  fruitSelectionChanged(fruits: any[]) {
-    console.log(fruits)
-     this.selectedFruits = fruits;
-     this.selectedFruitsText = this.formatData(this.selectedFruits);
-     this.modal.dismiss();
-   }
+
   saveProvider() {
-    console.log('saveProvider-->', this.providerForm.value)
+ 
     this.providerSaved.emit(this.providerForm.value);
+  }
+  onServicesChanged(values: any) {
+    console.log(values)
+    this.providerForm.get('servicesTypes')?.setValue(values);
   }
 
    ngOnInit() {
@@ -47,19 +48,6 @@ export class ProviderFormComponent implements OnInit {
  
    }
    
-
-
-   
-
-
-
-
-  
- 
-
-
-
-
 
 
 }

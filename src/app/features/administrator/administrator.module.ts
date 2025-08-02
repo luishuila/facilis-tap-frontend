@@ -8,7 +8,8 @@ import { AdministratorPageRoutingModule } from './administrator-routing.module';
 
 import { AdministratorPage } from './administrator.page';
 import { ProviderComponentsPageModule } from '../provider/components/provider-components.module';
-import { EmployeeComponentsPageModule } from '../employee/components/employee-components.module';
+import { EmployeeComponentsModule } from '../employee/components/employee-components.module';
+import { ServicesComponentsModule } from '../services/components/services-components.module';
 
 @NgModule({
   imports: [
@@ -17,7 +18,8 @@ import { EmployeeComponentsPageModule } from '../employee/components/employee-co
     IonicModule,
     AdministratorPageRoutingModule,
     ProviderComponentsPageModule,
-    EmployeeComponentsPageModule
+    EmployeeComponentsModule,
+    ServicesComponentsModule
   ],
   declarations: [AdministratorPage]
 })

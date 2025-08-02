@@ -4,7 +4,7 @@ import { environment } from 'src/environments/environment';
 import { UserDto, UserUpdateI } from '../../models/User/UserI';
 import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../../models/api/apiResponse';
-import { ProviderCreateDto, ProviderDto } from '../../models/Provider/ProviderI';
+import { ProviderCreateDto, ProviderDto } from '../../models/provider/ProviderI';
 
 @Injectable({
   providedIn: 'root'

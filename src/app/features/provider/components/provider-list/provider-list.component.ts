@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { addIcons } from 'ionicons';
 import { pin, share, trash } from 'ionicons/icons';
-import { ProviderDto } from 'src/app/core/models/Provider/ProviderI';
+import { ProviderDto } from 'src/app/core/models/provider/ProviderI';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 @Component({
   selector: 'app-provider-list',

@@ -31,14 +31,13 @@ export class HttpInterceptorService implements HttpInterceptor {
       }
       return next.handle(clonedReq).pipe(
         tap(event => console.log('🔹 Respuesta sin procesar:', event)), 
-        map(event => {
+        map((event:any) => {
+          console.log('event.body?.data', event?.body?.data)
           if (event instanceof HttpResponse && event.body?.data) {
-       
+            
             try {
               const decryptedData = this.aesService.decryptData(event.body.data);
               
-   
-
               return event.clone({ body: { ...event.body, data: decryptedData } });
             } catch (error) {
               console.error('❌ Error al desencriptar en login/register:', error);
@@ -62,7 +61,7 @@ export class HttpInterceptorService implements HttpInterceptor {
             if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
  
                const descript = usersData().id||'MY_SECRET_KEY_32_BYTES'
-             // encryptedBody = this.aesService.encryptData(req.body, descript);
+            //  let  encryptedBody = this.aesService.encryptData(req.body, descript);
              let data =  this.aesService.encryptData(req.body, descript);
               clonedReq = req.clone({ body: { data: data } });
             }

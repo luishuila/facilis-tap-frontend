@@ -8,12 +8,14 @@ import { UserUpdate } from 'src/app/core/models/User/User';
 import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
 import { Address } from 'src/app/core/models/address/Address';
-import { ProviderCreateDto } from 'src/app/core/models/Provider/ProviderI';
+import { ProviderCreateDto } from 'src/app/core/models/provider/ProviderI';
 import { IonSegment } from '@ionic/angular';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 import { MenuService } from 'src/app/core/services/util/menu.service';
-import { ProviderCreate } from 'src/app/core/models/Provider/Provider';
-import { ActivatedRoute } from '@angular/router';
+import { ProviderCreate } from 'src/app/core/models/provider/Provider';
+import { ActivatedRoute, Router } from '@angular/router';
+import { GenericServiceService } from 'src/app/core/services/genericService/generic-service.service';
+import { TypeItem } from 'src/app/core/models/util/util';
 @Component({
   selector: 'app-administrator-menu',
   templateUrl: './administrator-menu.page.html',
@@ -28,15 +30,11 @@ export class AdministratorMenuPage implements OnInit {
   validate: boolean = false;
   addressId: number | null = 0;
   validateUsers: boolean = false;
-  propertyType = [
-    { value: "HOUSE", label: 'House' },
-    { value: "APARTMENT", label: 'Apartment' },
-    { value: "BUILDING", label: 'Building' },
-    { value: "COMMERCIAL_SPACE", label: 'Commercial Space' }
-  ];
+  propertyType:TypeItem<string>[]|[] = [];
 
   userValidate = true;
   addressValidate = true;
+  addProveder = false;
   selectedSegment: string = 'register';
   genderOptions = genderObject;
   user!: UserDto;
@@ -45,8 +43,12 @@ export class AdministratorMenuPage implements OnInit {
     private addressService: AddressService,
     private providerService: ProviderService,
     private menuService: MenuService,
-    private _activatedRoute:ActivatedRoute
-  ) { }
+    private _activatedRoute:ActivatedRoute,
+     private router: Router,
+     private genericServiceService: GenericServiceService
+  ) {
+    this.genericServiceService.findAllContractType().subscribe(data => this.propertyType = data) 
+   }
 
   ngOnInit() {
     this.loadUser()
@@ -62,7 +64,6 @@ export class AdministratorMenuPage implements OnInit {
       description: [''],
       zipcode: [''],
       propertyType: [''],
-
     });
 
     this.userForm = this.fb.group({
@@ -80,22 +81,24 @@ export class AdministratorMenuPage implements OnInit {
 
     this.providerForm = this.fb.group({
       name: [''],
-      email: ['', [Validators.required, Validators.email]],
+      email: [''],
       phone: [''],
       img: [''],
-      website: ['',[Validators.required]],
-      nit: [null, Validators.required],
+      website: [''],
+      nit: [null],
       invima: [''],
       companyIdentifier: [''],
       logoUrl: [''],
-      description: ['']
+      description: [''],
+      servicesTypes:[[],Validators.required],
+
     });
 
     this.addressProviderForm = this.fb.group({
       countryCode: [''],
       stateCode: [''],
       cityStates: [null],
-      lat: ['', [Validators.required]],
+      lat: [''],
       lon: [''],
       street: [''],
       race: [''],
@@ -168,9 +171,6 @@ export class AdministratorMenuPage implements OnInit {
   }
 
   onAddressSaved(address?: AddressDtoI) {
-
-
-
     if (this.addressForm.invalid) {
       Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
       return;
@@ -183,21 +183,67 @@ export class AdministratorMenuPage implements OnInit {
     console.log('data', data)
   }
 
-  onProviderSaved(provider: ProviderCreateDto) {
 
- 
-    if (this.providerForm.invalid) {
-      Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
+  onAddressProviderSaved(addressProvider?: AddressDtoI) {
+
+    if (this.addressProviderForm.invalid) {
+      Object.values(this.addressProviderForm.controls).forEach(control => control.markAsTouched());
       return;
     }
+    const data = new Address({ ...addressProvider })
+  }
+  dataProvider:ProviderCreate = new ProviderCreate() ; 
+  onSegmentChanger(event:any,expr:number){
+ 
+    switch (expr) {
+      case 1:
+        if (this.providerForm.invalid) {
+          Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
+          return;
+        }
+        this.dataProvider = new ProviderCreate({ ...event ,userId:usersData().id })
+        this.selectedSegment = 'addressProvider'
+        break;
+      case 2:
+        if (this.addressProviderForm.invalid) {
+          Object.values(this.addressProviderForm.controls).forEach(control => control.markAsTouched());
+          return;
+        }
+        const data = new Address({ ...event })
+        if (!this.dataProvider.addresses) {
+          this.dataProvider.addresses = [];
+        }
+        console.log('onSegmentChanger--->',data)
+        this.dataProvider.addresses = [data]
+        console.log('dataProvider--->',this.dataProvider)
+        this.onProviderSaved( this.dataProvider)
+        break
+    }
+    console.log('dataProvider',this.dataProvider)
+  }
+  onProviderSaved(provider: ProviderCreateDto) {
+
+  //   if (this.providerForm.invalid) {
+  //     Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
+  //     return;
+  //   }
+  //  this.selectedSegment = 'addressProvider'
+  //   if (this.addressForm.invalid) {
+  //     Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
+  //     return;
+  //   }
+    
     const data = new ProviderCreate({ ...provider ,userId:usersData().id })
+    this.addProveder = true;
     this.providerService.create(data).subscribe((response:any) => {
-      console.log('data--->', response.users[0])
+
       localStorage.setItem('users', JSON.stringify(response.users[0] ?? {})); 
       this.menuService.loadInitialMenu();
       this.onSegment('addressProvider')
-    })
-
+      this.router.navigate([`navigation/services`]); 
+      this.addProveder = false;
+    },(erro)=>{console.log('erro',erro)})
+    this.addProveder = false;
   }
 
   onSegment(event:string){

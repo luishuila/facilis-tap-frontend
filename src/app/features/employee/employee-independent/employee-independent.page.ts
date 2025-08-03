@@ -3,8 +3,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Address } from 'src/app/core/models/address/Address';
 import { AddressDtoI } from 'src/app/core/models/address/AddressI';
 import { EmployeeCreate } from 'src/app/core/models/employee/employee.interface';
+import { TypeItem } from 'src/app/core/models/util/util';
 import { AddressService } from 'src/app/core/services/address/address.service';
 import { EmployeeService } from 'src/app/core/services/employee/employee.service';
+import { GenericServiceService } from 'src/app/core/services/genericService/generic-service.service';
 
 @Component({
   selector: 'app-employee-Independent',
@@ -17,9 +19,12 @@ export class EmployeeIndependentPage implements OnInit {
   addressForm!: FormGroup;
   addressId: number | null = 0;
   addressValidate = true;
-  
-  constructor(private fb: FormBuilder, private addressService: AddressService) {
-        this.addressForm = this.fb.group({
+  propertyType:TypeItem<string>[]|[] = [];
+  constructor(private fb: FormBuilder, private addressService: AddressService,
+    private genericServiceService: GenericServiceService
+  ) {
+    this.genericServiceService.findAllPropertyType().subscribe(data => this.propertyType = data)     
+    this.addressForm = this.fb.group({
           countryCode: [''],
           stateCode: [''],
           cityStates: [null],
@@ -32,6 +37,7 @@ export class EmployeeIndependentPage implements OnInit {
           zipcode: [''],
           propertyType: [''],
         });
+
    }
   onAddressSaved(address?: AddressDtoI) {
     if (this.addressForm.invalid) {

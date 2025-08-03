@@ -1,32 +1,37 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnChanges } from '@angular/core';
+import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnChanges, Output, EventEmitter } from '@angular/core';
 import Swiper from 'swiper';
 import { Navigation, Pagination } from 'swiper/modules';
 import type { SwiperOptions } from 'swiper/types';
 
 @Component({
-  selector: 'app-swiper',
-  templateUrl: './swiper.component.html',
-  styleUrls: ['./swiper.component.scss'],
+  selector: 'fac-category',
+  templateUrl: './fac-category.component.html',
+  styleUrls: ['./fac-category.component.scss'],
   standalone: false,
 })
-export class SwiperComponent implements OnChanges, AfterViewInit {
-  @Input() slides: { image: string; title: string }[] = [];
+export class  FacCategoryComponent implements OnChanges, AfterViewInit {
+  @Input() items: { img: string; title: string, id:number, description:string }[] | any[] = [];
   @Input() slidesPerView: number = 3;
   @Input() spaceBetween: number = 8;
   @Input() loop: boolean = true;
   @Input() navigation: boolean = true;
-
+  @Input() valueField: string = 'id';  
+  @Input() labelField: string = 'name';  
+  @Input() img: string = 'img'; 
+  @Output() categoryEvent = new EventEmitter<any>();
   swiperConfig: SwiperOptions = {};
   swiper!: Swiper;
 
   @ViewChild('swiperContainer', { static: false }) swiperContainer!: ElementRef;
 
   ngOnChanges() {
-    if (this.slides?.length > 0 && this.swiper) {
-      this.swiper.update(); // ✅ Actualizar Swiper en lugar de inicializarlo de nuevo
+    if (this.items?.length > 0 && this.swiper) {
+      this.swiper.update(); 
     }
   }
-
+  onImgClick(id: any) {
+    this.categoryEvent.emit(id)
+  }
   ngAfterViewInit() {
     setTimeout(() => this.initSwiper(), 0);
   }

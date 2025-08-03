@@ -26,16 +26,28 @@
       
         <br />
         <fac-select 
-        formControlName="servicesTypes" 
-        label="Servicios" 
-        placeholder="Servicios"
+        formControlName="category" 
+        label="Categorías" 
+        placeholder="Categorías"
         icon=""
         [valueField]="'id'" 
         [labelField]="'name'"
-        [items]="servicesType"
-  
+        [items]="categoryAll"
+        (ionChange)="onSubCategory($event)"
         >
       </fac-select>
+
+      <fac-select 
+      formControlName="subcategory" 
+      label="subCategory" 
+      placeholder="subCategory"
+      icon=""
+      [valueField]="'id'" 
+      [labelField]="'name'"
+      [items]="subCategory"
+      >
+    </fac-select>
+
       <br />
 
         <fac-input 

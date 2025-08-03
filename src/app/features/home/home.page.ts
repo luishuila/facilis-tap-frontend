@@ -1,6 +1,9 @@
 // src/app/features/home/home.page.ts
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
+import { CategoryService } from 'src/app/core/services/category/category.service';
+import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
 
 @Component({
   selector: 'app-home',
@@ -13,7 +16,8 @@ export class HomePage implements OnInit {
   lastScrollPosition: number = 0;
   headerOpacity: number = 1;
   headerOffset: number = 0;
-
+  categoryAll:CategoryDto[] =[];
+  subCategory:SubcategoryDto[] = []
   exampleData = exampleData;
   slidesTres = [
     { image: 'https://picsum.photos/600/300?random=1', title: 'Slide 1' },
@@ -23,20 +27,32 @@ export class HomePage implements OnInit {
     { image: 'https://picsum.photos/600/300?random=5', title: 'Slide 5' }
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private categoryService:CategoryService) {
+    this.categoryService.findAllCategory().subscribe(data=>{
+      this.categoryAll = data
+    })
+  }
 
   ngOnInit() {}
 
-  // ✅ Recarga la página al hacer clic en el botón Home
   reloadPage() {
     window.location.reload(); // ✅ Recarga completa de la página
   }
 
-  // ✅ Evento que se ejecuta al ingresar a la vista
+
   ionViewWillEnter() {
     this.resetPage();
   }
-
+  onCategory(event:any){
+    console.log('event-->', event)
+    this.subCategory = []
+    this.categoryService.findAllSubCategory(event).subscribe(data=>{
+      this.subCategory = data
+    })
+  }
+  onSubCategory(id:any){
+    console.log('onSubCategory-->', id)
+  }
   onScroll(event: any) {
     const currentScrollPosition = event.detail.scrollTop;
     const scrollDifference = currentScrollPosition - this.lastScrollPosition;
@@ -66,6 +82,8 @@ export class HomePage implements OnInit {
     document.querySelector('ion-content')?.scrollToTop(0);
   }
 }
+
+
 
 export const exampleData = [
   {

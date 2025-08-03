@@ -9,6 +9,7 @@ import { EmployeeIndependentPageRoutingModule } from './employee-independent-rou
 import { EmployeeIndependentPage } from './employee-independent.page';
 import { EmployeeComponentsModule } from '../components/employee-components.module';
 import { ServicesComponentsModule } from '../../services/components/services-components.module';
+import { AddressComponentsPageModule } from '../../address/components/address-components.module';
 
 @NgModule({
   imports: [
@@ -20,7 +21,8 @@ import { ServicesComponentsModule } from '../../services/components/services-com
     FormsModule,
     IonicModule,
     EmployeeComponentsModule,
-    ServicesComponentsModule
+    ServicesComponentsModule,
+    AddressComponentsPageModule
   ],
   declarations: [EmployeeIndependentPage]
 })

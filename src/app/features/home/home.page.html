@@ -13,21 +13,25 @@
     </ion-header>
 
     
-    <app-swiper 
-      [slides]="slidesTres" 
-      [slidesPerView]="3" 
-      [spaceBetween]="8" 
-      [loop]="true" 
-      [navigation]="true">
-    </app-swiper>
 
-    <app-swiper 
-      [slides]="slidesTres" 
+    <fac-category 
+      [items]="categoryAll" 
       [slidesPerView]="3" 
       [spaceBetween]="8" 
       [loop]="true" 
-      [navigation]="true">
-    </app-swiper>
+      [navigation]="true"
+      (categoryEvent)="onCategory($event)"
+      >
+    </fac-category>
+    <fac-subcategory 
+    [items]="subCategory" 
+    [slidesPerView]="3" 
+    [spaceBetween]="8" 
+    [loop]="true" 
+    [navigation]="true"
+    (subCategoryEvent)="onSubCategory($event)"
+    >
+  </fac-subcategory>
   </div>
   <!-- <ion-content class="ion-padding">
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">

@@ -1,0 +1,15 @@
+<div #swiperContainer class="swiper">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide" *ngFor="let option of items">
+      <img  [src]="option[img]" alt="Slide image" (click)="onImgClick(option[valueField])" />
+      {{ option[labelField] }}
+    </div>
+  </div>
+
+  <!-- Botones de navegación -->
+  <div class="swiper-button-prev" *ngIf="navigation"></div>
+  <div class="swiper-button-next" *ngIf="navigation"></div>
+
+  <!-- Paginación -->
+  <div class="swiper-pagination"></div>
+</div>

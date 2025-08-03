@@ -2,8 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { usersData } from 'src/app/core/generate/idData';
+import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
 import { ServiceCreate } from 'src/app/core/models/services/Service';
 import { ServiceCreateDto } from 'src/app/core/models/services/ServiceCreateDto';
+import { CategoryService } from 'src/app/core/services/category/category.service';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
 
@@ -17,20 +19,22 @@ export class ServicesFormComponent  implements OnInit {
 
   servicesForm!: FormGroup;
   servicesType:any[] =[];
+  categoryAll:CategoryDto[] =[];
   providerList:any[] =[];
+  subCategory:SubcategoryDto[] = []
   @Input() isValidates:boolean = true;
   
   constructor(private fb: FormBuilder, private servicesTypeService:ServicesTypeService,
     private providerService:ProviderService,   private route: ActivatedRoute,
-    
+    private categoryService:CategoryService
   ) {
-    
+    this.categoryService.findAllCategory().subscribe(data=>this.categoryAll = data)
     if(this.route.snapshot.paramMap.get('id')){
       this.isValidates = false;
 
-       this.servicesTypeService.findAll().subscribe(data=>{
-        this.servicesType=data
-      })
+      //  this.servicesTypeService.findAll().subscribe(data=>{
+      //   this.servicesType=data
+      // })
     }
     if(this.isValidates){
       this.providerService.findOneAll().subscribe(data=>{
@@ -57,7 +61,8 @@ export class ServicesFormComponent  implements OnInit {
       serviceTime: ['', Validators.required],
       price: [0, [Validators.required, Validators.min(0)]],
       providers: [null, this.isValidates ? Validators.required : []],
-      servicesTypes: [null, Validators.required],
+      category: [null, Validators.required],
+      subcategory:[null,Validators.required],
     });
   }
 
@@ -72,6 +77,8 @@ export class ServicesFormComponent  implements OnInit {
   }
 
   onSubmit() {
+    console.log('this.servicesForm.valid →', this.servicesForm.valid);
+    console.log('this.servicesForm →', this.servicesForm);
     if (this.servicesForm.valid) {
       let serviceCreate:ServiceCreate[] = this.servicesForm.value.data.map((item:ServiceCreateDto) =>{ 
           if(!this.isValidates){
@@ -96,4 +103,8 @@ export class ServicesFormComponent  implements OnInit {
     this.servicesType = []
     this.servicesType  =  this.providerList.find(data=>data.id === event.detail?.value).servicesTypes
   }
+  onSubCategory(event: any) {
+    this.categoryService.findAllSubCategory(event.detail.value).subscribe(data=>this.subCategory = data)
+  }
+ 
 }

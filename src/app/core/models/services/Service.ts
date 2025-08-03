@@ -11,7 +11,8 @@ export class ServiceCreate extends BaseModels<ServiceCreateDto> implements Servi
   providers?: number | null = null;
   servicesTypes?: number | null;
   employees?: string | number | null = null;
-
+  subcategory ?: number | null;
+  category ?: number | null;
   constructor(data: Partial<ServiceCreateDto> = {}) {
     super(data);
 

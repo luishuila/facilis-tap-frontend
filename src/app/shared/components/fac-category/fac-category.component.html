@@ -1,8 +1,8 @@
 <div #swiperContainer class="swiper">
   <div class="swiper-wrapper">
-    <div class="swiper-slide" *ngFor="let slide of slides">
-      <img [src]="slide.image" alt="Slide image" />
-      <h2>{{ slide.title }}</h2>
+    <div class="swiper-slide" *ngFor="let option of items">
+      <img  [src]="option[img]" alt="Slide image" (click)="onImgClick(option[valueField])" />
+      {{ option[labelField] }}
     </div>
   </div>
 

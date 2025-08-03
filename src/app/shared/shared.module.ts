@@ -2,7 +2,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, forwardRef, NgModule } from '@angular/core';
 
 // import { SwiperModule } from 'swiper/angular';
 
-import { SwiperComponent } from './components/swiper/swiper.component';
+import { FacCategoryComponent } from './components/fac-category/fac-category.component';
 import { CommonModule } from '@angular/common';
 import { FacCardComponent } from './components/fac-card/fac-card.component';
 import { IonicModule } from '@ionic/angular';
@@ -18,6 +18,7 @@ import { FacItemSlidingComponent } from './components/fac-item-sliding/fac-item-
 
 import { FacItemListComponent } from './components/fac-item-list/fac-item-list.component';
 import { FacModalSelectComponent } from './components/fac-modal-select/fac-modal-select.component';
+import { FacSubCategoryComponent } from './components/fac-subcategory/fac-subcategory.component';
 @NgModule({
   imports: [
     
@@ -26,7 +27,7 @@ import { FacModalSelectComponent } from './components/fac-modal-select/fac-modal
     FormsModule
   ],
   declarations: [
-    SwiperComponent,
+    FacCategoryComponent,
     FacCardComponent,
      MapsComponent,
      FacBtnComponent,
@@ -37,10 +38,12 @@ import { FacModalSelectComponent } from './components/fac-modal-select/fac-modal
       FacSelectComponent,
       FacItemSlidingComponent,
       FacItemListComponent,
-      FacModalSelectComponent
+      FacModalSelectComponent,
+      FacSubCategoryComponent
     ],
       
-  exports:[ SwiperComponent,
+  exports:[ 
+    FacCategoryComponent,
     FacCardComponent, 
     MapsComponent,
     FacBtnComponent,
@@ -51,7 +54,8 @@ import { FacModalSelectComponent } from './components/fac-modal-select/fac-modal
     FacSelectComponent,
     FacItemSlidingComponent,
     FacItemListComponent,
-    FacModalSelectComponent
+    FacModalSelectComponent,
+    FacSubCategoryComponent
   ],
   providers: [
     {

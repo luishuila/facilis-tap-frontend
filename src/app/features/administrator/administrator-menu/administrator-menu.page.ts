@@ -47,7 +47,7 @@ export class AdministratorMenuPage implements OnInit {
      private router: Router,
      private genericServiceService: GenericServiceService
   ) {
-    this.genericServiceService.findAllContractType().subscribe(data => this.propertyType = data) 
+    this.genericServiceService.findAllPropertyType().subscribe(data => this.propertyType = data) 
    }
 
   ngOnInit() {

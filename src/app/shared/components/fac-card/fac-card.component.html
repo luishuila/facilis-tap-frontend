@@ -25,6 +25,11 @@
       </ion-icon>
 
       <span *ngIf="location" class="location-text">{{ location }}</span>
+      
+    </div>
+    <div class="distance-info" *ngIf="formatDistance(distance)">
+      <ion-icon name="navigate-outline"></ion-icon>
+      <span>{{ formatDistance(distance) }}</span>
     </div>
   </ion-card-content>
 </ion-card>

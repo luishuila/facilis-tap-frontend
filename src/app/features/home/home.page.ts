@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
 import { CategoryService } from 'src/app/core/services/category/category.service';
+import { HomeService } from 'src/app/core/services/home/home.service';
 import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
 
 @Component({
@@ -17,34 +18,99 @@ export class HomePage implements OnInit {
   headerOpacity: number = 1;
   headerOffset: number = 0;
   categoryAll:CategoryDto[] =[];
-  subCategory:SubcategoryDto[] = []
+  subCategory:SubcategoryDto[] = [];
+  subCategoryId:  number|null|undefined ;
   exampleData = exampleData;
-  slidesTres = [
-    { image: 'https://picsum.photos/600/300?random=1', title: 'Slide 1' },
-    { image: 'https://picsum.photos/600/300?random=2', title: 'Slide 2' },
-    { image: 'https://picsum.photos/600/300?random=3', title: 'Slide 3' },
-    { image: 'https://picsum.photos/600/300?random=4', title: 'Slide 4' },
-    { image: 'https://picsum.photos/600/300?random=5', title: 'Slide 5' }
-  ];
-
-  constructor(private router: Router, private categoryService:CategoryService) {
+  items: any[] = [];
+  page = 1;
+  limit = 10;
+  lat = 4.6097;
+  lon = -74.0817;
+  categoryId?: number;
+  subcategoryId?: number;
+  hasMore = true;
+  constructor(private router: Router, private categoryService:CategoryService, 
+    private homeService:HomeService) {
+    
     this.categoryService.findAllCategory().subscribe(data=>{
       this.categoryAll = data
     })
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+         this.lat = position.coords.latitude;
+         this.lon = position.coords.longitude;
+        console.log("Latitud:", this.lat);
+        console.log("Longitud:", this.lon);
+      },
+      (error) => {
+        console.error("Error al obtener la ubicación:", error.message);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
   }
-
+  ionViewDidEnter() {
+    this.resetData();
+    this.loadHome();
+  }
+  resetData() {
+    this.items = [];
+    this.page = 1;
+    this.hasMore = true;
+  }
+  loadMore(event: any) {
+    console.log('More ckre')
+    this.loadHome(event);
+  }
   ngOnInit() {}
 
   reloadPage() {
-    window.location.reload(); // ✅ Recarga completa de la página
+    window.location.reload(); 
   }
 
-
+  loadHome(event?: any) {
+    if (!this.hasMore) {
+      if (event) event.target.complete();
+      return;
+    }
+  
+    this.homeService.getHome(this.lat, this.lon, this.page, this.limit, this.categoryId, this.subcategoryId)
+      .subscribe((data: any) => {
+        if (!Array.isArray(data?.items)) {
+          console.warn('No hay items válidos');
+          this.hasMore = false;
+          if (event) event.target.complete();
+          return;
+        }
+        if (this.page === 1) {
+          this.items = Array.isArray(data?.items) ? data.items : [];
+        } else {
+          console.log('.items-->',  data)
+          const newItems = Array.isArray(data?.items) ? data.items : [];
+          this.items = [...this.items, ...newItems];
+        }
+        console.log('.items-->',  this.items)
+        // ✅ Verifica si hay más datos
+        if (data.length < this.limit) {
+          this.hasMore = false;
+        } else {
+          this.page++;
+        }
+  
+        if (event) event.target.complete();
+      }, error => {
+        console.error('Error cargando datos:', error);
+        if (event) event.target.complete();
+      });
+  }
   ionViewWillEnter() {
     this.resetPage();
   }
   onCategory(event:any){
-    console.log('event-->', event)
+    this.categoryId = event;
     this.subCategory = []
     this.categoryService.findAllSubCategory(event).subscribe(data=>{
       this.subCategory = data

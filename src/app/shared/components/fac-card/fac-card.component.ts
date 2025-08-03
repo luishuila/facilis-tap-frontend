@@ -10,6 +10,7 @@ export class FacCardComponent  implements OnInit {
   @Input() imageUrl: string = '';
   @Input() title: string = '';
   @Input() description: string = '';
+  @Input() distance:any = null;
   @Input() location: string = '';
   @Input() showInfoIcon: boolean = true;
   @Input() showLocationIcon: boolean = true;
@@ -21,7 +22,16 @@ export class FacCardComponent  implements OnInit {
   onInfoClick() {
     console.log('Información clickeada');
   }
+  formatDistance(distKm: number | null): string | boolean {
 
+    if(distKm == null){
+      return false;
+    }
+    if (distKm < 1) {
+      return `${Math.round(distKm * 1000)} m`;
+    }
+    return `${distKm.toFixed(1)} km`;
+  }
   onLocationClick() {
     console.log('Ubicación clickeada');
   }

@@ -12,7 +12,6 @@
       </ion-toolbar>
     </ion-header>
 
-    
 
     <fac-category 
       [items]="categoryAll" 
@@ -33,22 +32,33 @@
     >
   </fac-subcategory>
   </div>
-  <!-- <ion-content class="ion-padding">
-    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
-      <ion-refresher-content></ion-refresher-content>
-    </ion-refresher>
-  
-    <p>Pull this content down to trigger the refresh.</p>
-  </ion-content> -->
+  <div class="cards-container">
+    <fac-card
+      *ngFor="let item of items"
+      [imageUrl]="item.imageUrl"
+      [title]="item.servicename"
+      [description]="item.subcategorynames"
+      [distance] = "item.distance"
+      [location]="`${item.city.cityName} ${item.city.stateCountries.stateName} ${item.city.stateCountries.countries.countryName}`"
+      [showInfoIcon]="true"
+      [showLocationIcon]="true">
+    </fac-card>
+  </div>
   <div class="cards-container">
     <fac-card
       *ngFor="let item of exampleData"
       [imageUrl]="item.imageUrl"
       [title]="item.title"
       [description]="item.description"
-      [location]="item.location"
+      [location]=" item.location "
       [showInfoIcon]="item.showInfoIcon"
       [showLocationIcon]="item.showLocationIcon">
     </fac-card>
   </div>
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
+    <ion-infinite-scroll-content
+      loadingSpinner="bubbles"
+      loadingText="Cargando más...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
 </ion-content>

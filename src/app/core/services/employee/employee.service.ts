@@ -5,6 +5,7 @@ import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../../models/api/apiResponse';
 import { EmployeeModelsCreate } from '../../models/employee/Employee.Model';
 import { EmployeeCreate } from '../../models/employee/employee.interface';
+import { EmployeeDto } from '../../models/employee/Employee.dto';
 
 @Injectable({
   providedIn: 'root'
@@ -20,9 +21,9 @@ export class EmployeeService {
       );
     }
 
-    findIndependent() : Observable<EmployeeCreate> {
-      return this.http.get<ApiResponse<EmployeeCreate>>(`${this.apiUrl}employee/independent`).pipe(
-        map((response:ApiResponse<EmployeeCreate>) => response.data) 
+    findIndependent() : Observable<EmployeeDto> {
+      return this.http.get<ApiResponse<EmployeeDto>>(`${this.apiUrl}employee/independent`).pipe(
+        map((response:ApiResponse<EmployeeDto>) => response.data) 
       );
     }
     create(data:EmployeeModelsCreate) : Observable<EmployeeCreate>{

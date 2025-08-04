@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Address } from 'src/app/core/models/address/Address';
 import { AddressDtoI } from 'src/app/core/models/address/AddressI';
+import { EmployeeDto } from 'src/app/core/models/employee/Employee.dto';
 import { EmployeeCreate } from 'src/app/core/models/employee/employee.interface';
 import { TypeItem } from 'src/app/core/models/util/util';
 import { AddressService } from 'src/app/core/services/address/address.service';
@@ -15,9 +16,9 @@ import { GenericServiceService } from 'src/app/core/services/genericService/gene
   standalone: false,
 })
 export class EmployeeIndependentPage implements OnInit {
-  employee: EmployeeCreate =  {} as EmployeeCreate;
+  employee: EmployeeDto|EmployeeCreate =  {} as EmployeeDto;
   addressForm!: FormGroup;
-  addressId: number | null = 0;
+  addressId: number | null | undefined ;
   addressValidate = true;
   propertyType:TypeItem<string>[]|[] = [];
   constructor(private fb: FormBuilder, private addressService: AddressService,
@@ -51,8 +52,16 @@ export class EmployeeIndependentPage implements OnInit {
     this.addressValidate = this.addressForm.invalid
     console.log('data', data)
   }
-  onSegmentChanger(event:EmployeeCreate){
+  onSegmentChanger(event: EmployeeDto | EmployeeCreate) {
     this.employee = event;
+  
+    if ('address' in event && event.address) {
+      this.addressId = event.address.id;
+      this.addressForm.patchValue({
+        ...event.address,
+        cityStates: event.address.cityStates?.id ?? null
+      });
+    }
   }
   ngOnInit() {
     // this.employeeService.findIndependent().subscribe(data => {

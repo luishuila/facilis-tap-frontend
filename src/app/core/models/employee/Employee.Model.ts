@@ -2,6 +2,7 @@ import { ContractTypeEnum } from "../../constant/enum";
 import { EmployeeCreate } from "./employee.interface";
 
 
+
 export class EmployeeModelsCreate {
   id?: number;
   idCard?: number;

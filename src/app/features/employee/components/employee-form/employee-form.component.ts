@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { contractType } from 'src/app/core/constant/constants';
 import { ContractTypeEnum } from 'src/app/core/constant/enum';
 import { usersData } from 'src/app/core/generate/idData';
+import { EmployeeDto } from 'src/app/core/models/employee/Employee.dto';
 import { EmployeeCreate } from 'src/app/core/models/employee/employee.interface';
 import { EmployeeModelsCreate } from 'src/app/core/models/employee/Employee.Model';
 import { EmployeeService } from 'src/app/core/services/employee/employee.service';
@@ -21,7 +22,7 @@ export class EmployeeFormComponent  implements OnInit {
   employeeForm: FormGroup;
   contractTypes;
   providersList: any[] = []; 
-  employee: EmployeeCreate =  {} as EmployeeCreate;
+  employee: EmployeeCreate|EmployeeDto =  {} as EmployeeCreate;
   
   constructor(private fb: FormBuilder, private providerService:ProviderService, private employeeService:EmployeeService) {
     this.contractTypes =contractType;
@@ -86,8 +87,9 @@ export class EmployeeFormComponent  implements OnInit {
         employeeModels.salary = undefined;
         employeeModels.providersId = undefined;
       }
+      this.employeeService.create(employeeModels).subscribe(data=>this.employee = data)
       if(!this.employee.id){
-          this.employeeService.create(employeeModels).subscribe(data=>this.employee = data)
+         
       }else{
         this.employeeService.update();
       }

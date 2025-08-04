@@ -20,10 +20,9 @@ export class HomePage implements OnInit {
   categoryAll:CategoryDto[] =[];
   subCategory:SubcategoryDto[] = [];
   subCategoryId:  number|null|undefined ;
-  exampleData = exampleData;
   items: any[] = [];
   page = 1;
-  limit = 10;
+  limit = 50;
   lat = 4.6097;
   lon = -74.0817;
   categoryId?: number;
@@ -76,7 +75,6 @@ export class HomePage implements OnInit {
       if (event) event.target.complete();
       return;
     }
-  
     this.homeService.getHome(this.lat, this.lon, this.page, this.limit, this.categoryId, this.subcategoryId)
       .subscribe((data: any) => {
         if (!Array.isArray(data?.items)) {
@@ -112,12 +110,22 @@ export class HomePage implements OnInit {
   onCategory(event:any){
     this.categoryId = event;
     this.subCategory = []
+    this.items = [];
+    this.hasMore = true;
+    this.page = 1;
+    this.subcategoryId = undefined;
+    this.loadHome('');
     this.categoryService.findAllSubCategory(event).subscribe(data=>{
       this.subCategory = data
     })
+    
   }
   onSubCategory(id:any){
-    console.log('onSubCategory-->', id)
+    this.subcategoryId = id;
+    this.items = [];
+    this.hasMore = true;
+    this.page = 1;
+    this.loadHome('');
   }
   onScroll(event: any) {
     const currentScrollPosition = event.detail.scrollTop;
@@ -143,8 +151,6 @@ export class HomePage implements OnInit {
     this.headerOpacity = 1;
     this.headerOffset = 0;
     this.lastScrollPosition = 0;
-
-    this.exampleData = exampleData
     document.querySelector('ion-content')?.scrollToTop(0);
   }
 }

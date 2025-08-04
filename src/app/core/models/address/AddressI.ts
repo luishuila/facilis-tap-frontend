@@ -41,7 +41,7 @@ export interface CountryDto {
     propertyType?: PropertyType | null;
     users?: string | null;
     countryCode?: string | null;
-    
+    employeeId?: number | null;
 }
 
 

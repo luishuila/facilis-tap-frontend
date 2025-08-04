@@ -44,7 +44,7 @@
       [showLocationIcon]="true">
     </fac-card>
   </div>
-  <div class="cards-container">
+  <!-- <div class="cards-container">
     <fac-card
       *ngFor="let item of exampleData"
       [imageUrl]="item.imageUrl"
@@ -54,7 +54,7 @@
       [showInfoIcon]="item.showInfoIcon"
       [showLocationIcon]="item.showLocationIcon">
     </fac-card>
-  </div>
+  </div> -->
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"

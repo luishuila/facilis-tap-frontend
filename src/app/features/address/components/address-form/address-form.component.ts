@@ -75,7 +75,7 @@ export class AddressFormComponent implements OnChanges {
       return;
     }
     this.departments = [];
-    // this.addressForm.controls['stateCode'].setValue('');
+     this.addressForm.controls['stateCode'].setValue('');
     
     this.addressService.findDepartmentsByCountry(selectedCountryId).subscribe(data => {
       this.departments = data
@@ -96,7 +96,7 @@ export class AddressFormComponent implements OnChanges {
     }
     this.cities = [];
     
-    // this.addressForm.controls['cityState'].setValue('');
+    this.addressForm.controls['cityState'].setValue('');
     this.addressService.findCityByDepartments(selectedDepartmentsId).subscribe(data => {
       this.cities = data
     });

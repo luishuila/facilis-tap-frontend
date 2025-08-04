@@ -31,7 +31,7 @@ export class AddressService {
   }
   
 
-  update(id: number | null, data: AddressUdpatedDtoI): Observable<AddressDtoI[]> {
+  update(id: number | null | undefined, data: AddressUdpatedDtoI): Observable<AddressDtoI[]> {
     return this.http.put<ApiResponse<AddressDtoI[]>>(`${this.apiUrl}address/${id}`, data).pipe(
       map((response: ApiResponse<AddressDtoI[]>) => response.data)
     );

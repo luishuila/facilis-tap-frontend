@@ -6,6 +6,14 @@
         <p class="para">Ingrese la información del proveedor</p>
 
         <form [formGroup]="providerForm" (ngSubmit)="saveProvider()">
+         <div *ngIf="independent">  
+           <fac-radio
+           label="Presta servicios"
+            icon="construct-outline"
+            [options]="contributor"
+            formControlName="independent">
+          </fac-radio>
+        </div>
           <fac-input 
             formControlName="name" 
             label="Nombre" 
@@ -13,7 +21,8 @@
             placeholder="Ingrese el nombre del proveedor" 
             icon="person">
           </fac-input>
-
+          
+         
         <fac-input 
             formControlName="email" 
             label="Correo Electrónico" 
@@ -45,7 +54,7 @@
             placeholder="https://example.com" 
             icon="globe">
           </fac-input>
-  
+          <div *ngIf="!providerForm.get('independent')?.value">  
           <fac-input 
             formControlName="nit" 
             label="NIT" 
@@ -53,21 +62,23 @@
             placeholder="Ingrese el NIT" 
             icon="business">
           </fac-input>
-
+        </div>
+        <div *ngIf="!providerForm.get('independent')?.value">  
           <fac-input 
             formControlName="invima" 
             label="Invima" 
             placeholder="Ingrese el código Invima" 
             icon="clipboard">
           </fac-input>
- 
+        </div>
+        <div *ngIf="!providerForm.get('independent')?.value">  
           <fac-input 
             formControlName="companyIdentifier" 
             label="Identificador de Empresa" 
             placeholder="Ingrese el identificador" 
             icon="pricetag">
           </fac-input>
-
+        </div>
           <fac-input 
             formControlName="logoUrl" 
             label="Logo URL" 
@@ -114,10 +125,10 @@
             [items]="selectModal"
             [labelField]="'name'"
             [valueField]="'id'"
-            [selectedItems]="this.providerForm.get('servicesTypes')?.value"
+            [selectedItems]="this.providerForm.get('categories')?.value"
             [selectModal]="true"
             (selectionChange)="onServicesChanged($event)"
-            formControlName="servicesTypes" 
+            formControlName="categories" 
             >
           </fac-select>
           

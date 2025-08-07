@@ -23,13 +23,19 @@
           </p>
 
 
+          <fac-input formControlName="phones" label="phones" type="phones" placeholder="+57" icon="call-outline"></fac-input>
+          <p class="error-text" *ngIf="registerForm.get('phones')?.invalid && (registerForm.get('phones')?.touched || registerForm.get('phones')?.dirty)">
+            <ion-label class="red-text">
+              {{ validationUsersService.getErrorMessage(registerForm, 'phones') }}
+            </ion-label>
+          </p>
+
           <fac-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
             <ion-label class="red-text">
               {{ validationUsersService.getErrorMessage(registerForm, 'email') }}
             </ion-label>
           </p>
-
 
           <fac-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
           <p class="error-text" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">

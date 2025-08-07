@@ -1,3 +1,4 @@
+import { roleEnum } from "../constant/enum";
 
 
 export let idUsers:string = '' 
@@ -8,6 +9,7 @@ export interface User {
     roles: Role[];
     uiid: string;
     username: string;
+    validateRoles: (role: roleEnum) => boolean;
   }
   
 export interface Role {
@@ -18,9 +20,14 @@ export interface Role {
  
   export const usersData = function(): User {
     const storedUser:User = JSON.parse( localStorage.getItem('users') ||'');
+    
     if (storedUser) {
         idUsers = storedUser.id;
         idUuid = storedUser.uiid;
+    }
+    
+    storedUser.validateRoles = (role:roleEnum)=>{
+      return   storedUser.roles.some(r => r.role === role)
     }
     return storedUser;
   }

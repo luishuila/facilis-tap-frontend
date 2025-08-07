@@ -19,7 +19,12 @@ export class ProviderService {
       map((response:ApiResponse<ProviderDto>) => response.data) 
     );
   }
-
+  
+  findOneProvedor(id: number): Observable<ProviderDto> {
+    return this.http.get<ApiResponse<ProviderDto>>(`${this.apiUrl}providers/${id}`).pipe(
+      map((response:ApiResponse<ProviderDto>) => response.data) 
+    );
+  }
   findOne(id: string): Observable<UserDto> {
     return this.http.get<ApiResponse<UserDto>>(`${this.apiUrl}user/${id}`).pipe(
       map((response:ApiResponse<UserDto>) => response.data) 

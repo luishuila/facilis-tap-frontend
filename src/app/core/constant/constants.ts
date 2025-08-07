@@ -22,3 +22,7 @@ export const genderObject:{label:string,value:GenderEnum }[] = [
      { value: PropertyType.BUILDING, label: 'Building' },
      { value: PropertyType.COMMERCIAL_SPACE, label: 'Commercial Space' }
   ];
+  export const contributor :{label:string,value:boolean }[] = [
+    { label: 'Compañia', value: false },
+    { label: 'Independiente', value: true }
+  ];

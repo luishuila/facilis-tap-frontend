@@ -58,9 +58,6 @@
       </ion-segment-content>
 
     </ion-segment-view>
-   
-
-
   </ion-segment-content>
 
 
@@ -71,6 +68,7 @@
     <app-provider-form
     [providerForm]="providerForm"
     [isDisabled]="false"
+    [independent]="independent"
     (providerSaved)="onSegmentChanger($event,1)"
     >
     </app-provider-form> 
@@ -82,7 +80,7 @@
     [isDisabled]="addProveder"
     (addressSaved)="onSegmentChanger($event,2)">
   </app-address-form>
-</ion-segment-content>
+  </ion-segment-content>
 </ion-segment-view>
 
 

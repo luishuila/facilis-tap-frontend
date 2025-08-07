@@ -1,91 +1,76 @@
-/* src/app/shared/components/info-card/info-card.component.scss */
 .info-card {
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 300px; // más estrecho
+  margin: 8px auto;
+  background-color: #ffffff;
+
+  .card-image {
+    width: 100%;
+    height: 90px; // más baja
+    object-fit: cover;
+  }
+
+  .card-header {
+    padding: 6px 10px;
+
+    .card-title {
+      font-size: 0.85rem; // más pequeño
+      font-weight: 600;
+      color: #1a1a1a;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .card-subtitle {
+      font-size: 0.7rem;
+      color: #6b6b6b;
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+
+  .card-content {
+    padding: 6px 10px;
     display: flex;
     flex-direction: column;
-    width: 150px; /* ✅ Card más pequeña */
-    height: 220px; /* ✅ Altura más compacta */
-    text-align: center; /* ✅ Centra el texto */
-    position: relative;
-    margin: auto; /* ✅ Centrada dentro del contenedor */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-    &:hover {
-      transform: translateY(-5px); /* ✅ Efecto al pasar el mouse */
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-  
-    .card-image {
-      width: 100%;
-      height: 60px; /* ✅ Imagen más pequeña */
-      object-fit: cover;
-    }
-  
-    .card-header {
-      padding: 4px 6px;
-  
-      ion-card-title {
-        font-size: 0.9em; /* ✅ Fuente más pequeña */
-        font-weight: bold;
-        color: #333;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis; /* ✅ Evita que el título se desborde */
-      }
-    }
-  
-    .card-content {
-      flex: 1;
-      padding: 6px;
-      font-size: 10px; /* ✅ Fuente más pequeña para la descripción */
-      color: #555;
+    gap: 4px;
+
+    .location-row,
+    .distance-row {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-  
-      .description {
-        height: 40px; /* ✅ Altura fija para la descripción */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-bottom: 6px; /* Espacio entre la descripción y los íconos */
-      }
-  
-      .card-icons {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 4px;
-  
-        .icon {
-          font-size: 16px; /* ✅ Íconos más pequeños */
-          cursor: pointer;
-          transition: color 0.3s;
-  
-          &.info-icon {
-            color: #007bff;
-  
-            &:hover {
-              color: #0056b3;
-            }
-          }
-  
-          &.location-icon {
-            color: #dc3545;
-  
-            &:hover {
-              color: #a71d2a;
-            }
-          }
-        }
-  
-        .location-text {
-          font-size: 8px; /* ✅ Fuente más pequeña para la ubicación */
-          color: #333;
-        }
+      align-items: center;
+      gap: 4px;
+      font-size: 0.7rem; // más pequeño
+      color: #444;
+    }
+
+    .location-icon,
+    .distance-icon {
+      font-size: 14px;
+      color: #dc3545;
+    }
+
+    .distance-icon {
+      color: #007bff;
+    }
+
+    .actions-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2px;
+
+      .info-button {
+        color: #007bff;
+        font-size: 1rem;
       }
     }
   }
-  
+}

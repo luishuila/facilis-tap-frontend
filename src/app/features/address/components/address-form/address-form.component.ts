@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Input, Output ,OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, DoCheck, AfterViewInit, AfterContentInit, OnInit, OnDestroy, Output, SimpleChanges,OnChanges } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { CityDto, CountryDto, StateCountryDto } from 'src/app/core/models/address/AddressI';
 import { AddressService } from 'src/app/core/services/address/address.service';
-
+import { ViewDidEnter } from '@ionic/angular';
 @Component({
   selector: 'app-address-form',
   templateUrl: './address-form.component.html',
   styleUrls: ['./address-form.component.scss'],
   standalone: false,
 })
-export class AddressFormComponent implements OnChanges {
+export class AddressFormComponent implements    OnInit{
   @Input() addressForm!: FormGroup; 
   @Input() propertyType: { value: string; label: string }[] = [];
   @Output() addressSaved = new EventEmitter<any>();
@@ -24,10 +24,13 @@ export class AddressFormComponent implements OnChanges {
   constructor(private addressService: AddressService) {
     this.addressService.findCountry().subscribe(data => {
       this.countries = data
-
     });
   }
-  ngOnChanges() {
+  ionViewDidEnter() {
+console.log('Hola mundo')
+  }
+
+  evento() {
  
     // navigator.geolocation.getCurrentPosition(
     //   function(position) {
@@ -38,9 +41,10 @@ export class AddressFormComponent implements OnChanges {
     //     console.error("Error obteniendo ubicación:", error.message);
     //   }
     // );
-   
+      console.log('Hola mundo onCountrySelected--->',  this.addressForm.value.countryCode)
       if(this.addressForm.value.countryCode){
            this.onCountrySelected(null, this.addressForm.value.countryCode)
+           console.log('onCountrySelected',  this.addressForm.value.countryCode)
       }
       if(this.addressForm.value.stateCode){
         this.onDepartmentsSelected(null,  this.addressForm.value.stateCode)
@@ -96,10 +100,23 @@ export class AddressFormComponent implements OnChanges {
     }
     this.cities = [];
     
-    this.addressForm.controls['cityState'].setValue('');
+    // this.addressForm.controls['cityState'].setValue('');
     this.addressService.findCityByDepartments(selectedDepartmentsId).subscribe(data => {
       this.cities = data
     });
 
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    console.log('ngOnChanges ⚡', changes);
+  }
+
+  ngOnInit() {
+    this.evento();
+    console.log('ngOnInit 🚀');
+  }
+
+ 
+
+
 }

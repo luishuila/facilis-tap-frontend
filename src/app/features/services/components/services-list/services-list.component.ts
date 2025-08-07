@@ -15,9 +15,9 @@ export class ServicesListComponent implements OnInit {
   
   ) {
 
-    this.servicesTypeService.findOneAllServices().subscribe(data=>{
-      this.servicesList = data
-    })
+    // this.servicesTypeService.findOneAllServices().subscribe(data=>{
+    //   this.servicesList = data
+    // })
   }
 
   ngOnInit() { }

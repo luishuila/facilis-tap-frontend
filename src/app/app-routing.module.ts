@@ -26,6 +26,7 @@ const routes: Routes = [
     path: 'services',
     loadChildren: () => import('./features/services/services.module').then( m => m.ServicesPageModule)
   },
+ 
 
 ];
 

@@ -64,7 +64,7 @@ const routes: Routes = [
         loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
       },
       {
-        path: 'services/empleyees/:id',
+        path: 'services/independent/:id',
         loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
       },
       {
@@ -76,7 +76,10 @@ const routes: Routes = [
         loadChildren: () => import('../../features/users/users-update/users-update.module').then( m => m.UsersUpdatePageModule)
       },
     
-
+      {
+        path: 'appointment',
+        loadChildren: () => import('../../features/appointment/appointment.module').then( m => m.AppointmentPageModule)
+      },
       
       {
         path: '',

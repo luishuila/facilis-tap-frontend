@@ -1,17 +1,16 @@
-<!-- src/app/features/home/home.page.html -->
-<ion-content [fullscreen]="true" (ionScroll)="onScroll($event)" scrollEvents="true">
+<ion-content [fullscreen]="true" class="native-scroll" (ionScroll)="onScroll($event)" scrollEvents="true">
   <div class="scrollable-header" [ngStyle]="{'opacity': headerOpacity, 'transform': 'translateY(' + headerOffset + 'px)'}">
     <ion-header>
       <ion-toolbar class="toolbar-with-icon">
-        <div class="toolbar-container">
-          <ion-title class="centered-title">Facilistap</ion-title>
+        <ion-title class="centered-title">Facilistap</ion-title>
+        <ion-buttons slot="end">
           <ion-button fill="clear" routerLink="/navigation/search" routerDirection="root" class="icon-button">
             <ion-icon name="search" class="clickable-icon"></ion-icon>
           </ion-button>
-        </div>
+        </ion-buttons>
       </ion-toolbar>
     </ion-header>
-
+    
 
     <fac-category 
       [items]="categoryAll" 
@@ -19,42 +18,33 @@
       [spaceBetween]="8" 
       [loop]="true" 
       [navigation]="true"
-      (categoryEvent)="onCategory($event)"
-      >
+      (categoryEvent)="onCategory($event)">
     </fac-category>
+
     <fac-subcategory 
-    [items]="subCategory" 
-    [slidesPerView]="3" 
-    [spaceBetween]="8" 
-    [loop]="true" 
-    [navigation]="true"
-    (subCategoryEvent)="onSubCategory($event)"
-    >
-  </fac-subcategory>
+      [items]="subCategory" 
+      [slidesPerView]="3" 
+      [spaceBetween]="8" 
+      [loop]="true" 
+      [navigation]="true"
+      (subCategoryEvent)="onSubCategory($event)">
+    </fac-subcategory>
   </div>
+
   <div class="cards-container">
     <fac-card
       *ngFor="let item of items"
-      [imageUrl]="item.imageUrl"
+      [imageUrl]="item.imgs"
       [title]="item.servicename"
       [description]="item.subcategorynames"
-      [distance] = "item.distance"
+      [distance]="item.distance"
       [location]="`${item.city.cityName} ${item.city.stateCountries.stateName} ${item.city.stateCountries.countries.countryName}`"
       [showInfoIcon]="true"
-      [showLocationIcon]="true">
+      [showLocationIcon]="true"
+      (eventCard)="navegate($event, item)">
     </fac-card>
   </div>
-  <!-- <div class="cards-container">
-    <fac-card
-      *ngFor="let item of exampleData"
-      [imageUrl]="item.imageUrl"
-      [title]="item.title"
-      [description]="item.description"
-      [location]=" item.location "
-      [showInfoIcon]="item.showInfoIcon"
-      [showLocationIcon]="item.showLocationIcon">
-    </fac-card>
-  </div> -->
+
   <ion-infinite-scroll threshold="100px" (ionInfinite)="loadMore($event)">
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"

@@ -13,7 +13,7 @@ export interface BaseProviderModel {
   companyIdentifier?: string | null;
   logoUrl?: string | null;
   description?: string | null;
-
+  
 
 }
 

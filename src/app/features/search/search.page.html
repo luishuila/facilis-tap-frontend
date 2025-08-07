@@ -1,9 +1,22 @@
-
+<ion-header>
   <ion-toolbar>
-    <ion-searchbar animated="true" placeholder="Animated"></ion-searchbar>
+    <ion-searchbar animated="true" placeholder="Buscar ubicación..."></ion-searchbar>
   </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding no-scroll">
+  <!-- Otro contenido arriba si lo deseas -->
+</ion-content>
+
+<!-- Mapa abajo ocupando media pantalla -->
+<!-- Mapa fijo abajo -->
+<div [ngClass]="{ 'map-bottom': !isFullScreen, 'map-fullscreen': isFullScreen }">
   <app-maps></app-maps>
 
+  <ion-button expand="block" size="small" class="fullscreen-btn" (click)="toggleMapFullscreen()">
+    {{ isFullScreen ? 'Salir de pantalla completa' : 'Pantalla Completa' }}
+  </ion-button>
+</div>
 
 
 <!-- <ion-content>

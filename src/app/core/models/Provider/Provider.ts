@@ -1,5 +1,6 @@
 
 import { AddressDtoI } from '../address/AddressI';
+import { CategoryDto } from '../category/category.dto';
 import { BaseProvider } from './BaseProviderModel';
 import { ProviderCreateDto } from './ProviderI';
 
@@ -11,6 +12,7 @@ export class ProviderCreate extends BaseProvider implements ProviderCreateDto {
   nit?: number | null = null;
   userId?: string| null;
   addresses?:AddressDtoI[] | null = [];
+  categories?:any|CategoryDto[]
   constructor(data: Partial<ProviderCreateDto> = {}) {
     super();
     Object.assign(this, data); 

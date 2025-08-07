@@ -16,6 +16,7 @@ import { ProviderCreate } from 'src/app/core/models/provider/Provider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GenericServiceService } from 'src/app/core/services/genericService/generic-service.service';
 import { TypeItem } from 'src/app/core/models/util/util';
+import { roleEnum } from 'src/app/core/constant/enum';
 @Component({
   selector: 'app-administrator-menu',
   templateUrl: './administrator-menu.page.html',
@@ -39,6 +40,7 @@ export class AdministratorMenuPage implements OnInit {
   genderOptions = genderObject;
   user!: UserDto;
   @ViewChild(IonSegment, { static: false }) segment!: IonSegment;
+   independent:boolean = true;;
   constructor(private fb: FormBuilder, private userService: UsersService,
     private addressService: AddressService,
     private providerService: ProviderService,
@@ -47,6 +49,7 @@ export class AdministratorMenuPage implements OnInit {
      private router: Router,
      private genericServiceService: GenericServiceService
   ) {
+    this.independent = !usersData().validateRoles(roleEnum.INDEPENDENT);
     this.genericServiceService.findAllPropertyType().subscribe(data => this.propertyType = data) 
    }
 
@@ -90,8 +93,8 @@ export class AdministratorMenuPage implements OnInit {
       companyIdentifier: [''],
       logoUrl: [''],
       description: [''],
-      servicesTypes:[[],Validators.required],
-
+      categories:[[]],
+      independent:[!usersData().validateRoles(roleEnum.INDEPENDENT)]
     });
 
     this.addressProviderForm = this.fb.group({
@@ -106,9 +109,11 @@ export class AdministratorMenuPage implements OnInit {
       description: [''],
       zipcode: [''],
       propertyType: [''],
+      
 
-    });
-  
+    }); 
+ 
+ 
     if (this._activatedRoute.snapshot.paramMap.get('id')) {
       console.log(this._activatedRoute.snapshot.paramMap.get('id'))
     }
@@ -129,7 +134,7 @@ export class AdministratorMenuPage implements OnInit {
         });
 
         const address = data.addresses?.[0] ?? {} as Partial<AddressDtoI>;
-        this.addressId = data.addresses?.[0].id || 0;
+        // this.addressId = data.addresses?.[0].id || 0;
         this.addressForm.patchValue({
           ...address,
           cityStates: address.cityStates?.id
@@ -176,9 +181,17 @@ export class AdministratorMenuPage implements OnInit {
       return;
     }
     const data = new Address({ ...address })
-    this.addressService.update(this.addressId, data).subscribe(dat => {
-      console.log('dat', dat)
-    })
+
+    if(this.addressId != 0){
+      this.addressService.update(this.addressId, data).subscribe(dat => {
+        console.log('dat', dat)
+      })
+    }else{
+      this.addressService.post(data).subscribe(dat => {
+        console.log('dat', dat)
+      })
+    }
+
     this.addressValidate = this.addressForm.invalid
     console.log('data', data)
   }
@@ -194,7 +207,7 @@ export class AdministratorMenuPage implements OnInit {
   }
   dataProvider:ProviderCreate = new ProviderCreate() ; 
   onSegmentChanger(event:any,expr:number){
- 
+    console.log('event-->', event)
     switch (expr) {
       case 1:
         if (this.providerForm.invalid) {
@@ -235,6 +248,7 @@ export class AdministratorMenuPage implements OnInit {
     
     const data = new ProviderCreate({ ...provider ,userId:usersData().id })
     this.addProveder = true;
+    alert('Hola munod');
     this.providerService.create(data).subscribe((response:any) => {
 
       localStorage.setItem('users', JSON.stringify(response.users[0] ?? {})); 

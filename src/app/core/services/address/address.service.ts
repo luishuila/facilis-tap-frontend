@@ -12,6 +12,13 @@ export class AddressService {
   private apiUrl = environment.url;
 
   constructor(private http: HttpClient) {}
+
+  post(data: AddressUdpatedDtoI): Observable<AddressDtoI[]> {
+    return this.http.post<ApiResponse<AddressDtoI[]>>(`${this.apiUrl}address`, data).pipe(
+      map((response: ApiResponse<AddressDtoI[]>) => response.data)
+    );
+  }
+
   findCountry(): Observable<CountryDto[]> {
     return this.http.get<ApiResponse<CountryDto[]>>(`${this.apiUrl}country`).pipe(
       map((response: ApiResponse<CountryDto[]>) => response.data)

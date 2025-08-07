@@ -23,15 +23,23 @@ export class ServicesFormComponent  implements OnInit {
   providerList:any[] =[];
   subCategory:SubcategoryDto[] = []
   @Input() isValidates:boolean = true;
-  
+
+  proveder:any
+
   constructor(private fb: FormBuilder, private servicesTypeService:ServicesTypeService,
     private providerService:ProviderService,   private route: ActivatedRoute,
     private categoryService:CategoryService
   ) {
-    this.categoryService.findAllCategory().subscribe(data=>this.categoryAll = data)
+    console.log('this.route.snapshot.paramMap.get-->', this.route.snapshot.paramMap.get('id'))
+    // this.categoryService.findAllCategory().subscribe(data=>this.categoryAll = data)
+
+    this.providerService.findOneProvedor(Number(this.route.snapshot.paramMap.get('id'))).subscribe((data:any)=>{
+      this.proveder = data
+      this.categoryAll = data.categories
+    })
     if(this.route.snapshot.paramMap.get('id')){
       this.isValidates = false;
-
+    
       //  this.servicesTypeService.findAll().subscribe(data=>{
       //   this.servicesType=data
       // })
@@ -43,13 +51,46 @@ export class ServicesFormComponent  implements OnInit {
     }
 
   }
-
   ngOnInit() {
     this.servicesForm = this.fb.group({
       data: this.fb.array([this.createServiceForm()])
     });
   }
+  onSelectItem(itemEvent:any, index: number){
+    const subcategoryId = itemEvent.detail.value;
 
+    const selectedService = this.proveder.services.find(
+      (service:any) => service.subcategory?.id == subcategoryId
+    );
+    const formArray = this.servicesForm.get('data') as FormArray;
+
+    if (selectedService) {
+      const formGroup = formArray.at(index) as FormGroup;
+  
+      formGroup.patchValue({
+        name: selectedService.name,
+        serviceTime: selectedService.serviceTime,
+        price: selectedService.price,
+        img: selectedService.img || '',
+        description:selectedService.description,
+        subcategory: subcategoryId 
+      });
+  
+      console.log('Servicio cargado en el formulario:', selectedService);
+    }
+   
+  }
+
+  getAvailableSubcategories(currentIndex: number): any[] {
+    const formArray = this.servicesForm.get('data') as FormArray;
+  
+    const selectedIds = formArray.controls
+      .map((fg, i) => i !== currentIndex ? fg.get('subcategory')?.value : null)
+      .filter(id => id !== null);
+  
+    
+    return this.subCategory.filter(sub => !selectedIds.includes(sub.id));
+  }
   get services(): FormArray {
     return this.servicesForm.get('data') as FormArray;
   }
@@ -81,15 +122,8 @@ export class ServicesFormComponent  implements OnInit {
     console.log('this.servicesForm →', this.servicesForm);
     if (this.servicesForm.valid) {
       let serviceCreate:ServiceCreate[] = this.servicesForm.value.data.map((item:ServiceCreateDto) =>{ 
-          if(!this.isValidates){
-            return {
-              ...new ServiceCreate(item),
-              employees:usersData().id
-            }
-          }else{
             return new ServiceCreate(item);
-          }
-        }  )  
+        })  
       console.log('Formulario completo serviceCreate →', serviceCreate);
       this.servicesTypeService.create(serviceCreate).subscribe(data=>{
         console.log('create--->',data )
@@ -104,7 +138,11 @@ export class ServicesFormComponent  implements OnInit {
     this.servicesType  =  this.providerList.find(data=>data.id === event.detail?.value).servicesTypes
   }
   onSubCategory(event: any) {
-    this.categoryService.findAllSubCategory(event.detail.value).subscribe(data=>this.subCategory = data)
+    this.categoryService.findAllSubCategory(event.detail.value).subscribe(data=>{
+
+      this.subCategory = data
+    
+    })
   }
  
 }

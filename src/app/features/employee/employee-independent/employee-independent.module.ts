@@ -10,6 +10,7 @@ import { EmployeeIndependentPage } from './employee-independent.page';
 import { EmployeeComponentsModule } from '../components/employee-components.module';
 import { ServicesComponentsModule } from '../../services/components/services-components.module';
 import { AddressComponentsPageModule } from '../../address/components/address-components.module';
+import { ProviderComponentsPageModule } from '../../provider/components/provider-components.module';
 
 @NgModule({
   imports: [
@@ -22,7 +23,8 @@ import { AddressComponentsPageModule } from '../../address/components/address-co
     IonicModule,
     EmployeeComponentsModule,
     ServicesComponentsModule,
-    AddressComponentsPageModule
+    AddressComponentsPageModule,
+    ProviderComponentsPageModule
   ],
   declarations: [EmployeeIndependentPage]
 })

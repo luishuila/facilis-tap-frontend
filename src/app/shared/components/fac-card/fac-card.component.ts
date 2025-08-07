@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'fac-card',
@@ -14,6 +14,7 @@ export class FacCardComponent  implements OnInit {
   @Input() location: string = '';
   @Input() showInfoIcon: boolean = true;
   @Input() showLocationIcon: boolean = true;
+  @Output() eventCard = new EventEmitter<any>();
   constructor() { }
 
   ngOnInit() {}
@@ -33,6 +34,7 @@ export class FacCardComponent  implements OnInit {
     return `${distKm.toFixed(1)} km`;
   }
   onLocationClick() {
+    this.eventCard.emit(1)
     console.log('Ubicación clickeada');
   }
 }

@@ -1,8 +1,12 @@
-<div #swiperContainer class="swiper">
+<div #swiperContainer class="swiper mySwiper">
   <div class="swiper-wrapper">
     <div class="swiper-slide" *ngFor="let option of items">
-      <img  [src]="option[img]" alt="Slide image" (click)="onImgClick(option[valueField])" />
-      {{ option[labelField] }}
+      <img 
+        [src]="option[img]" 
+        alt="Slide image" 
+        (click)="onImgClick(option[valueField])"
+      />
+      <span class="slide-label">{{ option[labelField] }}</span>
     </div>
   </div>
 

@@ -18,6 +18,9 @@
   </ion-toolbar>
 </ion-header>
 <ion-segment>
+  <ion-segment-button value="first" content-id="first" [class.disabled-segment]="!employee.id">
+    <ion-label>Provedores </ion-label>
+  </ion-segment-button>
   <ion-segment-button value="third" content-id="third">
     <ion-label>Employee</ion-label>
   </ion-segment-button>
@@ -26,12 +29,11 @@
     <ion-label>Services</ion-label>
   </ion-segment-button>
 
-  <ion-segment-button value="first" content-id="first" [class.disabled-segment]="!employee.id">
-    <ion-label>Provedores </ion-label>
-  </ion-segment-button>
+
 </ion-segment>
 
 <ion-segment-view>
+
 
   <ion-segment-content id="third">   
 
@@ -40,33 +42,66 @@
         <ion-segment-button value="usersId" content-id="usersId"  >
           <ion-label>Employee</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="addressId" content-id="addressId"  [class.disabled-segment]="!employee.id" >
+        <!-- <ion-segment-button value="addressId" content-id="addressId"  [class.disabled-segment]="!employee.id" >
           <ion-label>Employee Direccion</ion-label>
-        </ion-segment-button>
+        </ion-segment-button> -->
       </ion-segment>
       <ion-segment-view>
   
         <ion-segment-content id="usersId" >
-          <app-employee-form [independent]="false"     (employeeSaved)="onSegmentChanger($event)"></app-employee-form>
+          <app-employee-form
+          [employeeForm]="employeeForm"
+          [employee]="employee"
+          [independent]="false"    
+           (employeeEmitter)="onSegmentChanger($event)">
+          </app-employee-form>
         </ion-segment-content>
   
-        <ion-segment-content id="addressId" >
-          <ion-segment-content id="second">
+       <ion-segment-content id="addressId" >
+          <!--  <ion-segment-content id="second">
             <app-address-form 
             [addressForm]="addressForm"
             [propertyType]="propertyType"
             [isDisabled]="false"
             (addressSaved)="onAddressSaved($event)">
           </app-address-form>
-          </ion-segment-content>
-        </ion-segment-content>
+          </ion-segment-content>-->
+        </ion-segment-content> 
       </ion-segment-view>
     </ion-segment-content>
     
   </ion-segment-content>
 
   <ion-segment-content id="first">
-    <h1>hOLA MUNDO</h1>
+    <ion-segment>
+      <ion-segment-button value="providerId" content-id="providerId">
+        <ion-label>Editar Proveedor</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="provideraddressId" content-id="provideraddressId">
+        <ion-label>Dirección Proveedor</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-segment-view>
+      <ion-segment-content id="providerId">
+        <app-provider-form 
+          [providerForm]="providerForm"
+          [isDisabled]="false"
+          [independent]="independent"
+          (providerSaved)="onSegmentChangers($event, 1)">
+        </app-provider-form>
+      </ion-segment-content>
+
+      <ion-segment-content id="provideraddressId">
+        <app-address-form 
+        [addressForm]="addressForm"
+        [propertyType]="propertyType"
+        [isDisabled]="false"
+        (addressSaved)="onSegmentChangers($event,2)">
+      </app-address-form>
+      </ion-segment-content>
+    </ion-segment-view> 
   </ion-segment-content>
 
   <ion-segment-content id="second">

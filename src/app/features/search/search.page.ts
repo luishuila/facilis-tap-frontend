@@ -9,7 +9,12 @@ import { exampleData } from '../home/home.page';
 
 })
 export class SearchPage implements OnInit {
+  isFullScreen: boolean = false;
 
+  toggleMapFullscreen() {
+    this.isFullScreen = !this.isFullScreen;
+  }
+  
 
   ngOnInit(): void {}
 }

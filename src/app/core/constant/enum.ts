@@ -17,7 +17,8 @@ export enum roleEnum {
   MANAGER = 'MANAGER',
   ADMINISTRATOR = 'ADMINISTRATOR',
   CLIENT = 'CLIENT',
-  USER = 'USER'        
+  USER = 'USER',
+  INDEPENDENT = 'INDEPENDENT'        
 }
 
 export enum ContractTypeEnum {

@@ -1,0 +1,21 @@
+<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }">
+  <legend *ngIf="label">{{ label }}</legend>
+
+  <ion-item class="custom-input" lines="none">
+    <ion-checkbox
+      slot="start"
+      [checked]="value"
+      [disabled]="disabled"
+      (ionChange)="toggleChecked($event)"
+    ></ion-checkbox>
+    <ion-label>{{ checkboxLabel }}</ion-label>
+  </ion-item>
+
+  <ion-note *ngIf="!hasError && helperText" class="helper-text" color="medium">
+    {{ helperText }}
+  </ion-note>
+
+  <ion-note *ngIf="hasError && errorText" class="error-text" color="danger">
+    {{ errorText }}
+  </ion-note>
+</fieldset>

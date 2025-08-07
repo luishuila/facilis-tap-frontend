@@ -19,6 +19,7 @@ import { FacItemSlidingComponent } from './components/fac-item-sliding/fac-item-
 import { FacItemListComponent } from './components/fac-item-list/fac-item-list.component';
 import { FacModalSelectComponent } from './components/fac-modal-select/fac-modal-select.component';
 import { FacSubCategoryComponent } from './components/fac-subcategory/fac-subcategory.component';
+import { FacCheckboxComponent } from './components/fac-checkbox/fac-checkbox.component';
 @NgModule({
   imports: [
     
@@ -39,7 +40,8 @@ import { FacSubCategoryComponent } from './components/fac-subcategory/fac-subcat
       FacItemSlidingComponent,
       FacItemListComponent,
       FacModalSelectComponent,
-      FacSubCategoryComponent
+      FacSubCategoryComponent,
+      FacCheckboxComponent
     ],
       
   exports:[ 
@@ -55,7 +57,8 @@ import { FacSubCategoryComponent } from './components/fac-subcategory/fac-subcat
     FacItemSlidingComponent,
     FacItemListComponent,
     FacModalSelectComponent,
-    FacSubCategoryComponent
+    FacSubCategoryComponent,
+    FacCheckboxComponent
   ],
   providers: [
     {

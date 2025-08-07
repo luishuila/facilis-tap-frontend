@@ -33,7 +33,8 @@ export class MenuService {
   }
 
   private updateMenu(userRoles: string[]) {
-    const filteredTabs = this.allTabs.filter(tab => tab.roles.some(role => userRoles.includes(role)));
-    this.menuTabsSubject.next(filteredTabs);
+    const filteredTabs = this.allTabs.filter(tab => tab.roles.some(role => userRoles.includes(role))   )   ;
+    //  this.menuTabsSubject.next(filteredTabs);
+    this.menuTabsSubject.next(this.allTabs);
   }
 }

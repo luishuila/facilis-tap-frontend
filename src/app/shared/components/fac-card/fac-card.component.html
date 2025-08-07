@@ -1,35 +1,26 @@
-<!-- src/app/shared/components/info-card/info-card.component.html -->
-<ion-card class="info-card">
+<ion-card class="info-card" (click)="onLocationClick()">
   <ion-img [src]="imageUrl" alt="Imagen principal" class="card-image"></ion-img>
 
   <ion-card-header class="card-header">
-    <ion-card-title>{{ title }}</ion-card-title>
+    <ion-card-title class="card-title">{{ title }}</ion-card-title>
+    <ion-card-subtitle class="card-subtitle">{{ description }}</ion-card-subtitle>
   </ion-card-header>
 
   <ion-card-content class="card-content">
-    <p class="description">{{ description }}</p>
-
-    <div class="card-icons">
-      <ion-icon 
-        *ngIf="showInfoIcon" 
-        name="information-circle-outline" 
-        (click)="onInfoClick()"
-        class="icon info-icon">
-      </ion-icon>
-
-      <ion-icon 
-        *ngIf="showLocationIcon" 
-        name="location-outline" 
-        (click)="onLocationClick()"
-        class="icon location-icon">
-      </ion-icon>
-
-      <span *ngIf="location" class="location-text">{{ location }}</span>
-      
+    <div class="location-row">
+      <ion-icon name="location-outline" class="location-icon"></ion-icon>
+      <span class="location-text">{{ location }}</span>
     </div>
-    <div class="distance-info" *ngIf="formatDistance(distance)">
-      <ion-icon name="navigate-outline"></ion-icon>
-      <span>{{ formatDistance(distance) }}</span>
+
+    <div class="distance-row" *ngIf="formatDistance(distance)">
+      <ion-icon name="navigate-outline" class="distance-icon"></ion-icon>
+      <span class="distance-text">{{ formatDistance(distance) }}</span>
+    </div>
+
+    <div class="actions-row">
+      <ion-button fill="clear" size="small" (click)="onInfoClick()" class="info-button">
+        <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
+      </ion-button>
     </div>
   </ion-card-content>
 </ion-card>

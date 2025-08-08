@@ -1,103 +1,59 @@
-<div  class="profile-content">
+<div class="profile-content">
+
+  <!-- Encabezado compacto -->
+  <div class="page-header">
+    <h1>👤 Actualizar información</h1>
+    <p>Actualiza los datos de tu perfil personal</p>
+  </div>
+
+  <!-- Tarjeta/contendor con safe-area y padding nativo -->
   <ion-card class="input-card">
     <ion-card-content>
-      <div class="container">
-        <h1 class="heading">👤 Actualizar Información</h1>
-        <p class="para">Actualice los datos de su perfil personal</p>
 
-        <form [formGroup]="userForm" (ngSubmit)="onSave()">
-          
-          <!-- Nombre -->
-          <fac-input 
-            formControlName="name" 
-            label="Nombre" 
-            type="text" 
-            placeholder="John" 
-            icon="person">
-          </fac-input>
+      <form [formGroup]="userForm" (ngSubmit)="onSave()" class="form-grid">
 
-          <!-- Apellido -->
-          <fac-input 
-            formControlName="lastname" 
-            label="Apellido" 
-            type="text" 
-            placeholder="Doe" 
-            icon="person">
-          </fac-input>
+        <!-- Columna A -->
+        <div class="col">
+          <fac-input formControlName="name"      label="Nombre"                 type="text"   placeholder="John"              icon="person"></fac-input>
+          <fac-input formControlName="username"  label="Usuario"                type="text"   placeholder="john_doe"          icon="at"></fac-input>
+          <fac-input formControlName="email"     label="Correo electrónico"     type="email"  placeholder="correo@ejemplo.com" icon="mail"></fac-input>
+          <fac-input formControlName="nickname"  label="Apodo"                  type="text"   placeholder="Johnny"            icon="star"></fac-input>
+        </div>
 
-          <!-- Usuario -->
-          <fac-input 
-            formControlName="username" 
-            label="Usuario" 
-            type="text" 
-            placeholder="john_doe" 
-            icon="at">
-          </fac-input>
+        <!-- Columna B -->
+        <div class="col">
+          <fac-input formControlName="lastname"  label="Apellido"               type="text"   placeholder="Doe"               icon="person"></fac-input>
+          <fac-date  formControlName="birth"     label="Fecha de nacimiento"    icon="calendar"></fac-date>
+          <fac-input formControlName="nit"       label="NIT"                    type="number" placeholder="1234567890"        icon="barcode"></fac-input>
+          <fac-input formControlName="phones"    label="Teléfono"               type="tel"    placeholder="300 123 4567"      icon="call"></fac-input>
+        </div>
 
-          <!-- Correo -->
-          <fac-input 
-            formControlName="email" 
-            label="Correo Electrónico" 
-            type="email" 
-            placeholder="correo@ejemplo.com" 
-            icon="mail">
-          </fac-input>
+        <!-- Full width -->
+        <div class="full">
+          <fac-radio label="Género" icon="male-female"
+                     [options]="genderOptions"
+                     formControlName="gender"></fac-radio>
+        </div>
 
-          <!-- Apodo -->
-          <fac-input 
-            formControlName="nickname" 
-            label="Apodo" 
-            type="text" 
-            placeholder="Johnny" 
-            icon="star">
-          </fac-input>
+        <!-- Espaciador para que no tape la barra -->
+        <div class="bottom-spacer" aria-hidden="true">
+          <fac-btn
+          label="Guardar cambios"
+          color="primary"
+          customClass="primary-btn"
+          expand="block"
+          type="submit"
+          [disabled]="isDisabled"
+          (clicked)="onSave()">
+        </fac-btn>
+        </div>
+      </form>
 
-          <!-- Fecha de nacimiento -->
-          <fac-date 
-            formControlName="birth" 
-            label="Fecha de Nacimiento" 
-            icon="calendar">
-          </fac-date>
-
-          <!-- NIT -->
-          <fac-input 
-            formControlName="nit" 
-            label="NIT" 
-            type="number" 
-            placeholder="1234567890" 
-            icon="barcode">
-          </fac-input>
-
-          <!-- Teléfono -->
-          <fac-input 
-            formControlName="phones" 
-            label="Teléfono" 
-            type="text" 
-            placeholder="1234567890" 
-            icon="call">
-          </fac-input>
-
-          <!-- Género -->
-          <fac-radio 
-            label="Género" 
-            icon="male-female" 
-            [options]="genderOptions" 
-            formControlName="gender">
-          </fac-radio>
-
-          <!-- Botón Guardar -->
-          <fac-btn 
-            label="Guardar Cambios" 
-            color="primary" 
-            customClass="primary-btn" 
-            expand="block" 
-            type="submit"
-            [disabled]="isDisabled"
-            (clicked)="onSave()">
-          </fac-btn>
-
-        </form>
-      </div>
     </ion-card-content>
   </ion-card>
+
+  <!-- Barra de acción fija (estilo nativo) -->
+  <div class="sticky-actions">
+
+  </div>
 </div>

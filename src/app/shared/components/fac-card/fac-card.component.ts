@@ -6,35 +6,34 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   styleUrls: ['./fac-card.component.scss'],
   standalone: false,
 })
-export class FacCardComponent  implements OnInit {
-  @Input() imageUrl: string = '';
-  @Input() title: string = '';
-  @Input() description: string = '';
-  @Input() distance:any = null;
-  @Input() location: string = '';
-  @Input() showInfoIcon: boolean = true;
-  @Input() showLocationIcon: boolean = true;
+export class FacCardComponent implements OnInit {
+  @Input() imageUrl = '';
+  @Input() title = '';
+  @Input() description = '';
+  @Input() distance: number | null = null;
+  @Input() location = '';
+  @Input() showInfoIcon = true;
+  @Input() showLocationIcon = true;
+
   @Output() eventCard = new EventEmitter<any>();
-  constructor() { }
+  @Output() infoClick = new EventEmitter<void>();
+
+  imageLoaded = false;
 
   ngOnInit() {}
 
-
-  onInfoClick() {
-    console.log('Información clickeada');
+  onInfoClick(ev: Event) {
+    ev.stopPropagation(); // evita disparar onLocationClick
+    this.infoClick.emit();
   }
-  formatDistance(distKm: number | null): string | boolean {
 
-    if(distKm == null){
-      return false;
-    }
-    if (distKm < 1) {
-      return `${Math.round(distKm * 1000)} m`;
-    }
-    return `${distKm.toFixed(1)} km`;
+  formatDistance(distKm: number | null): string | false {
+    if (distKm == null || isNaN(+distKm)) return false;
+    if (distKm < 1) return `${Math.round(distKm * 1000)} m`;
+    return `${(+distKm).toFixed(1)} km`;
   }
+
   onLocationClick() {
-    this.eventCard.emit(1)
-    console.log('Ubicación clickeada');
+    this.eventCard.emit({ action: 'open-location' });
   }
 }

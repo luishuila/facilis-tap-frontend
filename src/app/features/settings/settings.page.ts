@@ -16,7 +16,10 @@ interface MenuItem {
     standalone: false,
 })
 export class SettingsPage implements OnInit {
-  menuOpen: boolean = false; // Controla la apertura/cierre del menú
+  imgFile: File | null = null;
+  avatarPreview: string | null = null; 
+
+  menuOpen: boolean = false; 
   menuItems = [
     { label: 'Home', link: '/navigation/home', icon: 'home', item: [], key: '' },
     { label: 'Search', link: '/navigation/search', icon: 'search', item: [], key: '' },
@@ -35,7 +38,14 @@ export class SettingsPage implements OnInit {
     }
     
   }
-
+  onImageFileSelected(file: File) {
+    this.imgFile = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.avatarPreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  } 
   toggleMenu() {
     this.menuOpen = !this.menuOpen; 
   }

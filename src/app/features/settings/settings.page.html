@@ -1,33 +1,48 @@
-<ion-content class="ion-padding">
+<ion-header class="app-header" [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Cuenta</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-  <!-- Perfil centrado -->
-  <div class="profile-container">
-    <ion-avatar class="avatar-large">
-      <img src="https://picsum.photos/600/300?random=18" alt="Avatar" />
-    </ion-avatar>
-    <h2 class="name"> {{data?.name}}  {{data?.lastname}}</h2>
-    <p class="username">uiid:{{data?.uiid}}</p>
+<ion-content [fullscreen]="true" class="settings-content">
+
+  <!-- HERO con avatar -->
+  <div class="hero">
+    <!-- <div class="avatar-wrap"> -->
+
+      <fac-avatar
+  [avatarUrl]="'https://picsum.photos/600/300?random=44'"
+  alt="Foto de perfil de {{data?.name}}">
+</fac-avatar>
+
+    
+    <!-- </div> -->
+
+    <h2 class="name">{{ data?.name }} {{ data?.lastname }}</h2>
+    <p class="username">UUID: {{ data?.uiid }}</p>
+
+    <!-- Accesos rápidos -->
+    <div class="quick-actions">
+      <button class="qa" type="button">
+        <ion-icon name="lock-closed-outline" aria-hidden="true"></ion-icon>
+        <span>Privacidad</span>
+      </button>
+
+      <button class="qa" type="button" [routerLink]="['/navigation/profiles', data?.id]">
+        <ion-icon name="person-circle-outline" aria-hidden="true"></ion-icon>
+        <span>Perfil</span>
+      </button>
+
+      <button class="qa" type="button">
+        <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
+        <span>Contactos</span>
+      </button>
+    </div>
   </div>
 
-  <!-- Botones tipo segmento -->
-  <ion-segment value="profile-options" class="profile-segment" mode="md">
-    <ion-segment-button value="privacy">
-      <ion-icon name="lock-closed-outline"></ion-icon>
-      <ion-label>Privacidad</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="profile">
-      <ion-icon name="person-circle-outline"></ion-icon>
-      <ion-label>Perfil</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="contacts">
-      <ion-icon name="people-outline"></ion-icon>
-      <ion-label>Contactos</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <!-- Lista de configuraciones -->
+  <!-- Lista de opciones -->
   <ion-list class="menu-list">
-    <ion-item *ngFor="let item of menuItems" [routerLink]="item.link">
+    <ion-item *ngFor="let item of menuItems" [routerLink]="item.link" detail="true" lines="full">
       <ion-icon [name]="item.icon" slot="start"></ion-icon>
       <ion-label>{{ item.label }}</ion-label>
     </ion-item>
@@ -35,11 +50,19 @@
 
 </ion-content>
 
-<!-- Footer fijo para cerrar sesión -->
+<!-- Footer con botón pequeño -->
 <ion-footer class="logout-footer">
-  <ion-item lines="none" (click)="logout()" button class="logout-button">
-    <ion-icon name="log-out-outline" slot="start" class="logout-icon"></ion-icon>
-    <ion-label class="logout-text">Cerrar sesión</ion-label>
-  </ion-item>
+  <ion-toolbar>
+    <div class="logout-btn-wrap">
+      <ion-button
+        size="small"
+        shape="round"
+        fill="outline"
+        class="logout-btn"
+        (click)="logout()">
+        <ion-icon slot="start" name="log-out-outline"></ion-icon>
+        Cerrar sesión
+      </ion-button>
+    </div>
+  </ion-toolbar>
 </ion-footer>
-

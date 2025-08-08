@@ -1,19 +1,27 @@
-<div #swiperContainer class="swiper mySwiper">
-  <div class="swiper-wrapper">
-    <div class="swiper-slide" *ngFor="let option of items">
-      <img 
-        [src]="option[img]" 
-        alt="Slide image" 
-        (click)="onImgClick(option[valueField])"
-      />
-      <span class="slide-label">{{ option[labelField] }}</span>
+<div class="carousel-card">
+  <div #swiperContainer class="swiper mySwiper" [attr.aria-label]="'Carrusel de subcategorías'">
+    <div class="swiper-wrapper">
+      <div
+        class="swiper-slide"
+        *ngFor="let option of items; trackBy: trackById"
+        (click)="onImgClick(option)"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="option[labelField] || 'Elemento'"
+      >
+        <div class="slide" [style.aspect-ratio]="aspectRatio" [class.ripple]="ripple">
+          <img [src]="option[img]" [alt]="option[labelField]" />
+          <div class="slide-label" *ngIf="showLabelChip">
+            <ion-icon name="pricetag-outline" aria-hidden="true"></ion-icon>
+            <span>{{ option[labelField] }}</span>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- Navegación y paginación por instancia (ViewChild) -->
+    <div #prevBtn class="swiper-button-prev" *ngIf="navigation"></div>
+    <div #nextBtn class="swiper-button-next" *ngIf="navigation"></div>
+    <div #paginationEl class="swiper-pagination" *ngIf="pagination"></div>
   </div>
-
-  <!-- Botones de navegación -->
-  <div class="swiper-button-prev" *ngIf="navigation"></div>
-  <div class="swiper-button-next" *ngIf="navigation"></div>
-
-  <!-- Paginación -->
-  <div class="swiper-pagination"></div>
 </div>

@@ -1,11 +1,28 @@
 <ion-button
   class="native-button"
-  [color]="color || 'primary'"
-  [expand]="expand || 'block'"
-  [disabled]="disabled"
-  [attr.type]="type || 'button'"
+  [ngClass]="[
+    customClass,
+    'size-' + size,
+    loading ? 'is-loading' : ''
+  ]"
+  [color]="color"
+  [fill]="fill"
+  [expand]="expand"
+  [disabled]="disabled || loading"
+  [attr.type]="type"
+  [attr.aria-busy]="loading"
   (click)="onClick()"
+  shape="round"
 >
-  <ion-icon *ngIf="icon" [name]="icon" slot="start"></ion-icon>
+  <!-- Icono inicio -->
+  <ion-icon *ngIf="icon && !loading" [name]="icon" slot="start"></ion-icon>
+
+  <!-- Spinner loading -->
+  <ion-spinner *ngIf="loading" slot="start"></ion-spinner>
+
+  <!-- Texto -->
   {{ label }}
+
+  <!-- Icono final -->
+  <ion-icon *ngIf="iconEnd && !loading" [name]="iconEnd" slot="end"></ion-icon>
 </ion-button>

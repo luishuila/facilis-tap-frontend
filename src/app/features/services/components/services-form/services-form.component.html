@@ -1,136 +1,122 @@
-<!-- <ion-content [fullscreen]="true">
-  <ion-card class="input-card">
-    <ion-card-content>
-      <div class="container">
-        <h1 class="heading">🏢 Registrar Servicios</h1>
-        <p class="para">Ingrese la información del Servicios</p>
+<ion-header translucent="true">
+  <ion-toolbar>
+    <ion-title>🏢 Registrar Servicios</ion-title>
+  </ion-toolbar>
+</ion-header>
 
-<form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
-  <div formArrayName="data">
-    <div *ngFor="let service of services.controls; let i = index" [formGroupName]="i">
-      <fieldset style="margin-bottom: 1rem; border: 1px solid #ccc; padding: 1rem;">
-        <div *ngIf="isValidates" >
-          <fac-select 
-          formControlName="providers" 
-          label="providers" 
-          placeholder="providers"
-          icon=""
-          [valueField]="'id'" 
-          [labelField]="'name'"
-          [items]="providerList"
-          (ionChange)="onProvidersSelected($event)"
-          >
-        </fac-select>
-        </div>
+<ion-content [fullscreen]="true" class="ion-padding">
 
-      
-        <br />
-        <fac-select 
-        formControlName="category" 
-        label="Categorías" 
-        placeholder="Categorías"
-        icon=""
-        [valueField]="'id'" 
-        [labelField]="'name'"
-        [items]="categoryAll"
-        (ionChange)="onSubCategory($event)"
-        >
-      </fac-select>
+  <form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
+    <ion-list lines="full" class="service-list" formArrayName="data">
 
-      <fac-select 
-      formControlName="subcategory" 
-      label="subCategory" 
-      placeholder="subCategory"
-      icon=""
-      [valueField]="'id'" 
-      [labelField]="'name'"
-      [items]="getAvailableSubcategories(i)"
-      (ionChange)="onSelectItem($event,i)"
-      >
-    </fac-select>
+      <ion-accordion-group expand="inset">
+        <ion-accordion *ngFor="let service of services.controls; let i = index" [value]="i" [formGroupName]="i">
+          <ion-item slot="header" detail="true">
+            <ion-label>
+              <h2>Servicio {{ i + 1 }}</h2>
+              <p>{{ (services.at(i).value?.name || 'Sin nombre') | slice:0:40 }}</p>
+            </ion-label>
+            <ion-buttons slot="end">
+              <ion-button fill="clear" color="danger" (click)="removeServiceForm(i)" type="button">
+                Eliminar
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
 
-      <br />
+          <div class="accordion-content" slot="content">
+            <ion-list class="group-fields" lines="none">
 
-        <fac-input 
-        formControlName="name" 
-        label="Nombre" 
-        type="text" 
-        placeholder="Ingrese el nombre del proveedor" 
-        icon="person">
-      </fac-input>
-      <br />
-      <fac-textarea 
-      formControlName="description" 
-      label="Descripción" 
-      placeholder="Ingrese una descripción" 
-      icon="document-text">
-    </fac-textarea> 
-        <br />
+              <ion-item *ngIf="isValidates">
+                <ion-label position="stacked">Proveedor</ion-label>
+                <fac-select
+                  formControlName="providers"
+                  placeholder="Seleccione proveedor"
+                  [valueField]="'id'"
+                  [labelField]="'name'"
+                  [items]="providerList"
+                  (ionChange)="onProvidersSelected($event)">
+                </fac-select>
+              </ion-item>
 
-        <fac-input 
-        formControlName="serviceTime" 
-        label="serviceTime" 
-        type="text" 
-        placeholder="serviceTime" 
-        icon="person">
-      </fac-input>
+              <ion-item>
+                <ion-label position="stacked">Categoría</ion-label>
+                <fac-select
+                  formControlName="category"
+                  placeholder="Seleccione categoría"
+                  [valueField]="'id'"
+                  [labelField]="'name'"
+                  [items]="categoryAll"
+                  (ionChange)="onSubCategory($event)">
+                </fac-select>
+              </ion-item>
 
-      <fac-input 
-      formControlName="price" 
-      label="price" 
-      type="number" 
-      placeholder="price" 
-      icon="person">
-    </fac-input>
-        <br />
+              <ion-item>
+                <ion-label position="stacked">Subcategoría</ion-label>
+                <fac-select
+                  formControlName="subcategory"
+                  placeholder="Seleccione subcategoría"
+                  [valueField]="'id'"
+                  [labelField]="'name'"
+                  [items]="getAvailableSubcategories(i)"
+                  (ionChange)="onSelectItem($event,i)">
+                </fac-select>
+              </ion-item>
 
-  
+              <ion-item>
+                <ion-label position="stacked">Nombre</ion-label>
+                <fac-input
+                  formControlName="name"
+                  type="text"
+                  placeholder="Ingrese el nombre del servicio"
+                  icon="person">
+                </fac-input>
+              </ion-item>
 
-        <fac-btn 
-        label="Eliminar" 
-        color="primary" 
-        customClass="primary-btn" 
-        expand="block"
-        type="submit"
- 
-        (clicked)="removeServiceForm(i)"> 
-      </fac-btn>
-    
-      </fieldset>
+              <ion-item>
+                <ion-label position="stacked">Descripción</ion-label>
+                <fac-textarea
+                  formControlName="description"
+                  placeholder="Ingrese una descripción"
+                  icon="document-text">
+                </fac-textarea>
+              </ion-item>
+
+              <div class="two-cols">
+                <ion-item>
+                  <ion-label position="stacked">Tiempo (min)</ion-label>
+                  <fac-input
+                    formControlName="serviceTime"
+                    type="number"
+                    placeholder="Ej: 45">
+                  </fac-input>
+                </ion-item>
+
+                <ion-item>
+                  <ion-label position="stacked">Precio</ion-label>
+                  <fac-input
+                    formControlName="price"
+                    type="number"
+                    placeholder="Ej: 50000">
+                  </fac-input>
+                </ion-item>
+              </div>
+
+            </ion-list>
+          </div>
+        </ion-accordion>
+      </ion-accordion-group>
+
+    </ion-list>
+
+    <div class="stack-actions">
+      <ion-button expand="block" color="primary" type="button" (click)="addServiceForm()">
+        + Agregar servicio
+      </ion-button>
+
+      <ion-button expand="block" color="primary" type="submit" [disabled]="servicesForm.invalid">
+        Guardar
+      </ion-button>
     </div>
-  </div>
-  <fac-btn 
-  label="+ Agregar Servicio" 
-  color="primary" 
-  customClass="primary-btn" 
-  expand="block"
+  </form>
 
-  (clicked)="addServiceForm()"> 
-</fac-btn>
-
-<fac-btn 
-label="Guardar" 
-color="primary" 
-customClass="primary-btn" 
-expand="block"
-type="submit"
-
-(clicked)="onSubmit()"> 
-</fac-btn>
-
-
-        <ion-footer class="ion-no-border">
-          <ion-toolbar>
-            <ion-title></ion-title>
-          </ion-toolbar>
-        </ion-footer>
-        <ion-footer class="ion-no-border">
-          <ion-toolbar>
-            <ion-title></ion-title>
-          </ion-toolbar>
-        </ion-footer>
-        </form>
-      </div>
-    </ion-card-content>
-  </ion-card>
-</ion-content> -->
+</ion-content>

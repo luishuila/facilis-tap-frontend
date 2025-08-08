@@ -7,12 +7,12 @@ export interface BaseProviderModel {
   name?: string | null;
   email?: string | null;
   phone?: string | null;
-  img?: string | null;
+  img?: any | null;
   website?: string | null;
   nit?: number | null;
   invima?: string | null;
   companyIdentifier?: string | null;
-  logoUrl?: string | null;
+  logoUrl?: any | null;
   description?: string | null;
   status?: string | null;
   rating?: number | null;

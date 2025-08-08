@@ -1,15 +1,25 @@
-<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }">
+<fieldset class="fac-field" [class.has-error]="hasError" [class.disabled]="disabled">
   <legend *ngIf="label">{{ label }}</legend>
 
-  <ion-item class="custom-textarea" lines="none">
-    <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+  <ion-item class="textarea-item" lines="none">
+    <ion-icon *ngIf="icon" [name]="icon" slot="start" aria-hidden="true"></ion-icon>
 
     <ion-textarea
+      class="native-textarea"
       [placeholder]="placeholder"
-      [(ngModel)]="value"
-      [autoGrow]="true"
-      (ionInput)="onInputChange($event)"
-      [disabled]="disabled">
+      [value]="value"
+      [autoGrow]="autoGrow"
+      [maxlength]="maxlength || null"
+      [counter]="!!maxlength"
+      [rows]="rows"
+      [disabled]="disabled"
+      (ionInput)="onIonInput($event)"
+      (ionBlur)="onTouched()">
     </ion-textarea>
   </ion-item>
+
+  <div class="hint-row">
+    <ion-note class="helper" *ngIf="!hasError && helperText">{{ helperText }}</ion-note>
+    <ion-note class="error"  *ngIf="hasError">{{ errorText || defaultError }}</ion-note>
+  </div>
 </fieldset>

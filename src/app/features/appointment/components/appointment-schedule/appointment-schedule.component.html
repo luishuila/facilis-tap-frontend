@@ -1,10 +1,9 @@
-<div class="scroll-wrapper">
-
+<div class="schedule">
   <!-- Selector de días -->
   <div class="day-selector">
     <ion-segment scrollable [(ngModel)]="activeDayValue" class="day-segment" #daySegment>
       <ion-segment-button
-        *ngFor="let day of days"
+        *ngFor="let day of days; let i = index"
         [value]="day.fullDate.toISOString()"
         (click)="setActiveDay(day)">
         <div class="day-card" [class.active]="day.active">
@@ -19,31 +18,34 @@
   <h2 class="section-title">This Day’s Plan</h2>
 
   <!-- Lista con scroll virtual -->
-  <cdk-virtual-scroll-viewport itemSize="1" class="tasks-scroll-area">
+  <cdk-virtual-scroll-viewport [itemSize]="TASK_ROW_SIZE" class="tasks-scroll">
     <ion-item-sliding *cdkVirtualFor="let task of tasks">
+      <ion-item lines="none" class="task-card">
+        <div class="indicator" [style.background]="task.color"></div>
 
-      <ion-item-options side="start">
-        <ion-item-option color="primary" (click)="onEdit(task)">Editar</ion-item-option>
-        <ion-item-option color="danger" (click)="onDelete(task)">Eliminar</ion-item-option>
-      </ion-item-options>
-  
-      <ion-item lines="none" class="task-card-modern">
-        <div class="indicator" [ngStyle]="{ 'background-color': task.color }"></div>
-        <div class="task-content">
-          <div class="task-title">{{ task.title }}</div>
-          <div class="task-time">
-            {{ task.time }}
-            <span *ngIf="task.tag" class="task-tag">{{ task.tag }}</span>
+        <div class="task-body">
+          <div class="task-title-row">
+            <div class="task-title">{{ task.title }}</div>
           </div>
-          <div class="task-subtitle">{{ task.subtitle }}</div>
+
+          <div class="task-meta">
+            <span class="time">{{ task.time }}</span>
+            <span *ngIf="task.tag" class="tag">{{ task.tag }}</span>
+          </div>
+
+          <div class="task-subtitle" *ngIf="task.subtitle">{{ task.subtitle }}</div>
+
+          <!-- ÚNICA ACCIÓN: Agendar -->
+          <ion-button
+            class="book-btn"
+            expand="block"
+            size="small"
+            (click)="onBook(task)">
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            Agendar
+          </ion-button>
         </div>
       </ion-item>
-  
-      <ion-item-options side="end">
-        <ion-item-option color="success" (click)="onRemind(task)">Recordar</ion-item-option>
-      </ion-item-options>
-  
     </ion-item-sliding>
   </cdk-virtual-scroll-viewport>
-
 </div>

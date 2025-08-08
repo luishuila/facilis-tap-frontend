@@ -1,94 +1,83 @@
-import { Component, Input, OnInit, forwardRef, inject, Output ,EventEmitter ,ViewChild } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, ControlContainer, AbstractControl } from '@angular/forms';
-import { ValidationService } from '../../../core/services/validate/validation.service';
-import {  FormGroup } from '@angular/forms';
-import { IonModal } from '@ionic/angular/standalone';
+import { Component, Input, OnInit, forwardRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { IonModal, Platform } from '@ionic/angular';
+
+type SelectInterface = 'action-sheet' | 'alert' | 'popover';
+
 @Component({
   selector: 'fac-select',
   templateUrl: './fac-select.component.html',
   styleUrls: ['./fac-select.component.scss'],
   standalone: false,
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FacSelectComponent),
-      multi: true
-    }
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => FacSelectComponent), multi: true }
   ]
 })
 export class FacSelectComponent implements ControlValueAccessor, OnInit {
-
-  @Input() label: string = '';
-  @Input() placeholder: string = 'Selecciona una opción';
-  @Input() icon: string = 'list'; 
-  @Input() disabled: boolean = false;
+  @Input() label = '';
+  @Input() placeholder = 'Selecciona una opción';
+  @Input() icon = 'list';
+  @Input() disabled = false;
   @Input() formControlName!: string;
-  @Input() valueField: string = 'value';  
-  @Input() labelField: string = 'label';  
-  @Input() title: string = 'Select Items';
+
+  @Input() valueField = 'value';
+  @Input() labelField = 'label';
+  @Input() title = 'Seleccionar';
   @Input() items: any[] = [];
+
+  /** Modal custom (para listas largas / multiselección) */
+  @Input() selectModal = false;
   @Input() selectedItems: string[] = [];
-  @Input() selectModal: boolean = false;
 
-  value: string | number = '';
-  control: AbstractControl | null = null;
-  private validationService = inject(ValidationService);
-  private controlContainer = inject(ControlContainer);
+  /** Texto visible en el modo modal */
+  selectedText = '';
 
-  get hasError(): boolean {
-    return this.validationService.hasError(this.controlContainer, this.formControlName);
-  }
+  /** Interfaz nativa por plataforma (iOS = action-sheet, Android = alert) */
+  selectInterface: SelectInterface = 'alert';
+
+  /** Mensaje de error opcional */
+  @Input() errorText = '';
+  defaultError = 'Revisa este campo';
+
+  /** Control de error externo */
+  @Input() hasError: boolean = false;
+
+  value: string | number | null = null;
+
+  constructor(private platform: Platform) {}
 
   @ViewChild('modal') modal!: IonModal;
-
-
-
-
-
   @Output() selectionChange = new EventEmitter<string[]>();
 
-  selectedText = '0 Items';
-
-  updateSelectedText() {
-    this.selectedText = `${this.selectedItems.length} Items`;
+  ngOnInit(): void {
+    // Interface nativa por plataforma
+    this.selectInterface = this.platform.is('ios') ? 'action-sheet' : 'alert';
+    this.updateSelectedText();
   }
 
-  onSelectionChangeModal(values: string[]) {
-    this.selectedItems = values;
+  // CVA
+  onChange: (v: any) => void = () => {};
+  onTouched: () => void = () => {};
+  writeValue(v: any): void { this.value = v ?? null; }
+  registerOnChange(fn: (v: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+  setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
+
+  onSelectionChange(ev: CustomEvent): void {
+    this.value = ev.detail.value;
+    this.onChange(this.value);
+  }
+
+  // ---- Modal personalizado ----
+  updateSelectedText(): void {
+    const n = this.selectedItems?.length ?? 0;
+    this.selectedText = n > 0 ? `${n} seleccionado${n > 1 ? 's' : ''}` : this.placeholder;
+  }
+
+  onSelectionChangeModal(values: string[]): void {
+    this.selectedItems = values ?? [];
     this.updateSelectedText();
     this.selectionChange.emit(values);
-    this.modal.dismiss();
-  }
-
-  ngOnInit() {
-    this.updateSelectedText();
-  }
-
-  // ngOnInit(): void {
-  //   // console.log('options', this.options)
-  // }
-  onChange: (value: string | number) => void = () => {};
-  onTouched: () => void = () => {};
-
-  writeValue(value: string | number): void {
-    this.value = value ?? ''; 
-    this.onChange(this.value);
-  }
-
-  registerOnChange(fn: (value: string | number) => void): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: () => void): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-  }
-
-  onSelectionChange(event: any): void {
-    this.value = event.detail.value;
-    this.onChange(this.value);
+    this.modal?.dismiss();
   }
 }

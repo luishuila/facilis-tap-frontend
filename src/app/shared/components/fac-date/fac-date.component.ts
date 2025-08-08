@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild,forwardRef, inject  } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild, forwardRef, inject } from '@angular/core';
 import { IonDatetime, IonModal } from '@ionic/angular';
 import { ControlContainer, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ValidationService } from 'src/app/core/services/validate/validation.service';
@@ -7,65 +7,83 @@ import { ValidationService } from 'src/app/core/services/validate/validation.ser
   selector: 'fac-date',
   templateUrl: './fac-date.component.html',
   styleUrls: ['./fac-date.component.scss'],
-  standalone: false,
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FacDateComponent),
-      multi: true,
-    },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => FacDateComponent), multi: true },
   ],
+  standalone: false,
 })
 export class FacDateComponent implements ControlValueAccessor {
   @Output() dateSelected = new EventEmitter<string>();
   @ViewChild('dateTime', { static: false }) dateTime!: IonDatetime;
-  @ViewChild('modal', { static: false }) modal!: IonModal;
+  @ViewChild('modal',    { static: false }) modal!: IonModal;
 
-  @Input() label: string = 'Fecha';
-  @Input() icon: string = 'calendar-clear-outline';
-  @Input() placeholder: string = 'Selecciona una fecha';
-  @Input() type: 'date' | 'time' | 'datetime' = 'date';  // Permite cambiar el tipo de selector
-  @Input() formControlName!: string; 
+  @Input() label = 'Fecha';
+  @Input() icon  = 'calendar-clear-outline';
+  @Input() placeholder = 'Selecciona una fecha';
+  @Input() type: 'date' | 'time' | 'datetime' = 'date';
+  @Input() formControlName!: string;
 
-  selectedDate: string = '';
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  /* mensajes opcionales, igual que el input genérico */
+  @Input() helperText = '';
+  @Input() errorText  = '';
 
-  private validationService = inject(ValidationService); 
-  private controlContainer = inject(ControlContainer); 
+  selectedDate = '';
+  isOpen = false;
+
+  private validationService = inject(ValidationService);
+  private controlContainer  = inject(ControlContainer);
+
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
+  get defaultError(): string { return 'Revisa este campo'; }
 
+  /* presentación nativa según tipo */
+  get presentation(): 'date'|'time'|'date-time' {
+    return this.type === 'datetime' ? 'date-time' : this.type;
+  }
 
-  openModal() {
-    if (this.modal) {
-      this.modal.present();
-    }
+  /* Valor mostrado bonito */
+  get displayValue(): string {
+    if (!this.selectedDate) return '';
+    try {
+      if (this.type === 'time') {
+        // HH:mm en 24h
+        const d = new Date(`1970-01-01T${this.selectedDate}`);
+        return d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
+      }
+      const d = new Date(this.selectedDate);
+      const date = d.toLocaleDateString('es-ES', { year: 'numeric', month: '2-digit', day: '2-digit' });
+      if (this.type === 'datetime') {
+        const time = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', hour12: false });
+        return `${date} ${time}`;
+      }
+      return date;
+    } catch { return this.selectedDate; }
   }
-  
-  closeModal() {
-    if (this.modal) {
-      this.modal.dismiss();
-    }
+
+  // CVA
+  onChange: (v: string) => void = () => {};
+  onTouched: () => void = () => {};
+
+  writeValue(v: string): void { this.selectedDate = v || ''; }
+  registerOnChange(fn: (v: string) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+
+  /* Modal control */
+  openModal(): void { if (!this.disabled) this.isOpen = true; }
+  cancel(): void { this.isOpen = false; }
+  confirm(): void {
+    // IonDatetime ya disparó onDateChange, solo cerramos si hay valor
+    this.isOpen = false;
   }
-  onDateChange(event: CustomEvent) {
-    this.selectedDate = event.detail.value;
+
+  onDateChange(ev: CustomEvent) {
+    const val = (ev.detail as any)?.value as string;
+    this.selectedDate = val || '';
     this.onChange(this.selectedDate);
     this.dateSelected.emit(this.selectedDate);
-    this.closeModal();
   }
 
-  // Métodos para trabajar con FormControl
-  writeValue(value: string): void {
-    this.selectedDate = value || '';
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
+  @Input() disabled = false;
 }

@@ -1,0 +1,105 @@
+ion-content.no-scroll {
+  --padding-top: 0;
+  --padding-bottom: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 32px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-border {
+  border: 4px solid #c13584;
+  padding: 4px;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.avatar-xl {
+  width: 120px !important;
+  height: 120px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.11);
+}
+
+.profile-name {
+  margin-top: 18px;
+  margin-bottom: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #212121;
+  text-align: center;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+/* --- Deja el resto de estilos para tabs, segment, cards, etc, como están --- */
+
+.tab-segment {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+}
+
+.tab-segment ion-segment-button {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.tab-segment ion-icon {
+  font-size: 22px;
+  color: #666;
+}
+
+.tab-segment ion-segment-button.ion-activated ion-icon {
+  color: #007aff;
+}
+
+.tab-content {
+  padding: 1rem;
+}
+ion-content.no-scroll {
+  --padding-top: 0;
+  --padding-bottom: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   // ¡Centrar hijos horizontalmente!
+  margin-top: 32px;
+  margin-bottom: 20px;
+}
+
+.profile-avatar-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;   // ¡Centrar hijos horizontalmente!
+}
+
+.profile-name {
+  margin-top: 18px;
+  margin-bottom: 0;
+  font-size: 2rem;
+  font-weight: bold;
+  color: #212121;
+  text-align: center;    // ¡Centrar texto!
+  letter-spacing: -1px;
+  line-height: 1.1;
+}

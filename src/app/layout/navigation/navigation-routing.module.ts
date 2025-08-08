@@ -59,14 +59,11 @@ const routes: Routes = [
         path: 'services',
         loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
       },
-      {
-        path: 'services',
-        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
-      },
-      {
-        path: 'services/independent/:id',
-        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
-      },
+      // {
+      //   path: 'services',
+      //   loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
+      // },
+
       {
         path: 'services/:id',
         loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
@@ -80,7 +77,10 @@ const routes: Routes = [
         path: 'profile-services',
         loadChildren: () => import('../../features/profile/profile.module').then( m => m.ProfilePageModule)
       },
-      
+      {
+        path: 'profiles/:id',
+        loadChildren: () => import('../../features/profile-users/profile-users.module').then( m => m.ProfileUsersPageModule)
+      },
       {
         path: '',
         redirectTo: 'home',

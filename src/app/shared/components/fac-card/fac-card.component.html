@@ -1,26 +1,37 @@
-<ion-card class="info-card" (click)="onLocationClick()">
-  <ion-img [src]="imageUrl" alt="Imagen principal" class="card-image"></ion-img>
+<ion-card class="info-card" (click)="onLocationClick()" button>
+  <!-- Imagen fija 16:9 -->
+  <div class="media">
+    <ion-skeleton-text *ngIf="!imageLoaded" class="img-skeleton"></ion-skeleton-text>
+    <img
+      class="card-image"
+      [src]="imageUrl"
+      [alt]="title || 'Imagen'"
+      loading="lazy"
+      (load)="imageLoaded = true"
+      [class.hide]="!imageLoaded"
+    />
+  </div>
 
+  <!-- Bloque de texto (alto reservado + clamps) -->
   <ion-card-header class="card-header">
     <ion-card-title class="card-title">{{ title }}</ion-card-title>
-    <ion-card-subtitle class="card-subtitle">{{ description }}</ion-card-subtitle>
+    <ion-card-subtitle *ngIf="description" class="card-subtitle">
+      {{ description }}
+    </ion-card-subtitle>
   </ion-card-header>
 
+  <!-- Chips pegados al fondo -->
   <ion-card-content class="card-content">
-    <div class="location-row">
-      <ion-icon name="location-outline" class="location-icon"></ion-icon>
-      <span class="location-text">{{ location }}</span>
-    </div>
+    <div class="chips">
+      <div class="chip" *ngIf="location">
+        <ion-icon *ngIf="showLocationIcon" name="location-outline"></ion-icon>
+        <span>{{ location }}</span>
+      </div>
 
-    <div class="distance-row" *ngIf="formatDistance(distance)">
-      <ion-icon name="navigate-outline" class="distance-icon"></ion-icon>
-      <span class="distance-text">{{ formatDistance(distance) }}</span>
-    </div>
-
-    <div class="actions-row">
-      <ion-button fill="clear" size="small" (click)="onInfoClick()" class="info-button">
-        <ion-icon slot="icon-only" name="information-circle-outline"></ion-icon>
-      </ion-button>
+      <div class="chip" *ngIf="formatDistance(distance)">
+        <ion-icon name="navigate-outline"></ion-icon>
+        <span>{{ formatDistance(distance) }}</span>
+      </div>
     </div>
   </ion-card-content>
 </ion-card>

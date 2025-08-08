@@ -1,86 +1,115 @@
-<div class="register-address-content">
+<div  class="register-address-content">
+
+  <!-- Encabezado -->
+  <div class="page-header">
+    <h1>📍 Registrar dirección</h1>
+    <p>Ingresa la información de tu dirección</p>
+  </div>
+
+  <!-- Card contenedora -->
   <ion-card class="input-card">
     <ion-card-content>
-      <div class="container">
-        <h1 class="heading">📍 Registrar Dirección</h1>
-        <p class="para">Ingrese la información de su dirección</p>
 
-        <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
+      <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="form-grid">
+
+        <!-- Columna A -->
+        <div class="col">
           <!-- País -->
-          <fac-select 
-            formControlName="countryCode" 
-            label="País" 
-            placeholder="Seleccione un país"
+          <fac-select
+            formControlName="countryCode"
+            label="País"
+            placeholder="Selecciona un país"
             icon="globe"
-            [valueField]="'countryCode'" 
+            [valueField]="'countryCode'"
             [labelField]="'countryName'"
             [items]="countries"
             (ionChange)="onCountrySelected($event, null)">
           </fac-select>
 
-          <!-- Departamento -->
-          <fac-select 
-            formControlName="stateCode" 
-            label="Departamento/Estado" 
-            placeholder="Seleccione un departamento"
+          <!-- Departamento/Estado -->
+          <fac-select
+            formControlName="stateCode"
+            label="Departamento/Estado"
+            placeholder="Selecciona un departamento"
             icon="map"
-            [valueField]="'stateCode'" 
+            [valueField]="'stateCode'"
             [labelField]="'stateName'"
             [items]="departments"
             (ionChange)="onDepartmentsSelected($event, null)">
           </fac-select>
 
           <!-- Ciudad -->
-          <fac-select 
-            formControlName="cityStates" 
-            label="Ciudad" 
-            placeholder="Seleccione una ciudad"
+          <fac-select
+            formControlName="cityStates"
+            label="Ciudad"
+            placeholder="Selecciona una ciudad"
             icon="location"
-            [valueField]="'id'" 
+            [valueField]="'id'"
             [labelField]="'cityName'"
             [items]="cities">
           </fac-select>
 
-          <!-- Lat/Lon -->
-          <fac-input formControlName="lat" label="Latitud" type="text" placeholder="Ej: 4.6097" icon="location"></fac-input>
-          <fac-input formControlName="lon" label="Longitud" type="text" placeholder="Ej: -74.0817" icon="navigate"></fac-input>
-
-          <!-- Calle/Carrera -->
-          <fac-input formControlName="street" label="Calle" type="text" placeholder="Ej: Calle 123" icon="business"></fac-input>
-          <fac-input formControlName="race" label="Carrera" type="text" placeholder="Ej: Carrera 45" icon="location"></fac-input>
-
-          <!-- Barrio / Código Postal -->
-          <fac-input formControlName="neighborhood" label="Barrio" type="text" placeholder="Ej: Chapinero" icon="home"></fac-input>
-          <fac-input formControlName="zipcode" label="Código Postal" type="number" placeholder="Ej: 110111" icon="home"></fac-input>
-
-          <!-- Descripción -->
-          <fac-textarea
-            formControlName="description" 
-            label="Descripción (Opcional)" 
-            placeholder="Detalles adicionales sobre la dirección">
-          </fac-textarea>
-
           <!-- Tipo de propiedad -->
-          <fac-select 
-            formControlName="propertyType" 
-            label="Tipo de Propiedad" 
-            placeholder="Seleccione una opción"
+          <fac-select
+            formControlName="propertyType"
+            label="Tipo de propiedad"
+            placeholder="Selecciona una opción"
             icon="home"
             [items]="propertyType">
           </fac-select>
+        </div>
 
-          <!-- Botón de guardar -->
-          <fac-btn 
-            label="Guardar Dirección" 
-            color="primary" 
-            customClass="primary-btn" 
-            expand="block"
-            type="submit"
-            [disabled]="isDisabled"
-            (clicked)="saveAddress()"> 
-          </fac-btn>
-        </form>
-      </div>
+        <!-- Columna B -->
+        <div class="col">
+          <!-- Lat/Lon -->
+          <div class="row-2">
+            <fac-input formControlName="lat" label="Latitud"  type="text" placeholder="Ej: 4.6097"   icon="location"></fac-input>
+            <fac-input formControlName="lon" label="Longitud" type="text" placeholder="Ej: -74.0817" icon="navigate"></fac-input>
+          </div>
+
+          <!-- Calle / Carrera -->
+          <div class="row-2">
+            <fac-input formControlName="street" label="Calle"   type="text" placeholder="Ej: Calle 123"   icon="business"></fac-input>
+            <fac-input formControlName="race"   label="Carrera" type="text" placeholder="Ej: Carrera 45"  icon="navigate"></fac-input>
+          </div>
+
+          <!-- Barrio / Código postal -->
+          <div class="row-2">
+            <fac-input formControlName="neighborhood" label="Barrio"        type="text"   placeholder="Ej: Chapinero" icon="home"></fac-input>
+            <fac-input formControlName="zipcode"      label="Código postal" type="number" placeholder="Ej: 110111"    icon="mail-open"></fac-input>
+          </div>
+        </div>
+
+        <!-- Descripción (full width) -->
+        <div class="full">
+          <fac-textarea
+            formControlName="description"
+            label="Descripción (opcional)"
+            placeholder="Detalles adicionales sobre la dirección"
+            icon="document-text">
+          </fac-textarea>
+        </div>
+
+        <!-- Espaciador para que no tape la barra fija -->
+        <div class="bottom-spacer" aria-hidden="true">
+          <fac-btn
+          label="Guardar dirección"
+          color="primary"
+          customClass="primary-btn"
+          expand="block"
+          type="submit"
+          [disabled]="isDisabled"
+          (clicked)="saveAddress()">
+        </fac-btn>
+        </div>
+      </form>
+
     </ion-card-content>
   </ion-card>
+
+  <!-- Barra de acción fija inferior -->
+  <div class="sticky-actions">
+  
+  </div>
+
 </div>

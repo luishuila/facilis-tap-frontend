@@ -16,6 +16,9 @@ export class ProviderService {
   constructor(private http: HttpClient) {}
 
   create(providerData: ProviderCreateDto): Observable<ProviderDto> {
+
+    
+
     return this.http.post<ApiResponse<ProviderDto>>(`${this.apiUrl}providers`,providerData).pipe(
       map((response:ApiResponse<ProviderDto>) => response.data) 
     );
@@ -37,7 +40,12 @@ export class ProviderService {
       map((response: ApiResponse<UserDto>) => response.data)
     );
   }
-  
+  updateImage( imgFile: File, id?: number): Observable<any> {
+    const formData = new FormData();
+    formData.append('img', imgFile, imgFile.name); 
+    return this.http.patch<any>(`${this.apiUrl}providers/img/${id}`, formData);
+
+  }
   findOneAll() : Observable<ProviderDto[]> {
     return this.http.get<ApiResponse<ProviderDto[]>>(`${this.apiUrl}providers/one-all`).pipe(
       map((response:ApiResponse<ProviderDto[]>) => response.data) 

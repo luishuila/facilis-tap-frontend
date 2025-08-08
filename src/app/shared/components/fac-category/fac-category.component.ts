@@ -1,67 +1,133 @@
-import { Component, Input, ViewChild, ElementRef, AfterViewInit, OnChanges, Output, EventEmitter } from '@angular/core';
+import {
+  Component, Input, ViewChild, ElementRef,
+  AfterViewInit, OnChanges, OnDestroy, Output, EventEmitter, SimpleChanges, ChangeDetectionStrategy
+} from '@angular/core';
 import Swiper from 'swiper';
-import { Navigation, Pagination } from 'swiper/modules';
+import { Navigation, Pagination, A11y, Keyboard } from 'swiper/modules';
 import type { SwiperOptions } from 'swiper/types';
+// import 'swiper/css';
+// import 'swiper/css/navigation';
+// import 'swiper/css/pagination';
 
 @Component({
   selector: 'fac-category',
   templateUrl: './fac-category.component.html',
   styleUrls: ['./fac-category.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
-export class  FacCategoryComponent implements OnChanges, AfterViewInit {
-  @Input() items: { img: string; title: string, id:number, description:string }[] | any[] = [];
-  @Input() slidesPerView: number = 3;
-  @Input() spaceBetween: number = 8;
-  @Input() loop: boolean = true;
-  @Input() navigation: boolean = true;
-  @Input() valueField: string = 'id';  
-  @Input() labelField: string = 'name';  
-  @Input() img: string = 'img'; 
-  @Output() categoryEvent = new EventEmitter<any>();
-  swiperConfig: SwiperOptions = {};
-  swiper!: Swiper;
+export class FacCategoryComponent implements OnChanges, AfterViewInit, OnDestroy {
+  @Input() items: any[] = [];
+  @Input() slidesPerView = 1.15;           // “peek” nativo en mobile
+  @Input() spaceBetween = 12;
+  @Input() loop = false;
+  @Input() navigation = true;
+  @Input() pagination = true;
+  @Input() centeredSlides = true;
 
-  @ViewChild('swiperContainer', { static: false }) swiperContainer!: ElementRef;
+  // mapeo de campos
+  @Input() valueField = 'id';
+  @Input() labelField = 'name';
+  @Input() imgField = 'img';            
+  @Input() ariaLabelField?: string;
 
-  ngOnChanges() {
-    if (this.items?.length > 0 && this.swiper) {
-      this.swiper.update(); 
+  // responsivo (puedes sobrescribirlo)
+  @Input() breakpoints: SwiperOptions['breakpoints'] = {
+    480:  { slidesPerView: 1.15, spaceBetween: 12 },
+    640:  { slidesPerView: 2,    spaceBetween: 12 },
+    920:  { slidesPerView: 3,    spaceBetween: 12 },
+    1200: { slidesPerView: 4,    spaceBetween: 12 },
+  };
+
+  // estilos/UX
+  @Input() aspectRatio = '16/9';
+  @Input() showLabelChip = true;
+  @Input() ripple = true;
+
+  @Output() categoryEvent = new EventEmitter<any>();   // emite el item
+  @Output() categoryId = new EventEmitter<any>();      // emite solo el id
+
+  @ViewChild('swiperContainer', { static: false }) swiperContainer!: ElementRef<HTMLDivElement>;
+  @ViewChild('nextBtn', { static: false }) nextBtn!: ElementRef<HTMLElement>;
+  @ViewChild('prevBtn', { static: false }) prevBtn!: ElementRef<HTMLElement>;
+  @ViewChild('paginationEl', { static: false }) paginationEl!: ElementRef<HTMLElement>;
+
+  swiper?: Swiper;
+
+  ngAfterViewInit() { this.initSwiper(); }
+
+  ngOnChanges(ch: SimpleChanges) {
+    // si cambian items o config en caliente, re-init para no dejar Swiper “cojo”
+    if ((ch['items'] && !ch['items'].firstChange) || this.swiper) {
+      queueMicrotask(() => this.reinitSwiper());
     }
   }
-  onImgClick(id: any) {
-    this.categoryEvent.emit(id)
-  }
-  ngAfterViewInit() {
-    setTimeout(() => this.initSwiper(), 0);
+
+  ngOnDestroy() {
+    this.destroySwiper();
   }
 
+  onImgClick(item: any) {
+    const id = item?.[this.valueField] ?? item;
+    this.categoryEvent.emit(item);
+    this.categoryId.emit(id);
+  }
+
+  trackById = (_: number, it: any) => it?.[this.valueField] ?? it;
+
+  // --- Swiper ---
   private initSwiper() {
-    if (!this.swiperContainer || !this.swiperContainer.nativeElement) {
-      console.error("Error: swiperContainer no está inicializado");
-      return;
-    }
+    if (!this.swiperContainer?.nativeElement) return;
 
-    if (this.swiper) {
-      this.swiper.destroy(true, true);
-    }
+    const nav = this.navigation
+      ? {
+          nextEl: this.nextBtn?.nativeElement ?? undefined,
+          prevEl: this.prevBtn?.nativeElement ?? undefined,
+        }
+      : undefined;
 
-    this.swiperConfig = {
-      modules: [Navigation, Pagination],
+    const pag = this.pagination
+      ? {
+          el: this.paginationEl?.nativeElement ?? undefined,
+          clickable: true,
+        }
+      : undefined;
+
+    const config: SwiperOptions = {
+      modules: [Navigation, Pagination, A11y, Keyboard],
       slidesPerView: this.slidesPerView,
       spaceBetween: this.spaceBetween,
+      centeredSlides: this.centeredSlides,
+      breakpoints: this.breakpoints,
       loop: this.loop,
-      navigation: this.navigation ? { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' } : false,
-      pagination: { clickable: true },
-      scrollbar: { draggable: true },
+      navigation: nav,
+      pagination: pag,
+      keyboard: { enabled: true },
+      a11y: { enabled: true },
       observer: true,
       observeParents: true,
       on: {
-        init: () => console.log(),
-        slideChange: () => console.log(),
-      }
+        init: () => {/* noop */},
+      },
     };
 
-    this.swiper = new Swiper(this.swiperContainer.nativeElement, this.swiperConfig);
+    this.destroySwiper();
+    this.swiper = new Swiper(this.swiperContainer.nativeElement, config);
+  }
+
+  private reinitSwiper() {
+    // actualizar si ya existe, si no, crear
+    if (this.swiper) {
+      this.swiper.update();
+    } else {
+      this.initSwiper();
+    }
+  }
+
+  private destroySwiper() {
+    if (this.swiper) {
+      this.swiper.destroy(true, true);
+      this.swiper = undefined;
+    }
   }
 }

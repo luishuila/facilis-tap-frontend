@@ -1,4 +1,7 @@
-import { Component, Input, OnInit, EventEmitter , Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
+
+type BtnVariant = 'solid' | 'outline' | 'clear';
+type BtnSize = 'default' | 'small' | 'large';
 
 @Component({
   selector: 'fac-btn',
@@ -6,21 +9,28 @@ import { Component, Input, OnInit, EventEmitter , Output } from '@angular/core';
   styleUrls: ['./fac-btn.component.scss'],
   standalone: false,
 })
-export class FacBtnComponent implements OnInit {
-  @Input() label: string = 'Button';  
-  @Input() icon: string = '';        
-  @Input() color: string = 'primary'; 
-  @Input() expand: 'full' | 'block' | 'default' = 'block';  
-  @Input() customClass: string = '';  
-  @Input() disabled: boolean = false; 
-  @Output() clicked = new EventEmitter<void>(); 
-  @Input() type: string = 'submit';  
-  constructor() { }
+export class FacBtnComponent  {
+  @Input() label: string = 'Button';
+  @Input() icon: string = '';               // icono al inicio
+  @Input() iconEnd: string = '';            // icono al final
+  @Input() color: string = 'primary';
+  @Input() variant: BtnVariant = 'solid';   // solid | outline | clear
+  @Input() expand: 'full' | 'block' | 'default' = 'block';
+  @Input() size: BtnSize = 'default';       // default | small | large
+  @Input() customClass: string = '';
+  @Input() disabled: boolean = false;
+  @Input() loading: boolean = false;
+  @Input() type: 'button' | 'submit' | 'reset' = 'submit';
 
+  @Output() clicked = new EventEmitter<void>();
+
+  // map variante -> fill de Ionic
+  get fill(): 'solid' | 'outline' | 'clear' {
+    return this.variant;
+  }
 
   onClick() {
-    console.log('Botón clickeado'); 
+    if (this.disabled || this.loading) return;
     this.clicked.emit();
   }
-  ngOnInit() {}
 }

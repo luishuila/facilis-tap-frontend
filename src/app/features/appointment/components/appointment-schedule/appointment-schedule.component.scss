@@ -1,198 +1,98 @@
-:host {
-  display: block;
-  height: 100%;
+:root{
+  /* alturas de zonas “sticky” para calcular el viewport */
+  --day-selector-h: 60px;
+  --title-h: 44px;
 }
 
-.scroll-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  background: #f2f2f7; // iOS-like background
-}
+/* layout base */
+:host { display:block; height:100%; }
+.schedule { display:flex; flex-direction:column; height:100%; background: #f2f2f7; }
 
-// Selector de días
+/* ===== selector de días ===== */
 .day-selector {
-  background: #ffffff;
-  border-bottom: 1px solid #dcdcdc;
+  position: sticky; top: 0; z-index: 5;
+  background: #fff;
+  border-bottom: 1px solid var(--ion-color-step-150, #e5e5ea);
   padding: 6px 0;
 }
 
-.day-segment {
-  --background: transparent;
-  --indicator-color: transparent;
-  overflow-x: auto;
-  white-space: nowrap;
-}
+.day-segment { --background: transparent; --indicator-color: transparent; }
+ion-segment-button { padding: 0; min-width: 72px; max-width: 72px; }
 
-ion-segment-button {
-  padding: 0;
-  min-width: 72px;
-  max-width: 72px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+.day-card{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap: 2px;
+  border-radius: 12px;
+  padding: 8px 10px;
+  background: #f1f2f6;
+  transition: background .2s ease, color .2s ease;
 
-.day-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  padding: 6px 10px;
-  background: #f0f0f0;
-  transition: background-color 0.3s ease;
+  small{ font-size: 12px; color:#7d7d7d; line-height: 1; }
+  strong{ font-size: 16px; color:#222; line-height: 1; }
 
-  small {
-    font-size: 12px;
-    color: #888;
-  }
-
-  strong {
-    font-size: 16px;
-    color: #333;
-  }
-
-  &.active {
+  &.active{
     background: var(--ion-color-primary);
-
-    small,
-    strong {
-      color: #fff;
-    }
+    small, strong { color: #fff; }
   }
 }
 
-// Título
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
-  padding: 12px 16px 8px;
+/* ===== título ===== */
+.section-title{
+  position: sticky; top: var(--day-selector-h); z-index:4;
   margin: 0;
-  color: #111;
-  background: #fff;
+  padding: 12px 16px 8px;
+  background:#fff;
+  border-bottom: 1px solid var(--ion-color-step-150, #e5e5ea);
+  font-size: 18px; font-weight: 700; color:#111;
 }
 
-// Área de scroll de tareas
-.tasks-scroll-area {
-  flex: 1;
-  padding: 0 12px;
-  overflow-y: auto;
-  height: calc(100vh - 200px); // Ajuste estándar
-
-  @media (max-height: 700px) {
-    height: calc(100vh - 170px);
-  }
-
-  @media (min-height: 900px) {
-    height: calc(100vh - 230px);
-  }
+/* ===== virtual scroll ===== */
+.tasks-scroll{
+  /* usar dvh para móviles con barra dinámica */
+  height: calc(100dvh - var(--ion-safe-area-top, 0px) - var(--day-selector-h) - var(--title-h));
+  min-height: 60vh; /* fallback */
+  padding: 10px 12px 16px;
+  background: var(--ion-color-step-100, #fafcff);
 }
 
-// Tarjetas de tareas
-.task-card-modern {
-  display: flex;
-  background: #eaf3ff;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
-  position: relative;
-
-  .indicator {
-    width: 4px;
-    height: 100%;
-    border-radius: 4px;
-    margin-right: 12px;
-  }
-
-  .task-content {
-    flex: 1;
-
-    .task-title {
-      font-weight: 600;
-      font-size: 16px;
-      margin-bottom: 4px;
-      color: #222;
-    }
-
-    .task-time {
-      font-size: 14px;
-      color: #666;
-      margin-bottom: 4px;
-
-      .task-tag {
-        background: #e0ecff;
-        color: #0051ff;
-        font-size: 12px;
-        padding: 2px 8px;
-        border-radius: 12px;
-        margin-left: 8px;
-      }
-    }
-
-    .task-subtitle {
-      font-size: 13px;
-      color: #777;
-    }
-  }
-}
-.tasks-scroll-area {
-  flex: 1;
-  min-height: 20em;
-  background-color: #FAFDFF;
-}
-
-
-
-ion-item.task-card-modern {
-  --background: #ffffff;
-  border-radius: 12px;
+/* ===== card ===== */
+ion-item.task-card{
+  --background: #fff;
+  border-radius: 14px;
   margin: 8px 0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-  display: flex;
-  align-items: center;
   padding: 12px;
-}
-
-.indicator {
-  width: 5px;
-  height: 100%;
-  border-radius: 4px;
-  margin-right: 12px;
-  background-color: var(--ion-color-primary);
-}
-
-.task-content {
-  flex: 1;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
   display: flex;
-  flex-direction: column;
+  align-items: stretch;
 }
 
-.task-title {
-  font-size: 16px;
-  font-weight: 600;
-  color: #222;
+.indicator{ width: 4px; border-radius: 4px; margin-right: 12px; }
+
+.task-body{ flex:1; display:flex; flex-direction:column; }
+
+.task-title-row{ display:flex; align-items:center; justify-content:space-between; }
+.task-title{ font-size:16px; font-weight:600; color:#222; }
+
+.task-meta{
+  display:flex; align-items:center; gap:8px;
+  margin: 2px 0 4px;
+  .time{ font-size:14px; color:#666; }
+  .tag{
+    background:#e0ecff; color:#0051ff; font-size:12px;
+    padding: 2px 8px; border-radius: 12px;
+  }
+}
+.task-subtitle{ font-size:13px; color:#777; }
+
+.book-btn{
+  margin-top: 10px;
+  --border-radius: 12px;
+  /* MISMO COLOR que el día activo (primary) */
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+  --background-focused: var(--ion-color-primary-shade);
+  --color: #fff;
 }
 
-.task-time {
-  font-size: 14px;
-  color: #666;
-  display: flex;
-  align-items: center;
-}
-
-.task-tag {
-  background: #e0ecff;
-  color: #0051ff;
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 12px;
-  margin-left: 8px;
-}
-
-.task-subtitle {
-  font-size: 13px;
-  color: #888;
-  margin-top: 4px;
-}
+/* tamaño consistente con itemSize */
+.task-card{ min-height: 94px; }

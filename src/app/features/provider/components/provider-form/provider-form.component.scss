@@ -1,79 +1,117 @@
+/* ===== Base del contenedor ===== */
 .profile-content {
-    --background: #f9f9f9;
-    min-height: 100vh;
-    background: var(--background);
-  
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-  
-    .container {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      padding: 0 8px;
-    }
-  
-    .heading {
-      font-size: 24px;
-      font-weight: 700;
-      color: #1c1c1e;
-      margin-bottom: 2px;
-      letter-spacing: -0.5px;
-    }
-  
-    .para {
-      font-size: 15px;
-      color: #6b6b6b;
-      margin-bottom: 10px;
-      margin-top: 0;
-    }
-  
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-  
-    .primary-btn {
-      margin-top: 22px;
-      --background: #007aff;
-      --color: #fff;
-      --border-radius: 13px;
-      font-weight: 600;
-      font-size: 17px;
-      letter-spacing: 0.2px;
-      box-shadow: 0 4px 18px rgba(0,122,255,0.12);
-      min-height: 48px;
-      text-transform: none;
-      transition: filter .2s;
-      &:active {
-        filter: brightness(0.92);
-      }
-    }
-  
-    ion-card.input-card {
-      margin: 0;
-      border-radius: 16px 16px 0 0;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.06);
-      background: #fff;
-      border: none;
-    }
-  
-    ion-card-content {
-      padding: 22px 8px 16px 8px;
-    }
-  
-    fac-input, fac-radio, fac-select, fac-btn, fac-textarea {
-      width: 100%;
-      max-width: 100vw;
-    }
-  
-    .ion-no-border {
-      border-top: none !important;
-      box-shadow: none !important;
-      background: transparent !important;
-    }
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--ion-background-color);
+}
+
+/* ===== Encabezado ===== */
+.page-header {
+  padding: 16px 16px 8px;
+  h1 {
+    margin: 0 0 4px;
+    font-weight: 700;
+    color: var(--ion-text-color);
+    font-size: 22px;
   }
-  
+  p {
+    margin: 0;
+    color: var(--ion-color-medium);
+    font-size: 14px;
+  }
+}
+
+/* ===== Tarjeta contenedora ===== */
+ion-card.input-card {
+  margin: 8px 12px 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  background: #fff;
+}
+ion-card.input-card ion-card-content {
+  padding: 14px;
+}
+
+/* ===== Avatar centrado ===== */
+.avatar-center {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+/* ===== Grid del formulario ===== */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;   /* móvil: 1 columna */
+  gap: 12px 14px;
+}
+
+.col, .full { display: grid; gap: 12px; }
+.full { grid-column: 1 / -1; }
+
+/* pantallas más anchas -> 2 columnas */
+@media (min-width: 640px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ===== Botón primario (nativo) ===== */
+.primary-btn {
+  --background: var(--ion-color-primary);
+  --color: #fff;
+  --border-radius: 14px;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: none;
+}
+
+/* ===== Barra pegada abajo (como app nativa) ===== */
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--ion-background-color) 40%);
+  border-top: 1px solid var(--ion-color-step-150);
+  backdrop-filter: saturate(180%) blur(10px);
+  z-index: 10;
+}
+.bottom-spacer { height: 56px; }
+
+/* ===== Ajustes look por plataforma ===== */
+:host-context(.ios) .page-header h1 { letter-spacing: -0.2px; }
+:host-context(.md)  .page-header h1 { font-weight: 700; }
+
+/* Alinea spacing de los fac-* con el grid */
+:host ::ng-deep fac-input .fac-field,
+:host ::ng-deep fac-date  .fac-field,
+:host ::ng-deep fac-radio .fac-field,
+:host ::ng-deep fac-select .fac-field,
+:host ::ng-deep fac-textarea .fac-field {
+  margin: 0; /* el grid ya maneja separación */
+}
+
+/* ===== Upload Covan ===== */
+.upload-covan { margin-top: 4px; }
+.upload-label {
+  display: inline-block;
+  padding: 10px 14px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--ion-color-primary);
+  cursor: pointer;
+}
+.covan-preview {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  img {
+    max-height: 100px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.12);
+  }
+  ion-icon {
+    font-size: 32px;
+    color: var(--ion-color-medium);
+  }
+}

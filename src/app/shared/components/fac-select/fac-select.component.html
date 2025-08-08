@@ -1,32 +1,40 @@
-<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }" *ngIf="!selectModal">
+<!-- MODO SELECT NORMAL (action-sheet iOS / alert Android) -->
+<fieldset class="fac-field" [class.has-error]="hasError" *ngIf="!selectModal">
   <legend *ngIf="label">{{ label }}</legend>
 
-  <ion-item class="custom-select" lines="none">
-    <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+  <ion-item class="field-item custom-select" lines="none">
+    <ion-icon *ngIf="icon" slot="start" [name]="icon" aria-hidden="true"></ion-icon>
 
     <ion-select
+      class="select-el"
       [placeholder]="placeholder"
       [(ngModel)]="value"
       (ionChange)="onSelectionChange($event)"
       [disabled]="disabled"
-      interface="popover"
-    >
-      <ion-select-option
-        *ngFor="let option of items"
-        [value]="option[valueField]"
-      >
+      [interface]="selectInterface"
+      [interfaceOptions]="{ header: label || title }">
+      <ion-select-option *ngFor="let option of items" [value]="option[valueField]">
         {{ option[labelField] }}
       </ion-select-option>
     </ion-select>
+
+    <!-- chevron visual (no funcional) -->
+    <ion-icon slot="end" name="chevron-down-outline" class="chevron"></ion-icon>
   </ion-item>
+
+  <div class="hint-row">
+    <ion-note class="error" *ngIf="hasError">{{ errorText || defaultError }}</ion-note>
+  </div>
 </fieldset>
 
-<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }" *ngIf="selectModal">
+<!-- MODO MODAL PERSONALIZADO -->
+<fieldset class="fac-field" [class.has-error]="hasError" *ngIf="selectModal">
   <legend *ngIf="label">{{ label }}</legend>
 
-  <ion-item class="custom-select" button id="select-modal-trigger">
-    <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
-    <ion-label>{{ selectedText || placeholder }}</ion-label>
+  <ion-item class="field-item custom-select" button id="select-modal-trigger" lines="none">
+    <ion-icon *ngIf="icon" slot="start" [name]="icon" aria-hidden="true"></ion-icon>
+    <ion-label class="select-value">{{ selectedText || placeholder }}</ion-label>
+    <ion-icon slot="end" name="chevron-down-outline" class="chevron"></ion-icon>
   </ion-item>
 </fieldset>
 
@@ -40,7 +48,7 @@
       [valueField]="valueField"
       [selectedItems]="selectedItems"
       (selectionChange)="onSelectionChangeModal($event)"
-      (selectionCancel)="modal.dismiss()"
-    ></fac-modal-select>
+      (selectionCancel)="modal.dismiss()">
+    </fac-modal-select>
   </ng-template>
 </ion-modal>

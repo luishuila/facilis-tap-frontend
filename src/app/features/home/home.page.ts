@@ -124,20 +124,21 @@ export class HomePage implements  ViewWillLeave  {
     this.loadHome()
   }
   onCategory(event:any){
-    this.categoryId = event;
+    console.log('event-->', event)
+    this.categoryId = event.id;
     this.subCategory = []
     this.items = [];
     this.hasMore = true;
     this.page = 1;
     this.subcategoryId = undefined;
     this.loadHome('');
-    this.categoryService.findAllSubCategory(event).subscribe(data=>{
+    this.categoryService.findAllSubCategory(event.id).subscribe(data=>{
       this.subCategory = data
     })
     
   }
-  onSubCategory(id:any){
-    this.subcategoryId = id;
+  onSubCategory(event:any){
+    this.subcategoryId = event.id;
     this.items = [];
     this.hasMore = true;
     this.page = 1;

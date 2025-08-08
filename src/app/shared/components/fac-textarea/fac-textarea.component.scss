@@ -1,50 +1,96 @@
-.input-item {
-    border: none;
-    margin-bottom: 10px;
-  
-    legend {
-      font-size: 14px;
-      color: #333;
-      margin-bottom: 4px;
-    }
-  
-    &.has-error {
-      border-left: 4px solid #eb445a;
-      padding-left: 8px;
-    }
+/* ===== Contenedor y leyenda (igual a los otros inputs) ===== */
+.fac-field{
+  margin: 0 0 14px;
+  border: none;
+
+  legend{
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ion-color-medium, #6b6b6b);
+    margin: 0 0 6px 12px;
   }
-  
-  .custom-textarea {
-    --background: #f0f0f0 !important;  // ✅ fondo gris tipo nativo
-    --border-radius: 30px;
-    --padding-start: 12px;
-    --padding-end: 12px;
-    --min-height: 80px;
-  
-    background: #f0f0f0;
-    border-radius: 30px;
-    display: flex;
-    align-items: flex-start;
-    margin: 6px 0;
-  
-    ion-icon {
-      font-size: 20px;
-      color: #007aff; // ✅ azul nativo
-      margin-top: 10px;
-    }
-  
-    ion-textarea {
-      font-size: 14px;
-      color: #666;
-      margin-left: 10px;
-      --padding-top: 12px;
-      --padding-bottom: 12px;
-    }
-  
-    ion-textarea::part(native) {
-      background: transparent;
-      color: #666;
-      font-size: 14px;
-    }
+
+  &.has-error legend { color: var(--ion-color-danger, #eb445a); }
+  &.disabled  legend { color: #9aa0a6; }
+}
+
+/* ===== Cápsula del textarea ===== */
+.textarea-item{
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  --min-height: 80px;          /* alto mínimo cómodo */
+
+  display: flex;
+  align-items: flex-start;
+  padding-left: 4px;           /* deja respirar al icono */
+  padding-right: 4px;
+
+  background: var(--background);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.textarea-item ion-icon[slot="start"]{
+  font-size: 20px;
+  color: var(--ion-color-primary, #007aff);
+  margin-top: 10px;
+}
+
+/* Textarea real */
+.native-textarea{
+  width: 100%;
+  font-size: 14px;
+  color: var(--ion-text-color, #222);
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+}
+.native-textarea::part(native){
+  background: transparent;
+  color: var(--ion-text-color, #222);
+  font-size: 14px;
+}
+
+/* Mensajes */
+.hint-row{
+  margin-top: 6px;
+  padding-left: 12px;
+  display: flex; gap: 12px;
+  .helper{ font-size: 12px; color: var(--ion-color-medium, #6b6b6b); }
+  .error { font-size: 12px; color: var(--ion-color-danger, #eb445a); }
+}
+
+/* Estados: focus / error / disabled */
+.textarea-item:focus-within{
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-primary) 22%, transparent);
+}
+.fac-field.has-error .textarea-item{
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-danger) 40%, transparent);
+}
+.fac-field.disabled .textarea-item{
+  opacity: .55;
+  pointer-events: none;
+}
+
+/* ===== iOS vs Android (MD) ===== */
+:host-context(.ios){
+  .textarea-item{
+    --background: #f2f2f7;
+    --radius: 9999px;
+    --shadow: inset 0 0 0 1px rgba(0,0,0,.05);
   }
-  
+}
+:host-context(.md){
+  .textarea-item{
+    --background: #eeeeee;
+    --radius: 16px;
+    --shadow: 0 1px 2px rgba(0,0,0,.04), inset 0 0 0 1px rgba(0,0,0,.06);
+  }
+}
+
+/* Compacto en pantallas muy chicas */
+@media (max-width: 360px){
+  .textarea-item{ --min-height: 72px; }
+  .fac-field legend{ font-size: 13px; }
+}

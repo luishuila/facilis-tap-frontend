@@ -1,0 +1,50 @@
+<div class="avatar-center">
+  <!-- Contenedor del avatar -->
+  <div class="avatar-wrap" [attr.aria-label]="alt" role="img">
+    <!-- Skeleton mientras carga -->
+    <ion-skeleton-text *ngIf="isLoading" class="skeleton"></ion-skeleton-text>
+
+    <!-- Imagen si hay URL y no hay error -->
+    <img
+      *ngIf="avatarUrl && !isError && !isLoading"
+      [src]="avatarUrl"
+      class="avatar-img"
+      [alt]="alt"
+      (load)="onLoadOk()"
+      (error)="onLoadError()"
+      (loadstart)="onStartLoading()"
+      decoding="async"
+      loading="lazy"
+    />
+
+    <!-- Si falla: placeholder o iniciales -->
+    <ng-container *ngIf="(!avatarUrl || isError) && !isLoading">
+      <ion-avatar class="avatar-img">
+        <img [src]="placeholder" [alt]="alt" />
+      </ion-avatar>
+
+      <div *ngIf="showInitials" class="initials" aria-hidden="true">{{ showInitials }}</div>
+    </ng-container>
+
+    <!-- Overlay cámara en modo edit -->
+    <label
+      *ngIf="effectiveMode === 'edit'"
+      class="avatar-overlay"
+      for="avatar-upload"
+      tabindex="0"
+      [attr.aria-label]="'Cambiar foto de perfil'"
+    >
+      <ion-icon name="camera"></ion-icon>
+    </label>
+
+    <input
+      id="avatar-upload"
+      type="file"
+      accept="image/*"
+      capture="user"
+      (change)="onFileSelected($event)"
+      hidden
+      [disabled]="effectiveMode !== 'edit'"
+    />
+  </div>
+</div>

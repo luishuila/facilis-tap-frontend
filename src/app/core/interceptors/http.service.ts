@@ -18,26 +18,24 @@ export class HttpInterceptorService implements HttpInterceptor {
   ) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
+    // Intercept login/register requests (encryption logic may vary here)
     if (req.url.includes('/login') || req.url.includes('/register')) {
       console.log('🚀 Interceptando solicitud de login/register...');
 
       let clonedReq = req;
-
-          
-      if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
-
-        const encryptedBody = this.aesService.encryptData(req.body);
-        clonedReq = req.clone({ body: { data: encryptedBody } });
+      if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+        // Only encrypt if body is not FormData (let FormData pass through, e.g. file upload)
+        if (!(req.body instanceof FormData)) {
+          const encryptedBody = this.aesService.encryptData(req.body);
+          clonedReq = req.clone({ body: { data: encryptedBody } });
+        }
       }
       return next.handle(clonedReq).pipe(
         tap(event => console.log('🔹 Respuesta sin procesar:', event)), 
-        map((event:any) => {
-          console.log('event.body?.data', event?.body?.data)
+        map((event: any) => {
           if (event instanceof HttpResponse && event.body?.data) {
-            
             try {
               const decryptedData = this.aesService.decryptData(event.body.data);
-              
               return event.clone({ body: { ...event.body, data: decryptedData } });
             } catch (error) {
               console.error('❌ Error al desencriptar en login/register:', error);
@@ -49,6 +47,7 @@ export class HttpInterceptorService implements HttpInterceptor {
       );
     }
 
+    // Other requests
     return defer(() => this.authService.getAccessToken()).pipe(
       switchMap(token =>
         defer(() => this.loadingCtrl.create({ message: 'Cargando...', spinner: 'crescent' })).pipe(
@@ -57,29 +56,32 @@ export class HttpInterceptorService implements HttpInterceptor {
 
             let clonedReq = req;
 
-            let encryptedBody =  'MY_SECRET_KEY_32_BYTES';
-            if (req.method === 'POST' || req.method === 'PUT' || req.method === 'PATCH') {
- 
-               const descript = usersData().id||'MY_SECRET_KEY_32_BYTES'
-            //  let  encryptedBody = this.aesService.encryptData(req.body, descript);
-             let data =  this.aesService.encryptData(req.body, descript);
-              clonedReq = req.clone({ body: { data: data } });
+            if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
+              // Only encrypt if body is not FormData
+              if (!(req.body instanceof FormData)) {
+                const descript = usersData().id || 'MY_SECRET_KEY_32_BYTES';
+                const data = this.aesService.encryptData(req.body, descript);
+                clonedReq = req.clone({ body: { data: data } });
+              }
             }
 
+            // Set token and custom headers if needed
             if (token?.access_token) {
-              clonedReq = clonedReq.clone({ setHeaders: { 
-                'key': usersData().id||'MY_SECRET_KEY_32_BYTES',
-                Authorization: `Bearer ${token.access_token}`
-               }});
+              clonedReq = clonedReq.clone({
+                setHeaders: {
+                  'key': usersData().id || 'MY_SECRET_KEY_32_BYTES',
+                  Authorization: `Bearer ${token.access_token}`
+                }
+              });
             }
 
             return next.handle(clonedReq).pipe(
               tap(event => event),
               map(event => {
                 if (event instanceof HttpResponse && event.body?.data) {
-                  const descript = usersData().id||'MY_SECRET_KEY_32_BYTES'
-                  const decryptedData = this.aesService.decryptData(event.body.data,descript);
+                  const descript = usersData().id || 'MY_SECRET_KEY_32_BYTES';
                   try {
+                    const decryptedData = this.aesService.decryptData(event.body.data, descript);
                     return event.clone({ body: { ...event.body, data: decryptedData } });
                   } catch (error) {
                     console.error('❌ Error al desencriptar datos en respuesta global:', error);

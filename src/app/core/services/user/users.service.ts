@@ -25,5 +25,10 @@ export class UsersService {
     );
   }
   
+  updateImage(id: string, imgFile: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('img', imgFile, imgFile.name); 
+    return this.http.patch<any>(`${this.apiUrl}user/img/${id}`, formData);
 
+  }
 }

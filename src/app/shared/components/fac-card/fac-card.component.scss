@@ -1,76 +1,155 @@
+:host { display: block; }
+
+/* ===== Tamaños consistentes ===== */
+:root{
+  /* Ajusta libremente estos números */
+  --card-height: 360px;           /* Alto fijo para TODAS las cards */
+  --header-min-h: 92px;           /* Altura reservada para título/subtítulo */
+  --title-lines: 3;               /* # líneas visibles en título */
+  --subtitle-lines: 1;            /* # líneas visibles en subtítulo */
+}
+
 .info-card {
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+  height: var(--card-height);
   display: flex;
   flex-direction: column;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+}
+
+/* Imagen: siempre 16:9 arriba */
+.media {
+  position: relative;
   width: 100%;
-  max-width: 300px; // más estrecho
-  margin: 8px auto;
-  background-color: #ffffff;
+  aspect-ratio: 16/9;
+  background: #f2f2f7;
+  flex: 0 0 auto; /* no crece */
+}
+.card-image {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.card-image.hide { display: none; }
+.img-skeleton { position: absolute; inset: 0; border-radius: 0; }
 
-  .card-image {
-    width: 100%;
-    height: 90px; // más baja
-    object-fit: cover;
-  }
+/* Header: reserva altura para que no “salte” entre cards */
+.card-header {
+  padding: 10px 12px 0;
+  min-height: var(--header-min-h);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
 
-  .card-header {
-    padding: 6px 10px;
+/* Limita líneas para uniformar */
+.card-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+  color: var(--ion-text-color);
+  display: -webkit-box;
+  -webkit-line-clamp: var(--title-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.card-subtitle {
+  font-size: 13px;
+  color: var(--ion-color-medium);
+  margin-top: 2px;
+  display: -webkit-box;
+  -webkit-line-clamp: var(--subtitle-lines);
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 
-    .card-title {
-      font-size: 0.85rem; // más pequeño
-      font-weight: 600;
-      color: #1a1a1a;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+/* El contenido ocupa el resto y pega los chips al fondo */
+.card-content {
+  padding: 10px 12px 14px;
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 auto;         /* ocupa el espacio restante */
+  overflow: hidden;       /* evita desbordes si hay mucho texto */
+}
 
-    .card-subtitle {
-      font-size: 0.7rem;
-      color: #6b6b6b;
-      margin-top: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
+/* Chips */
+.chips { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  background: var(--ion-color-step-100, #eee);
+  color: var(--ion-text-color);
+  white-space: nowrap; /* evita saltos raros */
+}
+/* ===== Tamaños globales que puedes ajustar ===== */
+:root{
+  --card-w: 260px;        /* ancho opcional si usas grid/lista */
+  --card-h: 360px;        /* ALTO TOTAL de TODAS las cards */
+  --media-h: 140px;       /* alto de la imagen */
+  --text-h: 120px;        /* bloque reservado para título+subtítulo */
+  --chips-h: 70px;        /* bloque reservado para chips */
+  --title-lines: 3;       /* líneas visibles en título */
+  --subtitle-lines: 2;    /* líneas visibles en subtítulo */
+}
 
-  .card-content {
-    padding: 6px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
+.info-card{
+  width: var(--card-w);          /* opcional, puedes eliminarlo si el contenedor define el ancho */
+  height: var(--card-h);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 6px 14px rgba(0,0,0,.08);
 
-    .location-row,
-    .distance-row {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.7rem; // más pequeño
-      color: #444;
-    }
+  /* Usamos grid para fijar zonas: imagen / texto / chips */
+  display: grid;
+  grid-template-rows: var(--media-h) var(--text-h) var(--chips-h);
+}
 
-    .location-icon,
-    .distance-icon {
-      font-size: 14px;
-      color: #dc3545;
-    }
+/* ---------- Imagen fija arriba ---------- */
+.media{
+  position: relative;
+  height: var(--media-h);
+  background: #f2f2f7;
+}
+.card-image{
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.card-image.hide{ display:none; }
+.img-skeleton{ position:absolute; inset:0; border-radius:0; }
 
-    .distance-icon {
-      color: #007bff;
-    }
+/* ---------- Texto con clamp (altura reservada) ---------- */
+.card-header{
+  padding: 10px 12px 0;
+  overflow: hidden; /* por si hay más texto del permitido */
+}
+.card-title{
+  margin:0;
+  font-size:16px; font-weight:600; color:var(--ion-text-color);
+  display:-webkit-box; -webkit-line-clamp:var(--title-lines);
+  -webkit-box-orient:vertical; overflow:hidden;
+}
+.card-subtitle{
+  margin-top:2px; font-size:13px; color:var(--ion-color-medium);
+  display:-webkit-box; -webkit-line-clamp:var(--subtitle-lines);
+  -webkit-box-orient:vertical; overflow:hidden;
+}
 
-    .actions-row {
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 2px;
-
-      .info-button {
-        color: #007bff;
-        font-size: 1rem;
-      }
-    }
-  }
+/* ---------- Chips bloque fijo abajo ---------- */
+.card-content{
+  padding: 10px 12px 14px;
+  display:flex; align-items:flex-end;
+  overflow:hidden; /* evita desbordes */
+}
+.chips{ display:flex; gap:8px; flex-wrap:wrap; }
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:6px 10px; border-radius:999px; font-size:13px;
+  background: var(--ion-color-step-100,#eee);
+  color: var(--ion-text-color);
+  max-width:100%;
+  white-space:nowrap; text-overflow:ellipsis; overflow:hidden;
 }

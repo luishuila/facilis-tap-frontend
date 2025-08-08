@@ -1,57 +1,86 @@
-<ion-header>
+<ion-header [translucent]="true" class="app-header">
   <ion-toolbar>
     <ion-title>Empresa</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="no-scroll">
-  <div class="profile-header"  >
-    <div class="profile-top">
-      <ion-avatar class="avatar-border">
-        <img alt="Company logo" [src]="profile?.img || 'https://picsum.photos/600/300?random=5'" />
+<ion-content [fullscreen]="true" class="profile-content">
+  <!-- HERO -->
+  <div class="hero">
+    <img class="hero-bg" [src]="'https://picsum.photos/800/450?random=3'" alt="cover" />
+    <div class="hero-overlay"></div>
+
+    <div class="hero-bottom">
+      <ion-avatar class="avatar">
+        <img alt="Company logo" [src]="profile?.img || 'https://picsum.photos/200/200?random=5'" />
       </ion-avatar>
-      <div class="username">
-        <h2>{{ profile?.name }}</h2>
-        <p>{{ company.type }}</p>
-      </div>
-    </div>
 
-    <div class="company-info">
-      <ion-text>
-        <p><strong>Descripción:</strong> {{ profile?.description }}</p>
-        <p><strong>Teléfono:</strong> {{ profile?.phone }}</p>
-        <p><strong>Web:</strong>
-          <a [href]="company.url" target="_blank">{{ profile?.website }}</a>
-        </p>
-        <!-- <p><strong>Ubicación:</strong> {{ profile?.addresses[0]?.race }}</p> -->
-        <p><strong>Ciudad:</strong> {{ profile?.phone }}</p>
-      </ion-text>
-    </div>
-
-    <div class="highlights">
-      <div class="highlight" *ngFor="let story of profile?.employees ">
-        <ion-avatar>
-          <img [src]="story?.users?.img || 'https://picsum.photos/600/300?random=5'" alt="story" />
-        </ion-avatar>
-        <p>{{ story?.users?.name }}</p>
+      <div class="name-block">
+        <h1 class="title">{{ profile?.name || company.name }}</h1>
+        <p class="subtitle">{{ company.type }}</p>
       </div>
     </div>
   </div>
 
-  <ion-segment [(ngModel)]="selectedTab" class="tab-segment" mode="md">
-    <ion-segment-button value="cita">
-      <ion-icon name="calendar-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="mapa">
-      <ion-icon name="map-outline"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
+  <!-- INFO PRINCIPAL -->
+  <section class="info">
+    <p class="description" *ngIf="profile?.description">{{ profile?.description }}</p>
 
+    <div class="chips">
+      <div class="chip" *ngIf="profile?.phone">
+        <ion-icon name="call-outline"></ion-icon>
+        <span>{{ profile?.phone }}</span>
+      </div>
+
+      <a class="chip"
+         *ngIf="profile?.website || company.url"
+         [href]="profile?.website || company.url"
+         target="_blank" rel="noopener">
+        <ion-icon name="globe-outline"></ion-icon>
+        <span>{{ profile?.website || company.url }}</span>
+      </a>
+
+      <div class="chip" *ngIf="company.city">
+        <ion-icon name="location-outline"></ion-icon>
+        <span>{{ company.city }}</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="highlights" *ngIf="stories">
+    <h2 class="section-title">Equipo</h2>
+    <div class="stories">
+      <div class="story" *ngFor="let e of stories">
+        <ion-avatar>
+          <img [src]=" 'https://picsum.photos/100/100?random=5'" alt="story" />
+        </ion-avatar>
+        <p>{{ e?.title }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEGMENTO STICKY -->
+  <div class="segment-sticky">
+    <ion-segment [(ngModel)]="selectedTab" class="tab-segment" mode="md">
+      <ion-segment-button value="cita">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <ion-label>Citas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="mapa">
+        <ion-icon name="map-outline"></ion-icon>
+        <ion-label>Mapa</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- CONTENIDO TABS -->
   <div [ngSwitch]="selectedTab" class="tab-content">
     <div *ngSwitchCase="'cita'">
       <app-appointment-schedule></app-appointment-schedule>
     </div>
-    <div *ngSwitchCase="'mapa'">
+    <div *ngSwitchCase="'mapa'" class="map-box">
+      <ion-icon name="map-outline"></ion-icon>
       <p><strong>Aquí irá la vista de mapa</strong></p>
     </div>
   </div>

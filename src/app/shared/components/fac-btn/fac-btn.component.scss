@@ -1,48 +1,92 @@
+/* Base */
 .native-button {
-  --border-radius: 12px;
+  /* Paddings y radio coherentes con nativo */
+  --border-radius: 14px;
   --padding-top: 12px;
   --padding-bottom: 12px;
-  --padding-start: 24px;
-  --padding-end: 24px;
-  --background: #007aff; /* Azul nativo iOS */
-  --color: #ffffff;
-  --box-shadow: none;
-  --transition: background-color 0.3s ease;
+  --padding-start: 20px;
+  --padding-end: 20px;
 
-  font-weight: 500;
+  /* Tipografía y comportamiento */
+  font-weight: 600;
   font-size: 16px;
   text-transform: none;
+  letter-spacing: 0.2px;
+  transition: transform .06s ease, filter .15s ease;
 
   ion-icon {
     font-size: 20px;
-    margin-right: 8px;
   }
 
-  &:hover {
-    opacity: 0.9;
-  }
+  /* Estados */
+  &:active:not(.ion-activated):not(.is-loading) { transform: scale(0.985); }
+  &.is-loading { cursor: default; opacity: 0.9; }
+}
 
-  &:active {
-    transform: scale(0.98);
-  }
+/* Tamaños */
+.size-small {
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-start: 14px;
+  --padding-end: 14px;
+  font-size: 14px;
 
-  &.ios {
-    --background: #007aff;
-  }
+  ion-icon { font-size: 18px; }
+}
 
-  &.md {
-    --background: #3880ff;
-  }
+.size-large {
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  --padding-start: 26px;
+  --padding-end: 26px;
+  font-size: 17px;
 
-  &.danger {
-    --background: #eb445a;
-  }
+  ion-icon { font-size: 22px; }
+}
 
-  &.secondary {
-    --background: #3dc2ff;
+/* iOS look */
+:host-context(.ios) .native-button {
+  /* Sutil sombra y color “iOS-y” para solid */
+  &.button-solid {
+    --box-shadow: 0 6px 16px rgba(0, 122, 255, 0.18);
   }
+  /* Focus ring accesible */
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(0,122,255,.25);
+  }
+}
 
-  &.success {
-    --background: #2dd36f;
+/* Material look (Android) */
+:host-context(.md) .native-button {
+  /* Ripple viene por defecto; reforzamos elevación ligera */
+  &.button-solid {
+    --box-shadow: 0 2px 6px rgba(0,0,0,.18);
   }
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba(56,128,255,.25);
+  }
+}
+
+/* Ajustes por variante (cuando quieras afinar extra) */
+.native-button.button-outline {
+  /* El ‘outline’ usa el color del botón para borde/label automáticamente */
+  --border-width: 2px;
+}
+
+.native-button.button-clear {
+  /* Clear mantiene fondo transparente; subimos el peso del texto */
+  font-weight: 600;
+}
+
+/* Deshabilitado */
+.native-button[disabled] {
+  opacity: .6;
+  filter: grayscale(0.1);
+}
+
+/* Safe-area friendly si el botón va en sticky footers */
+:host-context(.ios) .native-button {
+  padding-bottom: calc(var(--padding-bottom) + env(safe-area-inset-bottom, 0));
 }

@@ -1,21 +1,77 @@
-ion-accordion-group {
-    height: auto !important;
-    max-height: 100%;
-    overflow: visible;
+/* ===== Contenido/base ===== */
+.profile-content {
+  --background: var(--ion-background-color);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Header */
+.page-header {
+  padding: 16px 16px 8px;
+  h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--ion-text-color);
   }
-  :host {
-    display: block;
-    width: 100%;
-    height: auto !important;
-    max-height: none !important;
-    overflow: visible;
+  p {
+    margin: 0;
+    font-size: 14px;
+    color: var(--ion-color-medium);
   }
-  ion-accordion-group {
-    height: auto !important;
-    max-height: 100%;
-    overflow: visible;
-  }
-  .disabled-segment {
-    pointer-events: none; /* Bloquea clics y selección */
-    opacity: 0.5; /* Hace que se vea deshabilitado */
-  }
+}
+
+/* Card contenedora */
+ion-card.input-card {
+  margin: 8px 12px 16px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+}
+ion-card.input-card ion-card-content {
+  padding: 14px;
+}
+
+/* Grid responsivo: móvil 1 col, tablet+ 2 col */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px 14px;
+}
+.col, .full { display: grid; gap: 12px; }
+.full { grid-column: 1 / -1; }
+
+@media (min-width: 640px) {
+  .form-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* Botón primario con look nativo */
+.primary-btn {
+  --background: var(--ion-color-primary);
+  --color: #fff;
+  --border-radius: 14px;
+  font-weight: 600;
+  font-size: 16px;
+  text-transform: none;
+}
+
+/* Barra de acción sticky */
+.sticky-actions {
+  position: sticky;
+  bottom: 0;
+  left: 0; right: 0;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, rgba(0,0,0,0) 0%, var(--ion-background-color) 45%);
+  border-top: 1px solid var(--ion-color-step-150);
+  backdrop-filter: saturate(180%) blur(10px);
+  z-index: 10;
+}
+.bottom-spacer { height: 56px; }
+
+/* Ajustes finos por plataforma */
+:host-context(.ios) .page-header h1 { letter-spacing: -0.2px; }
+:host-context(.md)  .page-header h1 { font-weight: 700; }
+
+/* Quitar márgenes internos si tus fac-* ya los traen */
+:host ::ng-deep fac-input .fac-field,
+:host ::ng-deep fac-textarea .fac-field {
+  margin: 0;
+}

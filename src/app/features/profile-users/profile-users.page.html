@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Empresa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="no-scroll">
+  <!-- SOLO AVATAR GRANDE Y NOMBRE CENTRADO -->
+  <div class="profile-header">
+    <div class="profile-avatar-center">
+      <fac-avatar avatarUrl="https://picsum.photos/600/300?random=18" mode="edit" (imageSelected)="onImageFileSelected($event)"></fac-avatar>
+      <h2 class="profile-name">Hola Luis</h2>
+    </div>
+  </div>
+
+  <ion-segment [(ngModel)]="selectedTab" class="tab-segment" mode="md">
+    <ion-segment-button value="cita">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="mapa">
+      <ion-icon name="map-outline"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="selectedTab" class="tab-content">
+    <div *ngSwitchCase="'cita'">
+      <p><strong>Aquí irá la vista de c</strong></p>
+    </div>
+    <div *ngSwitchCase="'mapa'">
+      <p><strong>Aquí irá la vista de mapa</strong></p>
+    </div>
+  </div>
+</ion-content>

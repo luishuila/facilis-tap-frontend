@@ -7,7 +7,7 @@ import { UserDto, UserUpdate, UserUpdateI } from 'src/app/core/models/User/User'
 import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
 import { Address } from 'src/app/core/models/address/Address';
-import { ProviderCreateDto } from 'src/app/core/models/provider/ProviderI';
+import { ProviderCreateDto, ProviderDto } from 'src/app/core/models/provider/ProviderI';
 import { IonSegment } from '@ionic/angular';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 import { MenuService } from 'src/app/core/services/util/menu.service';
@@ -33,7 +33,7 @@ export class AdministratorMenuPage implements OnInit {
   addressId: number | null = 0;
   validateUsers: boolean = false;
   propertyType:TypeItem<string>[]|[] = [];
-
+  imgFile: File | any;
   userValidate = true;
   addressValidate = true;
   addProveder = false;
@@ -216,55 +216,63 @@ export class AdministratorMenuPage implements OnInit {
   }
   dataProvider:ProviderCreate = new ProviderCreate() ; 
   onSegmentChanger(event:any,expr:number){
+    console.log('event-onSegmentChanger->', event)
+
+    this.dataProvider = new ProviderCreate({ ...event ,userId:usersData().id })
+    this.imgFile = event.logoUrl;
+
     console.log('event-->', event)
-    switch (expr) {
-      case 1:
-        if (this.providerForm.invalid) {
-          Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
-          return;
-        }
-        this.dataProvider = new ProviderCreate({ ...event ,userId:usersData().id })
-        this.selectedSegment = 'addressProvider'
-        break;
-      case 2:
-        if (this.addressProviderForm.invalid) {
-          Object.values(this.addressProviderForm.controls).forEach(control => control.markAsTouched());
-          return;
-        }
-        const data = new Address({ ...event })
-        if (!this.dataProvider.addresses) {
-          this.dataProvider.addresses = [];
-        }
-        console.log('onSegmentChanger--->',data)
-        this.dataProvider.addresses = [data]
-        console.log('dataProvider--->',this.dataProvider)
-        this.onProviderSaved( this.dataProvider)
-        break
-    }
-    console.log('dataProvider',this.dataProvider)
+    this.onProviderSaved( this.dataProvider)
+    // switch (expr) {
+    //   case 1:
+    //     if (this.providerForm.invalid) {
+    //       Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
+    //       return;
+    //     }
+    //     this.dataProvider = new ProviderCreate({ ...event ,userId:usersData().id })
+    //     this.selectedSegment = 'addressProvider'
+    //     break;
+    //   case 2:
+    //     if (this.addressProviderForm.invalid) {
+    //       Object.values(this.addressProviderForm.controls).forEach(control => control.markAsTouched());
+    //       return;
+    //     }
+    //     const data = new Address({ ...event })
+    //     if (!this.dataProvider.addresses) {
+    //       this.dataProvider.addresses = [];
+    //     }
+    //     console.log('onSegmentChanger--->',data)
+    //     this.dataProvider.addresses = [data]
+    //     console.log('dataProvider--->',this.dataProvider)
+    //     this.onProviderSaved( this.dataProvider)
+    //     break
+    // }
+    // console.log('dataProvider',this.dataProvider)
   }
   onProviderSaved(provider: ProviderCreateDto) {
 
-    if (this.providerForm.invalid) {
-      Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
-      return;
-    }
-   this.selectedSegment = 'addressProvider'
-    if (this.addressForm.invalid) {
-      Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
-      return;
-    }
+  //   if (this.providerForm.invalid) {
+  //     Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
+  //     return;
+  //   }
+  //  this.selectedSegment = 'addressProvider'
+  //   if (this.addressForm.invalid) {
+  //     Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
+  //     return;
+  //   }
     
     const data = new ProviderCreate({ ...provider ,userId:usersData().id })
     this.addProveder = true;
-    alert('Hola munod');
-    this.providerService.create(data).subscribe((response:any) => {
-
+    data.toJson().logoUrl = null;
+    this.providerService.create(data).subscribe((response:ProviderDto) => {
       localStorage.setItem('users', JSON.stringify(response.users[0] ?? {})); 
-      this.menuService.loadInitialMenu();
-      this.onSegment('addressProvider')
-      this.router.navigate([`navigation/services`]); 
-      this.addProveder = false;
+      this.providerService.updateImage(this.imgFile, response.id).subscribe(data=>{
+        this.menuService.loadInitialMenu();
+        this.onSegment('addressProvider')
+        this.router.navigate([`navigation/services/${response.id}`]); 
+        this.addProveder = false;
+      })
+  
     },(erro)=>{console.log('erro',erro)})
     this.addProveder = false;
   }

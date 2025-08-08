@@ -6,46 +6,44 @@ import { ValidationService } from 'src/app/core/services/validate/validation.ser
   selector: 'fac-radio',
   templateUrl: './fac-radio.component.html',
   styleUrls: ['./fac-radio.component.scss'],
-  standalone: false,
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => FacRadioComponent),
-      multi: true,
-    },
+    { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => FacRadioComponent), multi: true },
   ],
+  standalone: false,
 })
 export class FacRadioComponent implements ControlValueAccessor {
-  @Input() label: string = '';
-  @Input() icon: string = 'radio-button-on';
+  @Input() label = '';
+  @Input() icon  = 'radio-button-on';
   @Input() options: { label: string; value: any }[] = [];
-  @Input() disabled: boolean = false;
+  @Input() disabled = false;
+  @Input() formControlName!: string;
+
+  /* mensajes opcionales como en los otros inputs */
+  @Input() helperText = '';
+  @Input() errorText = '';
+
   value: any = '';
-  @Input() formControlName!: string; 
-  
-  private validationService = inject(ValidationService); 
-  private controlContainer = inject(ControlContainer); 
+  defaultError = 'Revisa este campo';
+
+  private validationService = inject(ValidationService);
+  private controlContainer  = inject(ControlContainer);
+
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
 
-  onChange: any = () => {};
-  onTouched: any = () => {};
+  // CVA
+  onChange: (v: any) => void = () => {};
+  onTouched: () => void = () => {};
 
-  writeValue(value: any): void {
-    this.value = value;
-  }
+  writeValue(v: any): void { this.value = v; }
+  registerOnChange(fn: (v: any) => void): void { this.onChange = fn; }
+  registerOnTouched(fn: () => void): void { this.onTouched = fn; }
+  setDisabledState(isDisabled: boolean): void { this.disabled = isDisabled; }
 
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  selectValue(value: any) {
-    this.value = value;
-    this.onChange(value);
+  selectValue(v: any) {
+    this.value = v;
+    this.onChange(v);
+    this.onTouched();
   }
 }

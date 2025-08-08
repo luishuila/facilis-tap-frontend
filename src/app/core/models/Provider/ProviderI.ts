@@ -34,7 +34,7 @@ export class ProviderDto {
   nit?: number | null;
   invima?: string | null;
   companyIdentifier?: string | null;
-  logoUrl?: string | null;
+  logoUrl?: any | null;
   description?: string | null;
   status?: string | null;
   category?: string | null;
@@ -47,7 +47,7 @@ export class ProviderDto {
   appointments?: AppointmentDto[];
   categories?: CategoryDto[];
   employees?: EmployeeDto[];
-  users?: UserDto[];
+  users?: any;
 }
 
 

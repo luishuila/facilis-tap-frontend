@@ -1,43 +1,100 @@
-.input-item {
+/* ===== Contenedor y leyenda (igual que otros inputs) ===== */
+.fac-field{
+  margin: 0 0 14px;
   border: none;
-  margin-bottom: 10px;
 
-  legend {
-    font-size: 14px;
-    color: #333;
-    margin-bottom: 4px;
+  legend{
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ion-color-medium, #6b6b6b);
+    margin: 0 0 6px 12px;
   }
 
-  &.has-error {
-    border-left: 4px solid #eb445a;
-    padding-left: 8px;
+  &.has-error legend { color: var(--ion-color-danger, #eb445a); }
+  &.disabled legend  { color: #9aa0a6; }
+}
+
+/* ===== Lista de opciones ===== */
+.radio-group{
+  display: grid;
+  gap: 8px;                 /* separación entre cápsulas */
+}
+
+/* Cada opción con look “píldora” */
+.radio-item{
+  --padding-start: 10px;
+  --padding-end: 10px;
+  --min-height: 48px;
+  --inner-border-width: 0;
+  --highlight-height: 0;
+  --background: #f2f2f2;
+
+  display: flex;
+  align-items: center;
+  background: var(--background);
+  border-radius: 9999px;    /* por defecto iOS-like */
+  padding-left: 4px;
+  padding-right: 4px;
+
+  ion-icon[slot="start"]{
+    font-size: 20px;
+    color: var(--ion-color-primary, #007aff);
+    margin-right: 6px;
+  }
+
+  ion-label{
+    font-size: 15px;
+    color: var(--ion-text-color, #222);
+  }
+
+  ion-radio{
+    --color: var(--ion-color-primary);         /* color del punto seleccionado */
+    --color-checked: var(--ion-color-primary);
+  }
+
+  /* Foco accesible */
+  &:focus-within{
+    box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-primary) 20%, transparent);
+  }
+
+  /* Estado seleccionado: leve realce de fondo */
+  &.checked{
+    background: color-mix(in oklab, var(--ion-color-primary) 10%, var(--background));
   }
 }
 
-.custom-radio {
-  --background: #f0f0f0 !important;  // ✅ aplica al Shadow DOM
-  --border-radius: 30px;
-  --inner-padding-end: 10px;
-  --min-height: 48px;
+/* Error / Disabled */
+.fac-field.has-error .radio-item{
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--ion-color-danger) 40%, transparent);
+}
+.fac-field.disabled .radio-item{
+  opacity: .55;
+  pointer-events: none;
+}
 
-  background: #f0f0f0 !important;    // ✅ refuerzo adicional
-  border-radius: 30px;
-  margin: 6px 0;
-  display: flex;
-  align-items: center;
+/* Mensajería */
+.hint-row{
+  margin-top: 6px;
+  padding-left: 12px;
+  display: flex; gap: 12px;
+  .helper{ font-size: 12px; color: var(--ion-color-medium, #6b6b6b); }
+  .error { font-size: 12px; color: var(--ion-color-danger, #eb445a); }
+}
 
-  ion-icon {
-    font-size: 20px;
-    color: #007aff;                  // ✅ azul nativo
-  }
+/* ===== iOS vs Android (MD) ===== */
+:host-context(.ios) .radio-item{
+  --background: #f2f2f7;
+  border-radius: 9999px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+}
+:host-context(.md) .radio-item{
+  --background: #eeeeee;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(0,0,0,.04), inset 0 0 0 1px rgba(0,0,0,.06);
+}
 
-  ion-label {
-    font-size: 14px;
-    color: #666;
-    margin-left: 10px;
-  }
-
-  ion-radio {
-    --color: #007aff;                // ✅ azul al seleccionar
-  }
+/* Compacto en pantallas pequeñas */
+@media (max-width: 360px){
+  .radio-item{ --min-height: 44px; }
+  .fac-field legend{ font-size: 13px; }
 }

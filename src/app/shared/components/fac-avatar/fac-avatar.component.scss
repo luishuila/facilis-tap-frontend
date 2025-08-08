@@ -1,0 +1,105 @@
+:host {
+  display: block;
+}
+
+/* Centro del bloque */
+.avatar-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 18px 0;
+}
+
+/* Wrapper con ring opcional */
+.avatar-wrap {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  isolation: isolate;
+}
+
+/* Tamaños nativos coherentes */
+:host(.size-sm) .avatar-wrap { width: 84px; height: 84px; }
+:host(.size-md) .avatar-wrap { width: 120px; height: 120px; }
+:host(.size-lg) .avatar-wrap { width: 160px; height: 160px; }
+
+/* Anillo decorativo */
+:host(.has-ring) .avatar-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  border: 3px solid rgba(0,0,0,.06);
+}
+
+/* iOS look: ring más claro */
+:host-context(.ios).has-ring .avatar-wrap::after {
+  border-color: rgba(0,0,0,.08);
+}
+
+/* Android (Material): sombra ligera */
+:host-context(.md) .avatar-wrap {
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+}
+
+/* Imagen / ion-avatar comparten tamaño y forma */
+.avatar-img, ion-avatar.avatar-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #fff;
+  overflow: hidden;
+  object-fit: cover;
+  display: block;
+}
+
+/* Iniciales como fallback */
+.initials {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  color: #555;
+  user-select: none;
+  letter-spacing: 0.5px;
+  /* escala según tamaño */
+}
+:host(.size-sm) .initials { font-size: 22px; }
+:host(.size-md) .initials { font-size: 28px; }
+:host(.size-lg) .initials { font-size: 34px; }
+
+/* Overlay botón cámara (solo edit) */
+.avatar-overlay {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 3px solid #fff;
+  background: var(--ion-color-primary, #007aff);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(0,0,0,.12);
+  cursor: pointer;
+  transition: transform .12s ease, filter .15s ease;
+}
+.avatar-overlay:active { transform: scale(0.97); }
+.avatar-overlay ion-icon { font-size: 22px; }
+
+/* Skeleton */
+.skeleton {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+/* Focus accesible al tabular sobre el overlay */
+.avatar-overlay:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 3px rgba(0,122,255,.25);
+}

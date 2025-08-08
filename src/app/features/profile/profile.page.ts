@@ -50,7 +50,7 @@ export class ProfilePage  implements ViewWillEnter {
     }
     // ngOnInit() {
     //   console.log('this.profile-->', this.profile)
-    // }
+    // }e?.users?.name || e?.name
 
     
     stories = [
@@ -65,7 +65,7 @@ export class ProfilePage  implements ViewWillEnter {
       { title: 'London', img: 'https://picsum.photos/600/300?random=5' },
       { title: 'Turkey', img: 'https://picsum.photos/600/300?random=5' },
       { title: 'NYC', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Vietnam', img: 'https://picsum.photos/600/300?random=5' },
+      { title: 'Vietnam', img: 'https://picsum.photos/600/300?random=5',  },
     ];
 
 

@@ -1,24 +1,36 @@
-<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }">
+<fieldset class="fac-field" [class.has-error]="hasError" [class.disabled]="disabled">
   <legend *ngIf="label">{{ label }}</legend>
 
-  <ion-item class="custom-input" lines="none">
-    <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+  <ion-item class="field-item" lines="none">
+    <ion-icon *ngIf="icon" slot="start" [name]="icon" aria-hidden="true"></ion-icon>
 
     <ion-input
+      class="input-element"
       [type]="getInputType()"
       [placeholder]="placeholder"
-      [(ngModel)]="value"
-      (ionInput)="onInputChange($event)"
+      [value]="value"
+      [clearInput]="clearable"
+      [inputmode]="inputmode"
+      [autocomplete]="autocomplete"
+      [maxlength]="maxlength || null"
       [disabled]="disabled"
-      class="input-element">
+      (ionInput)="onIonInput($event)"
+      (ionBlur)="onTouched()">
     </ion-input>
 
-    <ion-icon
+    <ion-button
       *ngIf="type === 'password'"
       slot="end"
-      [name]="isPasswordVisible ? 'eye-off-outline' : 'eye-outline'"
+      fill="clear"
+      size="small"
       class="password-toggle"
       (click)="togglePasswordVisibility()">
-    </ion-icon>
+      <ion-icon [name]="isPasswordVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+    </ion-button>
   </ion-item>
+
+  <div class="hint-row">
+    <ion-note class="helper" *ngIf="!hasError && helperText">{{ helperText }}</ion-note>
+    <ion-note class="error" *ngIf="hasError">{{ errorText || defaultError }}</ion-note>
+  </div>
 </fieldset>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from 'src/app/core/models/User/User';
@@ -12,7 +12,8 @@ import { genderObject } from 'src/app/core/constant/constants';
   standalone: false,
 })
 export class RegisterPage implements OnInit {
-  registerForm: FormGroup; 
+  @Input()registerForm!: FormGroup; 
+  @Output() eventLogin = new EventEmitter<any>();
   errorMessage: string = '';
   genderOptions = genderObject;
 
@@ -22,7 +23,6 @@ export class RegisterPage implements OnInit {
       name: ['' ],
       lastname: [''],
       email: [''],
-      phones: [''],
       password: [''],
       confirmPassword: [''],
       birth: [''] ,
@@ -35,8 +35,10 @@ export class RegisterPage implements OnInit {
     return password === confirmPassword ? null : { mismatch: true };
   }
   ngOnInit() {}
-
-  onRegister() {
+  goToLogin(){
+    this.eventLogin.emit('login')
+  }
+  submitRegister() {
     if (this.registerForm.invalid) {
       Object.values(this.registerForm.controls).forEach((datos:any)=>{
        datos.markAsTouched();

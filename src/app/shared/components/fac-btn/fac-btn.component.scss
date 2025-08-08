@@ -1,20 +1,48 @@
-ion-button {
-    --border-radius: 6px;  // ✅ Bordes más suaves
-    --box-shadow: none;
-    font-size: 14px;  // ✅ Fuente más pequeña para mejor proporción
-    height: 40px;  // ✅ Reduce la altura del botón
-    margin: 8px 0;
-    text-transform: capitalize; // ✅ Para que el texto no sea todo en mayúsculas
+.native-button {
+  --border-radius: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --padding-start: 24px;
+  --padding-end: 24px;
+  --background: #007aff; /* Azul nativo iOS */
+  --color: #ffffff;
+  --box-shadow: none;
+  --transition: background-color 0.3s ease;
+
+  font-weight: 500;
+  font-size: 16px;
+  text-transform: none;
+
+  ion-icon {
+    font-size: 20px;
+    margin-right: 8px;
   }
-  
-  .primary-btn {
-    --background: var(--ion-color-primary);
-    --color: white;
+
+  &:hover {
+    opacity: 0.9;
   }
-  
-  .google-btn {
-    --background: white;
-    --color: #757575;
-    border: 1px solid #d1d1d1;
+
+  &:active {
+    transform: scale(0.98);
   }
-  
+
+  &.ios {
+    --background: #007aff;
+  }
+
+  &.md {
+    --background: #3880ff;
+  }
+
+  &.danger {
+    --background: #eb445a;
+  }
+
+  &.secondary {
+    --background: #3dc2ff;
+  }
+
+  &.success {
+    --background: #2dd36f;
+  }
+}

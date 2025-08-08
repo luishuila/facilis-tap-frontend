@@ -1,11 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { UserDto, UserUpdateI } from '../../models/User/UserI';
+
 import { map, Observable } from 'rxjs';
 import { ApiResponse } from '../../models/api/apiResponse';
-import { CategoryDto, SubcategoryDto } from '../../models/category/category.dto';
-import { shareDataService } from '../DataShareService/shareDataService';
+
 
 @Injectable({
   providedIn: 'root'
@@ -43,5 +42,28 @@ export class HomeService {
     );
   }
   
-
+  profile(
+    providerId?: number,
+    categoryId?: number,
+    subcategoryId?: number
+  ): Observable<any> {
+    let params = new HttpParams();
+  
+    if (providerId != null) {
+      params = params.set('providerId', providerId.toString());
+    }
+  
+    if (categoryId != null) {
+      params = params.set('categoryId', categoryId.toString());
+    }
+  
+    if (subcategoryId != null) {
+      params = params.set('subcategoryId', subcategoryId.toString());
+    }
+  
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}home/profile`, { params }).pipe(
+      map((response: ApiResponse<any>) => response.data)
+    );
+  }
+  
 }

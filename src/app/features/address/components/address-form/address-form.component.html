@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<div class="register-address-content">
   <ion-card class="input-card">
     <ion-card-content>
       <div class="container">
@@ -6,7 +6,7 @@
         <p class="para">Ingrese la información de su dirección</p>
 
         <form [formGroup]="addressForm" (ngSubmit)="saveAddress()">
-   
+          <!-- País -->
           <fac-select 
             formControlName="countryCode" 
             label="País" 
@@ -15,12 +15,10 @@
             [valueField]="'countryCode'" 
             [labelField]="'countryName'"
             [items]="countries"
-            (ionChange)="onCountrySelected($event, null)"
-            >
+            (ionChange)="onCountrySelected($event, null)">
           </fac-select>
 
-  
-        
+          <!-- Departamento -->
           <fac-select 
             formControlName="stateCode" 
             label="Departamento/Estado" 
@@ -29,10 +27,10 @@
             [valueField]="'stateCode'" 
             [labelField]="'stateName'"
             [items]="departments"
-            (ionChange)="onDepartmentsSelected($event, null)"
-            >
+            (ionChange)="onDepartmentsSelected($event, null)">
           </fac-select>
 
+          <!-- Ciudad -->
           <fac-select 
             formControlName="cityStates" 
             label="Ciudad" 
@@ -43,93 +41,46 @@
             [items]="cities">
           </fac-select>
 
-          <fac-input 
-            formControlName="lat" 
-            label="Latitud" 
-            type="text" 
-            placeholder="Ej: 4.6097" 
-            icon="location">
-          </fac-input>
+          <!-- Lat/Lon -->
+          <fac-input formControlName="lat" label="Latitud" type="text" placeholder="Ej: 4.6097" icon="location"></fac-input>
+          <fac-input formControlName="lon" label="Longitud" type="text" placeholder="Ej: -74.0817" icon="navigate"></fac-input>
 
-          <fac-input 
-            formControlName="lon" 
-            label="Longitud" 
-            type="text" 
-            placeholder="Ej: -74.0817" 
-            icon="navigate">
-          </fac-input>
+          <!-- Calle/Carrera -->
+          <fac-input formControlName="street" label="Calle" type="text" placeholder="Ej: Calle 123" icon="business"></fac-input>
+          <fac-input formControlName="race" label="Carrera" type="text" placeholder="Ej: Carrera 45" icon="location"></fac-input>
 
-          <fac-input 
-            formControlName="street" 
-            label="Calle" 
-            type="text" 
-            placeholder="Ej: Calle 123" 
-            icon="business">
-          </fac-input>
+          <!-- Barrio / Código Postal -->
+          <fac-input formControlName="neighborhood" label="Barrio" type="text" placeholder="Ej: Chapinero" icon="home"></fac-input>
+          <fac-input formControlName="zipcode" label="Código Postal" type="number" placeholder="Ej: 110111" icon="home"></fac-input>
 
-          <fac-input 
-            formControlName="race" 
-            label="Carrera" 
-            type="text" 
-            placeholder="Ej: Carrera 45" 
-            icon="location">
-          </fac-input>
-
-          <fac-input 
-            formControlName="neighborhood" 
-            label="Barrio" 
-            type="text" 
-            placeholder="Ej: Chapinero" 
-            icon="home">
-          </fac-input>
-          
-          <fac-input 
-          formControlName="zipcode" 
-          label="Codigo Postal" 
-          type="number" 
-          placeholder="Ej: Chapinero" 
-          icon="home">
-        </fac-input>
-
+          <!-- Descripción -->
           <fac-textarea
             formControlName="description" 
             label="Descripción (Opcional)" 
             placeholder="Detalles adicionales sobre la dirección">
           </fac-textarea>
 
+          <!-- Tipo de propiedad -->
           <fac-select 
-          formControlName="propertyType" 
-          label="Property Type" 
-          placeholder="Select a property type"
-          icon="home"
-          [items]="propertyType">
+            formControlName="propertyType" 
+            label="Tipo de Propiedad" 
+            placeholder="Seleccione una opción"
+            icon="home"
+            [items]="propertyType">
+          </fac-select>
 
-        </fac-select>
-        
-        <fac-btn 
-        label="Guardar Dirección" 
-        color="primary" 
-        customClass="primary-btn" 
-        expand="block"
-        type="submit"
-        [disabled]="isDisabled"
-        (clicked)="saveAddress()"> 
-      </fac-btn>
-      
-
-      <ion-footer class="ion-no-border">
-        <ion-toolbar>
-          <ion-title></ion-title>
-        </ion-toolbar>
-      </ion-footer>
-      <ion-footer class="ion-no-border">
-        <ion-toolbar>
-          <ion-title></ion-title>
-        </ion-toolbar>
-      </ion-footer>
+          <!-- Botón de guardar -->
+          <fac-btn 
+            label="Guardar Dirección" 
+            color="primary" 
+            customClass="primary-btn" 
+            expand="block"
+            type="submit"
+            [disabled]="isDisabled"
+            (clicked)="saveAddress()"> 
+          </fac-btn>
         </form>
       </div>
     </ion-card-content>
   </ion-card>
-  
-</ion-content>
+</div>

@@ -17,7 +17,7 @@ const routes: Routes = [
       },
       {
         path: 'quote',
-        loadChildren: () => import('../../features/quote/quote.module').then(m => m.QuotePageModule)
+        loadChildren: () => import('../../features/appointment/appointment.module').then(m => m.AppointmentPageModule)
       },
       {
         path: 'employee',
@@ -77,8 +77,8 @@ const routes: Routes = [
       },
     
       {
-        path: 'appointment',
-        loadChildren: () => import('../../features/appointment/appointment.module').then( m => m.AppointmentPageModule)
+        path: 'profile-services',
+        loadChildren: () => import('../../features/profile/profile.module').then( m => m.ProfilePageModule)
       },
       
       {

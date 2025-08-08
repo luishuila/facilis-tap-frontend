@@ -2,19 +2,22 @@ import { ContractTypeEnum } from "../../constant/enum";
 import { AddressDtoI } from "../address/AddressI";
 
 export interface EmployeeDto {
-    id?: number;
-    idcard?: number;
-    employeeCode: string;
-    position: string;
-    hireDate: Date | string;
-    salary: number;
-    status: boolean;
-    supervisor?: string;
-    department: string;
-    contractType: ContractTypeEnum;
-    providersId?: number;
-    usersId?:string;
-    independent?: boolean;
-    address:AddressDtoI
+  id: number;
+  idcard?: number | null;
+  employeeCode?: string | null;
+  position?: string | null;
+  hireDate?: Date | null;
+  salary?: number | null;
+  status?: boolean;
+  supervisor?: string | null;
+  department?: string | null;
+  independent?: boolean;
+  contractType?: ContractTypeEnum | null;
+  providers?: any;
+  users?: any;
+  appointments?: any;
+  employeeStatus?: any;
+  employeeServices?: any;
+  services?: any;
   }
   

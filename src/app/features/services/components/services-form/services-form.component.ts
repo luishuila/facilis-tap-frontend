@@ -33,28 +33,28 @@ export class ServicesFormComponent  implements OnInit {
     console.log('this.route.snapshot.paramMap.get-->', this.route.snapshot.paramMap.get('id'))
     // this.categoryService.findAllCategory().subscribe(data=>this.categoryAll = data)
 
-    this.providerService.findOneProvedor(Number(this.route.snapshot.paramMap.get('id'))).subscribe((data:any)=>{
-      this.proveder = data
-      this.categoryAll = data.categories
-    })
-    if(this.route.snapshot.paramMap.get('id')){
-      this.isValidates = false;
+    // this.providerService.findOneProvedor(Number(this.route.snapshot.paramMap.get('id'))).subscribe((data:any)=>{
+    //   this.proveder = data
+    //   this.categoryAll = data.categories
+    // })
+    // if(this.route.snapshot.paramMap.get('id')){
+    //   this.isValidates = false;
     
-      //  this.servicesTypeService.findAll().subscribe(data=>{
-      //   this.servicesType=data
-      // })
-    }
-    if(this.isValidates){
-      this.providerService.findOneAll().subscribe(data=>{
-        this.providerList = data
-      })
-    }
+    //   //  this.servicesTypeService.findAll().subscribe(data=>{
+    //   //   this.servicesType=data
+    //   // })
+    // }
+    // if(this.isValidates){
+    //   this.providerService.findOneAll().subscribe(data=>{
+    //     this.providerList = data
+    //   })
+    // }
 
   }
   ngOnInit() {
-    this.servicesForm = this.fb.group({
-      data: this.fb.array([this.createServiceForm()])
-    });
+    // this.servicesForm = this.fb.group({
+    //   data: this.fb.array([this.createServiceForm()])
+    // });
   }
   onSelectItem(itemEvent:any, index: number){
     const subcategoryId = itemEvent.detail.value;

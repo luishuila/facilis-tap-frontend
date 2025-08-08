@@ -1,91 +1,47 @@
-<ion-header>
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Empresa</ion-title>
+    <ion-title>Quote</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="no-scroll">
-  <div class="profile-header">
-    <div class="profile-top">
-      <ion-avatar class="avatar-border">
-        <img alt="Company logo" src="https://picsum.photos/600/300?random=5" />
-      </ion-avatar>
-      <div class="username">
-        <h2>{{ company.name }}</h2>
-        <p>{{ company.type }}</p>
-      </div>
-    </div>
+<ion-content [fullscreen]="true" class="quote-content">
 
-    <div class="company-info">
-      <ion-text>
-        <p><strong>Descripción:</strong> {{ company.description }}</p>
-        <p><strong>Teléfono:</strong> {{ company.phone }}</p>
-        <p><strong>Web:</strong>
-          <a [href]="company.url" target="_blank">{{ company.url }}</a>
-        </p>
-        <p><strong>Ubicación:</strong> {{ company.location }}</p>
-        <p><strong>Ciudad:</strong> {{ company.city }}</p>
-      </ion-text>
-    </div>
+  <!-- Dropdown de filtro -->
+  <ion-item>
+    <ion-label>Filtrar cursos</ion-label>
+    <ion-select [(ngModel)]="filtroSeleccionado" interface="popover">
+      <ion-select-option value="proxima">Curso próxima</ion-select-option>
+      <ion-select-option value="en_curso">Curso en curso</ion-select-option>
+      <ion-select-option value="pasada">Curso pasada</ion-select-option>
+    </ion-select>
+  </ion-item>
 
-    <div class="highlights">
-      <div class="highlight" *ngFor="let story of stories">
-        <ion-avatar>
-          <img [src]="story.img" alt="story" />
-        </ion-avatar>
-        <p>{{ story.title }}</p>
-      </div>
-    </div>
-  </div>
+  <!-- Lista deslizable de cursos -->
+  <ion-list>
+    <ion-item-sliding *ngFor="let curso of cursosFiltrados()">
 
-  <ion-segment [(ngModel)]="selectedTab" class="tab-segment" mode="md">
-    <ion-segment-button value="cita">
-      <ion-icon name="calendar-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="mapa">
-      <ion-icon name="map-outline"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
+      <!-- Acciones al deslizar hacia la derecha -->
+      <ion-item-options side="start">
+        <ion-item-option color="success" (click)="editarCurso(curso)">Editar</ion-item-option>
+      </ion-item-options>
 
-  <div [ngSwitch]="selectedTab" class="tab-content">
-    <div *ngSwitchCase="'cita'">
+      <!-- Acciones al deslizar hacia la izquierda -->
+      <ion-item-options side="end">
+        <ion-item-option color="danger" (click)="eliminarCurso(curso)">Eliminar</ion-item-option>
+      </ion-item-options>
 
-      <!-- Selector de días -->
-      <div class="day-selector">
-        <ion-segment scrollable [(ngModel)]="activeDayValue" class="day-segment" #daySegment>
-          <ion-segment-button
-            *ngFor="let day of days"
-            [value]="day.fullDate.toISOString()"
-            (click)="setActiveDay(day)"
-          >
-            <div class="day-card" [class.active]="day.active">
-              <small>{{ day.name }}</small>
-              <strong>{{ day.date }}</strong>
-            </div>
-          </ion-segment-button>
-        </ion-segment>
-      </div>
-    
-      <!-- Lista de tareas -->
-      <div class="tasks">
-        <h2>Today's Tasks</h2>
-    
-        <div *ngFor="let task of tasks" class="task-card" [ngClass]="task.statusClass">
-          <div class="task-time">
-            <strong>{{ task.time }}</strong>
-            <small>{{ task.duration }}</small>
-          </div>
-          <div class="task-details">
-            <p class="task-title">{{ task.title }}</p>
-            <p class="task-subtitle">{{ task.subtitle }}</p>
-            <span class="task-status">{{ task.status }}</span>
-          </div>
-        </div>
-      </div>
-    
-    </div>
-    <div *ngSwitchCase="'mapa'">
-      <p><strong>Aquí irá la vista de mapa</strong></p>
-    </div>
-  </div>
+      <!-- Contenido personalizado -->
+      <ion-item lines="none">
+        <ion-card class="quote-card">
+          <ion-card-content [ngClass]="curso.estado">
+            <blockquote>"{{ curso.descripcion }}"</blockquote>
+            <p class="author">- {{ curso.nombre }} ({{ curso.fecha }})</p>
+          </ion-card-content>
+        </ion-card>
+      </ion-item>
+
+    </ion-item-sliding>
+  </ion-list>
+
 </ion-content>
+

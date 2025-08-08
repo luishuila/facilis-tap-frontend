@@ -20,25 +20,26 @@ export class FacInputComponent implements ControlValueAccessor {
   @Input() label: string = '';
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
-  @Input() icon: string = ''; 
+  @Input() icon: string = '';
   @Input() disabled: boolean = false;
-  @Input() formControlName!: string; 
+  @Input() formControlName!: string;
 
   value: string = '';
   isPasswordVisible: boolean = false;
-  control: AbstractControl | null = null; 
-  private validationService = inject(ValidationService); 
-  private controlContainer = inject(ControlContainer); 
+  control: AbstractControl | null = null;
+
+  private validationService = inject(ValidationService);
+  private controlContainer = inject(ControlContainer);
+
   get hasError(): boolean {
     return this.validationService.hasError(this.controlContainer, this.formControlName);
   }
-
 
   onChange: (value: string) => void = () => {};
   onTouched: () => void = () => {};
 
   writeValue(value: string): void {
-    this.value = value ?? ''; 
+    this.value = value ?? '';
     this.onChange(this.value);
   }
 
@@ -56,12 +57,18 @@ export class FacInputComponent implements ControlValueAccessor {
 
   onInputChange(event: Event): void {
     const inputElement = event.target as HTMLInputElement;
-    const newValue: string = inputElement?.value ?? ''; 
-    this.value = newValue;
+    this.value = inputElement?.value ?? '';
     this.onChange(this.value);
   }
 
   togglePasswordVisibility(): void {
     this.isPasswordVisible = !this.isPasswordVisible;
+  }
+
+  getInputType(): string {
+    if (this.type === 'password') {
+      return this.isPasswordVisible ? 'text' : 'password';
+    }
+    return this.type;
   }
 }

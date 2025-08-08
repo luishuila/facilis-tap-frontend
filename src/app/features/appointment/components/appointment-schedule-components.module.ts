@@ -4,20 +4,21 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LoginPageRoutingModule } from './login-routing.module';
-
-import { LoginPage } from './login.page';
 import { SharedPageModule } from 'src/app/shared/shared.module';
+import { AppointmentScheduleComponent } from './appointment-schedule/appointment-schedule.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule,
     SharedPageModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    ScrollingModule
   ],
-  declarations: [LoginPage]
+  declarations: [AppointmentScheduleComponent],
+  exports:[AppointmentScheduleComponent]
 })
-export class LoginPageModule {}
+export class AppointmentSchedulePageModule {}

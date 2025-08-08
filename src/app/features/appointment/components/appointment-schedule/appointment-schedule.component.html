@@ -1,0 +1,49 @@
+<div class="scroll-wrapper">
+
+  <!-- Selector de días -->
+  <div class="day-selector">
+    <ion-segment scrollable [(ngModel)]="activeDayValue" class="day-segment" #daySegment>
+      <ion-segment-button
+        *ngFor="let day of days"
+        [value]="day.fullDate.toISOString()"
+        (click)="setActiveDay(day)">
+        <div class="day-card" [class.active]="day.active">
+          <small>{{ day.name }}</small>
+          <strong>{{ day.date }}</strong>
+        </div>
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+
+  <!-- Título -->
+  <h2 class="section-title">This Day’s Plan</h2>
+
+  <!-- Lista con scroll virtual -->
+  <cdk-virtual-scroll-viewport itemSize="1" class="tasks-scroll-area">
+    <ion-item-sliding *cdkVirtualFor="let task of tasks">
+
+      <ion-item-options side="start">
+        <ion-item-option color="primary" (click)="onEdit(task)">Editar</ion-item-option>
+        <ion-item-option color="danger" (click)="onDelete(task)">Eliminar</ion-item-option>
+      </ion-item-options>
+  
+      <ion-item lines="none" class="task-card-modern">
+        <div class="indicator" [ngStyle]="{ 'background-color': task.color }"></div>
+        <div class="task-content">
+          <div class="task-title">{{ task.title }}</div>
+          <div class="task-time">
+            {{ task.time }}
+            <span *ngIf="task.tag" class="task-tag">{{ task.tag }}</span>
+          </div>
+          <div class="task-subtitle">{{ task.subtitle }}</div>
+        </div>
+      </ion-item>
+  
+      <ion-item-options side="end">
+        <ion-item-option color="success" (click)="onRemind(task)">Recordar</ion-item-option>
+      </ion-item-options>
+  
+    </ion-item-sliding>
+  </cdk-virtual-scroll-viewport>
+
+</div>

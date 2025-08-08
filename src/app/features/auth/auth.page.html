@@ -1,9 +1,22 @@
-<!-- <ion-content [fullscreen]="true" class="content-container">
-  <div class="centered-container">
-    <ion-card class="input-card"> -->
-      <!-- <ion-card-content class="input-card-content"> -->
-        <ion-router-outlet></ion-router-outlet>
-      <!-- </ion-card-content> -->
-    <!-- </ion-card>
+<ion-content fullscreen class="login-content">
+
+  <!-- Header azul con avatar -->
+  <div class="login-header" [ngClass]="{ 'header-register': login === 'register' }">
+    <ion-avatar class="login-avatar">
+      <img src="https://picsum.photos/600/300?random=1" alt="Avatar" />
+    </ion-avatar>
+    <h1 class="welcome-text">WELCOME!!</h1>
   </div>
-</ion-content> -->
+
+  <!-- Card dinámica con animación -->
+  <div [ngClass]="login === 'register' ? 'register-card animate-slide-up' : 'login-card animate-slide-down'">
+    <ng-container *ngIf="login === 'login'">
+      <app-login (eventLogin)="eventLogin($event)"></app-login>
+    </ng-container>
+
+    <ng-container *ngIf="login === 'register'">
+      <app-register (eventLogin)="eventLogin($event)"></app-register>
+    </ng-container>
+  </div>
+
+</ion-content>

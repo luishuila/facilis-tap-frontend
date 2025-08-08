@@ -1,10 +1,15 @@
-<fieldset class="input-item" [ngClass]="{'has-error': hasError}"> 
+<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }">
   <legend *ngIf="label">{{ label }}</legend>
   <ion-radio-group [(ngModel)]="value" (ionChange)="selectValue($event.detail.value)">
-    <ion-item class="custom-input" *ngFor="let option of options">
-      <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+    <ion-item
+      class="custom-radio"
+      *ngFor="let option of options"
+      lines="none"
+      [disabled]="disabled"
+    >
+      <ion-icon *ngIf="icon" [name]="icon" slot="start"></ion-icon>
       <ion-label>{{ option.label }}</ion-label>
-      <ion-radio [value]="option.value" [disabled]="disabled"></ion-radio>
+      <ion-radio slot="end" [value]="option.value"></ion-radio>
     </ion-item>
   </ion-radio-group>
 </fieldset>

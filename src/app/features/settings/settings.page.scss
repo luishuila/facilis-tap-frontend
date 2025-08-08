@@ -1,22 +1,148 @@
-.center-avatar {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;  /* Centra verticalmente */
-    align-items: center;  /* Centra horizontalmente */
-    height: 100vh;  /* Asegura que el contenido ocupa toda la pantalla */
-    text-align: center;
+.profile-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+
+  .avatar-large {
+    width: 120px;
+    height: 120px;
+    border-radius: 60px;
+    overflow: hidden;
+    border: 3px solid #007aff;
+    margin-bottom: 12px;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
   }
-  
-  .avatar-size {
+
+  .name {
+    font-size: 22px;
+    font-weight: 600;
+    color: #222;
+    margin: 0;
+  }
+
+  .username {
+    font-size: 14px;
+    color: #888;
+    margin: 4px 0 12px;
+  }
+}
+
+.profile-segment {
+  margin: 0 auto 20px auto;
+  width: 95%;
+  background: #f0f0f0;
+  border-radius: 8px;
+
+  ion-segment-button {
+    color: #007aff;
+
+    ion-icon {
+      font-size: 18px;
+    }
+
+    ion-label {
+      font-size: 13px;
+    }
+
+    &.segment-button-checked {
+      background-color: #d6e9ff;
+    }
+  }
+}
+
+.settings-list {
+  ion-item {
+    --background: #fff;
+    --color: #000;
+    --padding-start: 16px;
+    font-size: 14px;
+
+    ion-icon {
+      font-size: 20px;
+      color: #007aff;
+    }
+  }
+}
+.logout-button {
+  margin-top: 10px;
+  --background: transparent;
+
+  .logout-icon {
+    color: #ff3b30; // rojo Apple / WhatsApp
+    font-size: 20px;
+  }
+
+  .logout-text {
+    color: #ff3b30;
+    font-weight: 500;
+    font-size: 14px;
+  }
+
+  &:hover {
+    background-color: #ffecec;
+    border-radius: 8px;
+  }
+}
+.menu-header {
+  text-align: center;
+  margin-top: 24px;
+  margin-bottom: 12px;
+
+  .avatar {
     width: 100px;
     height: 100px;
-    border-radius: 50%;
-    margin-bottom: 20px; /* Espaciado entre el avatar y el menú */
+    margin: auto;
+    border: 3px solid #007aff;
   }
-  .center-avatarC {
-    position: relative;
-    top: 1%;
-    left: 40%;
-    text-align: center;
+
+  .name {
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 10px;
+    color: #222;
   }
-  
+
+  .username {
+    font-size: 13px;
+    color: #888;
+  }
+}
+
+.menu-list {
+  ion-item {
+    font-size: 14px;
+    --color: #1e1e1e;
+
+    ion-icon {
+      font-size: 20px;
+      color: #007aff;
+    }
+  }
+}
+
+.logout-footer {
+  border-top: 1px solid #eee;
+  padding: 4px 10px;
+  background: #fff;
+
+  .logout-button {
+    --background: transparent;
+    --color: #ff3b30;
+
+    .logout-icon {
+      color: #ff3b30;
+      font-size: 20px;
+    }
+
+    .logout-text {
+      font-weight: 500;
+      color: #ff3b30;
+    }
+  }
+}

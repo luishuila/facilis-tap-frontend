@@ -3,8 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { genderObject } from 'src/app/core/constant/constants';
 import { usersData } from 'src/app/core/generate/idData';
 import { AddressDtoI } from 'src/app/core/models/address/AddressI';
-import { UserDto, UserUpdateI } from 'src/app/core/models/User/UserI';
-import { UserUpdate } from 'src/app/core/models/User/User';
+import { UserDto, UserUpdate, UserUpdateI } from 'src/app/core/models/User/User';
 import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
 import { Address } from 'src/app/core/models/address/Address';
@@ -24,6 +23,8 @@ import { roleEnum } from 'src/app/core/constant/enum';
   standalone: false
 })
 export class AdministratorMenuPage implements OnInit {
+  subSegment: string = 'usersId';
+  
   addressForm!: FormGroup;
   userForm!: FormGroup;
   providerForm!: FormGroup;
@@ -117,6 +118,14 @@ export class AdministratorMenuPage implements OnInit {
     if (this._activatedRoute.snapshot.paramMap.get('id')) {
       console.log(this._activatedRoute.snapshot.paramMap.get('id'))
     }
+    this.selectedSegment = this.userValidate || this.addressValidate ? 'first' : 'register';
+
+    this.subSegment = 'usersId';
+    console.log('this.userValidate-->', this.userValidate)
+    console.log('this.addressValidate-->', this.addressValidate)
+    if (this.userValidate && this.addressValidate) {
+      this.selectedSegment = 'register';
+    }
   }
 
   segmentChanged(event: any) {
@@ -134,7 +143,7 @@ export class AdministratorMenuPage implements OnInit {
         });
 
         const address = data.addresses?.[0] ?? {} as Partial<AddressDtoI>;
-        // this.addressId = data.addresses?.[0].id || 0;
+        this.addressId = data.addresses?.[0].id || 0;
         this.addressForm.patchValue({
           ...address,
           cityStates: address.cityStates?.id
@@ -236,15 +245,15 @@ export class AdministratorMenuPage implements OnInit {
   }
   onProviderSaved(provider: ProviderCreateDto) {
 
-  //   if (this.providerForm.invalid) {
-  //     Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
-  //     return;
-  //   }
-  //  this.selectedSegment = 'addressProvider'
-  //   if (this.addressForm.invalid) {
-  //     Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
-  //     return;
-  //   }
+    if (this.providerForm.invalid) {
+      Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
+      return;
+    }
+   this.selectedSegment = 'addressProvider'
+    if (this.addressForm.invalid) {
+      Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
+      return;
+    }
     
     const data = new ProviderCreate({ ...provider ,userId:usersData().id })
     this.addProveder = true;

@@ -1,19 +1,19 @@
 // src/app/features/home/home.page.ts
-import { Component, OnInit, ViewChild, ElementRef  } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnDestroy  } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
 import { CategoryService } from 'src/app/core/services/category/category.service';
-import { shareDataService } from 'src/app/core/services/DataShareService/shareDataService';
+import { ShareDataService } from 'src/app/core/services/DataShareService/shareDataService';
 import { HomeService } from 'src/app/core/services/home/home.service';
 import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
-
+import {  ViewWillLeave } from '@ionic/angular';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage implements OnInit {
+export class HomePage implements  ViewWillLeave  {
   @ViewChild('miCard', { static: false, read: ElementRef }) cardRef!: ElementRef;
   showHeader: boolean = true;
   lastScrollPosition: number = 0;
@@ -26,11 +26,11 @@ export class HomePage implements OnInit {
   limit = 50;
   lat = 8.1003879;
   lon = -76.7220969;
-  categoryId?: number;
+  categoryId?: number ;
   subcategoryId?: number;
   hasMore = true;
   constructor(private router: Router, private categoryService:CategoryService, 
-    private homeService:HomeService, private sharedData: shareDataService) {
+    private homeService:HomeService, private sharedData: ShareDataService) {
     
     this.categoryService.findAllCategory().subscribe(data=>{
       this.categoryAll = data
@@ -39,8 +39,6 @@ export class HomePage implements OnInit {
       (position) => {
          this.lat = position.coords.latitude;
          this.lon = position.coords.longitude;
-        console.log("Latitud:", this.lat);
-        console.log("Longitud:", this.lon);
       },
       (error) => {
         console.error("Error al obtener la ubicación:", error.message);
@@ -52,6 +50,11 @@ export class HomePage implements OnInit {
       }
     );
   }
+  ionViewWillLeave() {
+    this.subcategoryId = undefined;
+    this.categoryId = undefined;
+    this.resetData();
+  }
   enfocarCard() {
     const element = this.cardRef.nativeElement;
     element.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -62,7 +65,6 @@ export class HomePage implements OnInit {
     }, 1500);
   }
   ionViewDidEnter() {
-    this.resetData();
     this.loadHome();
   }
   resetData() {
@@ -74,7 +76,7 @@ export class HomePage implements OnInit {
     console.log('More ckre')
     this.loadHome(event);
   }
-  ngOnInit() {}
+
 
   reloadPage() {
     window.location.reload(); 
@@ -85,6 +87,7 @@ export class HomePage implements OnInit {
       if (event) event.target.complete();
       return;
     }
+   
     this.homeService.getHome(this.lat, this.lon, this.page, this.limit, this.categoryId, this.subcategoryId)
       .subscribe((data: any) => {
         if (!Array.isArray(data?.items)) {
@@ -116,6 +119,9 @@ export class HomePage implements OnInit {
   }
   ionViewWillEnter() {
     this.resetPage();
+     this.hasMore = true;
+     this.subCategory = [];
+    this.loadHome()
   }
   onCategory(event:any){
     this.categoryId = event;
@@ -166,7 +172,7 @@ export class HomePage implements OnInit {
   navegate(event:any, items:any){
     this.sharedData.data = {idProveder:items.idprov,categoryId:this.categoryId, subcategoryId:this.subcategoryId, item:items}
     console.log('id-->', items)
-     this.router.navigate(['navigation/appointment'])
+     this.router.navigate(['navigation/profile-services'])
   }
 }
 

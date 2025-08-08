@@ -1,18 +1,23 @@
-<fieldset class="input-item" [ngClass]="{'has-error': hasError}">
+<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }">
   <legend *ngIf="label">{{ label }}</legend>
-  <ion-item class="custom-input">
+
+  <ion-item class="custom-input" lines="none">
     <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
-    <ion-input 
-      [type]="(type === 'password' && !isPasswordVisible) ? 'password' : type"
+
+    <ion-input
+      [type]="getInputType()"
       [placeholder]="placeholder"
       [(ngModel)]="value"
       (ionInput)="onInputChange($event)"
-      [disabled]="disabled">
+      [disabled]="disabled"
+      class="input-element">
     </ion-input>
-    <ion-icon 
-      *ngIf="type === 'password'" 
-      slot="end" 
-      [name]="isPasswordVisible ? 'eye-off' : 'eye'" 
+
+    <ion-icon
+      *ngIf="type === 'password'"
+      slot="end"
+      [name]="isPasswordVisible ? 'eye-off-outline' : 'eye-outline'"
+      class="password-toggle"
       (click)="togglePasswordVisibility()">
     </ion-icon>
   </ion-item>

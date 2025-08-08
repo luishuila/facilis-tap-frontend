@@ -1,0 +1,198 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.scroll-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: #f2f2f7; // iOS-like background
+}
+
+// Selector de días
+.day-selector {
+  background: #ffffff;
+  border-bottom: 1px solid #dcdcdc;
+  padding: 6px 0;
+}
+
+.day-segment {
+  --background: transparent;
+  --indicator-color: transparent;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+ion-segment-button {
+  padding: 0;
+  min-width: 72px;
+  max-width: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.day-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  padding: 6px 10px;
+  background: #f0f0f0;
+  transition: background-color 0.3s ease;
+
+  small {
+    font-size: 12px;
+    color: #888;
+  }
+
+  strong {
+    font-size: 16px;
+    color: #333;
+  }
+
+  &.active {
+    background: var(--ion-color-primary);
+
+    small,
+    strong {
+      color: #fff;
+    }
+  }
+}
+
+// Título
+.section-title {
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 16px 8px;
+  margin: 0;
+  color: #111;
+  background: #fff;
+}
+
+// Área de scroll de tareas
+.tasks-scroll-area {
+  flex: 1;
+  padding: 0 12px;
+  overflow-y: auto;
+  height: calc(100vh - 200px); // Ajuste estándar
+
+  @media (max-height: 700px) {
+    height: calc(100vh - 170px);
+  }
+
+  @media (min-height: 900px) {
+    height: calc(100vh - 230px);
+  }
+}
+
+// Tarjetas de tareas
+.task-card-modern {
+  display: flex;
+  background: #eaf3ff;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+  position: relative;
+
+  .indicator {
+    width: 4px;
+    height: 100%;
+    border-radius: 4px;
+    margin-right: 12px;
+  }
+
+  .task-content {
+    flex: 1;
+
+    .task-title {
+      font-weight: 600;
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: #222;
+    }
+
+    .task-time {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 4px;
+
+      .task-tag {
+        background: #e0ecff;
+        color: #0051ff;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 12px;
+        margin-left: 8px;
+      }
+    }
+
+    .task-subtitle {
+      font-size: 13px;
+      color: #777;
+    }
+  }
+}
+.tasks-scroll-area {
+  flex: 1;
+  min-height: 20em;
+  background-color: #FAFDFF;
+}
+
+
+
+ion-item.task-card-modern {
+  --background: #ffffff;
+  border-radius: 12px;
+  margin: 8px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  align-items: center;
+  padding: 12px;
+}
+
+.indicator {
+  width: 5px;
+  height: 100%;
+  border-radius: 4px;
+  margin-right: 12px;
+  background-color: var(--ion-color-primary);
+}
+
+.task-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+
+.task-time {
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+}
+
+.task-tag {
+  background: #e0ecff;
+  color: #0051ff;
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-left: 8px;
+}
+
+.task-subtitle {
+  font-size: 13px;
+  color: #888;
+  margin-top: 4px;
+}

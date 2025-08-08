@@ -1,83 +1,30 @@
-<ion-content [fullscreen]="true">
-  <ion-card class="input-card">
-    <ion-card-content>
-      <div class="container">
-        <h1 class="heading">👋 Welcome</h1>
-        <p class="para">Sign in to continue!</p>
-
-        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-
-          <fac-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail">
-          </fac-input>
-
-          <fac-input formControlName="password" label="Password" type="password" placeholder="*******"
-            icon="lock-closed">
-          </fac-input>
 
 
+  <form [formGroup]="loginForm" class="login-card">
 
+    <fac-input
+      label="Correo"
+      placeholder="Username / Email"
+      icon="mail-outline"
+      type="text"
+      formControlName="users">
+    </fac-input>
 
-          <fac-btn 
-          label="Login" 
-          color="primary" 
-          customClass="primary-btn" 
-          expand="block"
-          type="submit"
-        
-          (clicked)="onLogin()">  
-        </fac-btn>
+    <fac-input
+      label="Contraseña"
+      placeholder="Password"
+      icon="lock-closed-outline"
+      type="password"
+      formControlName="password">
+    </fac-input>
 
+    <div class="forgot-text">
+      <a (click)="forgotPassword('password')">Forgot Password?</a>
+    </div>
 
-        <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <ion-button expand="block" class="login-button" type="submit" (click)="login()">LOGIN</ion-button>
 
-        <p class="forget-text"><a href="#">Forgot Password?</a></p>
-        <br>
-        <p class="signup-text" [routerLink]="['/auth/register']">
-          I'm a new user&nbsp;
-          <a >Sign Up?</a>
-        </p>
-
-
-        </form>
-      </div>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
-
-
-<!-- 
-
-        <p class="forget-text"><a href="#">Forgot Password?</a></p>
-          <p class="signup-text">I'm a new user&nbsp;<a href="#">Sign Up?</a></p>
-         <fac-btn label="Google Signin" icon="logo-google" color="light" customClass="google-btn" expand="block"></fac-btn>
-<ion-content [fullscreen]="true">
-  <ion-card class="input-card">
-    <ion-card-content>
-      <div class="container">
-        <h1 class="heading">👋 Welcome<br><br></h1>
-        <p class="para">Sign in to continue!</p>
-        <form>
-        
-          <fac-input label="Email Id" type="email" placeholder="name@domain.com" icon="mail"></fac-input>
-
-
-          <fac-input label="Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
-
-
- 
-
-        
-          <fac-btn label="Login" color="primary" customClass="primary-btn" expand="block"></fac-btn>
-
-          
-        </form>
-      </div>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
-
-<ion-footer color="white">
-  <ion-toolbar>
-    <p class="copyright">Crafted in ❤️ by&nbsp;<a href="#">Adenwalla</a></p>
-  </ion-toolbar>
-</ion-footer> -->
+    <div class="register-text">
+      Don’t have an Account? <a (click)="register('register')">Register</a>
+    </div>
+  </form>

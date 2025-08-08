@@ -1,7 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
-import { shareDataService } from 'src/app/core/services/DataShareService/shareDataService';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-appointment',
@@ -9,117 +6,68 @@ import { shareDataService } from 'src/app/core/services/DataShareService/shareDa
   styleUrls: ['./appointment.page.scss'],
   standalone: false,
 })
-export class AppointmentPage  {
-  selectedTab = 'cita';
-  company = {
-    name: 'Von Inc',
-    description: 'Servicios de belleza personalizados para toda la familia.',
-    phone: '+57 300 1234567',
-    url: 'https://voninc.com',
-    type: 'Independiente',
-    location: 'Cra. 45 #123-45, Medellín, Antioquia',
-    city: 'Medellín'
-  };
+export class AppointmentPage implements OnInit {
+  filtroSeleccionado: string = '' ;
+  constructor() { }
 
-  @ViewChild('daySegment', { static: false }) daySegment: any;
-  private daysInitialized = false;
+  ngOnInit() {
+      this.filtroSeleccionado = 'proxima'
+  }
+  // por defecto
 
-
-  activeDayValue: string = '';
-  days: { name: string, date: number, fullDate: Date, short: string, active: boolean }[] = [];
-  tasks: any = [
+  cursos = [
     {
-      time: '09:00 - 09:30',
-      duration: '30 Minutes',
-      title: 'Coffee with Julia',
-      subtitle: 'at Coffee Adda',
-      status: 'Done',
-      statusClass: 'done'
+      nombre: 'Curso de Angular',
+      descripcion: 'Aprende Angular desde cero.',
+      fecha: '2025-08-10',
+      estado: 'proxima'
     },
     {
-      time: '10:00 - 11:30',
-      duration: '1.5 Hours',
-      title: 'E-commerce app project meeting',
-      subtitle: '',
-      status: 'In Progress',
-      statusClass: 'in-progress'
+      nombre: 'Curso de Ionic',
+      descripcion: 'Crea apps móviles con Ionic.',
+      fecha: '2025-08-04',
+      estado: 'en_curso'
     },
-
+    {
+      nombre: 'Curso de NestJS',
+      descripcion: 'Backend moderno con TypeScript.',
+      fecha: '2025-06-01',
+      estado: 'pasada'
+    },
+    {
+      nombre: 'Curso de C#',
+      descripcion: 'Programación orientada a objetos.',
+      fecha: '2025-05-10',
+      estado: 'pasada'
+    }
   ];
 
-    constructor(private router: Router,   private sharedData: shareDataService) {
-      console.log('sharedData-->', this.sharedData.data)
-    }
+  // Filtrar cursos según el estado seleccionado
+  cursosFiltrados() {
+    return this.cursos.filter(curso => curso.estado === this.filtroSeleccionado);
+  }
 
-    ngOnInit() {
-      if (!this.daysInitialized) {
-        this.generateNext30Days();
-        this.daysInitialized = true;
-      }
+  // Retorna el color del ion-card según el estado
+  colorPorEstado(estado: string): string {
+    switch (estado) {
+      case 'proxima':
+        return 'success'; // verde
+      case 'en_curso':
+        return 'warning'; // amarillo
+      case 'pasada':
+        return 'danger'; // rojo
+      default:
+        return 'medium';
     }
-
-    
-    stories = [
-      { title: 'London', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Turkey', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'NYC', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Vietnam', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'London', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Turkey', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'NYC', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Vietnam', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'London', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Turkey', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'NYC', img: 'https://picsum.photos/600/300?random=5' },
-      { title: 'Vietnam', img: 'https://picsum.photos/600/300?random=5' },
-    ];
-
-
-    generateNext30Days() {
-      this.days = [];  // <--- SOLUCIÓN AQUÍ
-    
-      const today = new Date();
-    
-      for (let i = 0; i <= 30; i++) {
-        const date = new Date(today);
-        date.setDate(today.getDate() + i);
-    
-        const dayName = date.toLocaleDateString('en-US', { weekday: 'short' }).toUpperCase();
-        const dayNumber = date.getDate();
-        const short = dayName.toLowerCase();
-    
-        const isActive = i === 0;
-    
-        if (isActive) {
-          this.activeDayValue = short;
-        }
-    
-        this.days.push({
-          name: dayName,
-          date: dayNumber,
-          fullDate: date,
-          short,
-          active: isActive
-        });
-      }
-    }
-    
-    setActiveDay(selectedDay: any) {
-      this.days.forEach(day => {
-        day.active = day.fullDate.toISOString() === selectedDay.fullDate.toISOString();
-      });
-    
-      this.activeDayValue = selectedDay.fullDate.toISOString();
-    
-      setTimeout(() => {
-        const index = this.days.findIndex(d => d.fullDate.toISOString() === selectedDay.fullDate.toISOString());
-        const buttons = this.daySegment?.el.querySelectorAll('ion-segment-button');
-        const button = buttons?.[index] as HTMLElement;
-    
-        if (button) {
-          button.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }
-      }, 100);
-    }
-    
+  }
+  editarCurso(curso: any) {
+    console.log('Editar curso:', curso);
+    // Aquí puedes abrir un modal, navegar o lo que necesites
+  }
+  
+  eliminarCurso(curso: any) {
+    console.log('Eliminar curso:', curso);
+    // Lógica de eliminación
+  }
+  
 }

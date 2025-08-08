@@ -1,4 +1,4 @@
-<ion-content [fullscreen]="true">
+<div class="profile-content">
   <ion-card class="input-card">
     <ion-card-content>
       <div class="container">
@@ -6,156 +6,68 @@
         <p class="para">Ingrese la información del proveedor</p>
 
         <form [formGroup]="providerForm" (ngSubmit)="saveProvider()">
-         <div *ngIf="independent">  
-           <fac-radio
-           label="Presta servicios"
-            icon="construct-outline"
-            [options]="contributor"
-            formControlName="independent">
-          </fac-radio>
-        </div>
-          <fac-input 
-            formControlName="name" 
-            label="Nombre" 
-            type="text" 
-            placeholder="Ingrese el nombre del proveedor" 
-            icon="person">
-          </fac-input>
-          
-         
-        <fac-input 
-            formControlName="email" 
-            label="Correo Electrónico" 
-            type="email" 
-            placeholder="ejemplo@correo.com" 
-            icon="mail">
-          </fac-input>
+          <!-- Radio para seleccionar si presta servicios -->
+          <div *ngIf="independent">
+            <fac-radio
+              label="Presta servicios"
+              icon="construct-outline"
+              [options]="contributor"
+              formControlName="independent">
+            </fac-radio>
+          </div>
 
-          <fac-input 
-            formControlName="phone" 
-            label="Teléfono" 
-            type="tel" 
-            placeholder="+57 321 1234567" 
-            icon="call">
-       </fac-input>
-  
-          <fac-input 
-            formControlName="img" 
-            label="Imagen URL" 
-            type="url" 
-            placeholder="https://example.com/logo.png" 
-            icon="image">
-          </fac-input>
+          <!-- Inputs básicos -->
+          <fac-input formControlName="name" label="Nombre" type="text"
+            placeholder="Ingrese el nombre del proveedor" icon="person"></fac-input>
+          <fac-input formControlName="email" label="Correo Electrónico" type="email"
+            placeholder="ejemplo@correo.com" icon="mail"></fac-input>
+          <fac-input formControlName="phone" label="Teléfono" type="tel"
+            placeholder="+57 321 1234567" icon="call"></fac-input>
+          <fac-input formControlName="img" label="Imagen URL" type="url"
+            placeholder="https://example.com/logo.png" icon="image"></fac-input>
+          <fac-input formControlName="website" label="Sitio Web" type="url"
+            placeholder="https://example.com" icon="globe"></fac-input>
 
-          <fac-input 
-            formControlName="website" 
-            label="Sitio Web" 
-            type="url" 
-            placeholder="https://example.com" 
-            icon="globe">
-          </fac-input>
-          <div *ngIf="!providerForm.get('independent')?.value">  
-          <fac-input 
-            formControlName="nit" 
-            label="NIT" 
-            type="number" 
-            placeholder="Ingrese el NIT" 
-            icon="business">
-          </fac-input>
-        </div>
-        <div *ngIf="!providerForm.get('independent')?.value">  
-          <fac-input 
-            formControlName="invima" 
-            label="Invima" 
-            placeholder="Ingrese el código Invima" 
-            icon="clipboard">
-          </fac-input>
-        </div>
-        <div *ngIf="!providerForm.get('independent')?.value">  
-          <fac-input 
-            formControlName="companyIdentifier" 
-            label="Identificador de Empresa" 
-            placeholder="Ingrese el identificador" 
-            icon="pricetag">
-          </fac-input>
-        </div>
-          <fac-input 
-            formControlName="logoUrl" 
-            label="Logo URL" 
-            type="url" 
-            placeholder="https://example.com/logo.png" 
-            icon="image">
-          </fac-input>
+          <!-- Condicionales para empresa -->
+          <div *ngIf="!providerForm.get('independent')?.value">
+            <fac-input formControlName="nit" label="NIT" type="number"
+              placeholder="Ingrese el NIT" icon="business"></fac-input>
+            <fac-input formControlName="invima" label="Invima"
+              placeholder="Ingrese el código Invima" icon="clipboard"></fac-input>
+            <fac-input formControlName="companyIdentifier" label="Identificador de Empresa"
+              placeholder="Ingrese el identificador" icon="pricetag"></fac-input>
+          </div>
 
-          <fac-textarea 
-            formControlName="description" 
-            label="Descripción" 
-            placeholder="Ingrese una descripción" 
-            icon="document-text">
-          </fac-textarea> 
+          <fac-input formControlName="logoUrl" label="Logo URL" type="url"
+            placeholder="https://example.com/logo.png" icon="image"></fac-input>
 
-          <!-- <fac-select 
-            formControlName="status" 
-            label="Estado" 
-            placeholder="Seleccione el estado" 
-            icon="toggle" 
-            [options]="statusOptions">
-          </fac-select>
+          <fac-textarea formControlName="description" label="Descripción"
+            placeholder="Ingrese una descripción" icon="document-text"></fac-textarea>
 
+          <!-- Selector de servicios -->
           <fac-select 
-            formControlName="category" 
-            label="Categoría" 
-            placeholder="Seleccione la categoría" 
-            icon="list" 
-            [options]="categoryOptions">
-          </fac-select> -->
-
-          <!-- <fac-input 
-            formControlName="rating" 
-            label="Calificación" 
-            type="number" 
-            placeholder="Ingrese la calificación (1-5)" 
-            icon="star">
-          </fac-input> -->
-
- 
-            <fac-select 
-            [label]="'Servicios'"
-            [title]="'Select Servicios'"
+            label="Servicios"
+            title="Seleccione Servicios"
             [items]="selectModal"
             [labelField]="'name'"
             [valueField]="'id'"
-            [selectedItems]="this.providerForm.get('categories')?.value"
+            [selectedItems]="providerForm.get('categories')?.value"
             [selectModal]="true"
             (selectionChange)="onServicesChanged($event)"
-            formControlName="categories" 
-            >
+            formControlName="categories">
           </fac-select>
-          
 
-
+          <!-- Botón de registro -->
           <fac-btn 
-          label="Registrar" 
-          color="primary" 
-          customClass="primary-btn" 
-          expand="block"
-          type="submit"
-   
-          (clicked)="saveProvider()"> 
-        </fac-btn>
-        
-        <ion-footer class="ion-no-border">
-          <ion-toolbar>
-            <ion-title></ion-title>
-          </ion-toolbar>
-        </ion-footer>
-        <ion-footer class="ion-no-border">
-          <ion-toolbar>
-            <ion-title></ion-title>
-          </ion-toolbar>
-        </ion-footer>
+            label="Registrar" 
+            color="primary" 
+            customClass="primary-btn" 
+            expand="block"
+            type="submit"
+            (clicked)="saveProvider()">
+          </fac-btn>
         </form>
       </div>
     </ion-card-content>
   </ion-card>
-</ion-content>
+</div>

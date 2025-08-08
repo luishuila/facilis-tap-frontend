@@ -1,104 +1,63 @@
-<ion-content [fullscreen]="true">
-  <ion-card class="input-card">
-    <ion-card-content>
-      <div class="container">
-        <h1 class="heading">🚀 Create Account</h1>
-        <p class="para">Sign up to get started!</p>
+<form [formGroup]="registerForm" class="login-card">
 
-        <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+  <fac-input
+    label="Nombre"
+    placeholder="Nombre"
+    icon="person-outline"
+    type="text"
+    formControlName="name">
+  </fac-input>
 
-          <fac-input formControlName="name" label="First Name" type="text" placeholder="John" icon="person"></fac-input>
-          <p class="error-text" *ngIf="registerForm.get('name')?.invalid && (registerForm.get('name')?.touched || registerForm.get('name')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'name') }}
-            </ion-label>
-          </p>
+  <fac-input
+    label="Apellido"
+    placeholder="Apellido"
+    icon="person-outline"
+    type="text"
+    formControlName="lastname">
+  </fac-input>
 
+  <fac-input
+    label="Correo electrónico"
+    placeholder="Correo electrónico"
+    icon="mail-outline"
+    type="email"
+    formControlName="email">
+  </fac-input>
 
-          <fac-input formControlName="lastname" label="Last Name" type="text" placeholder="Doe" icon="person"></fac-input>
-          <p class="error-text" *ngIf="registerForm.get('lastname')?.invalid && (registerForm.get('lastname')?.touched || registerForm.get('lastname')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'lastname') }}
-            </ion-label>
-          </p>
+  <fac-input
+    label="Contraseña"
+    placeholder="Contraseña"
+    icon="lock-closed-outline"
+    type="password"
+    formControlName="password">
+  </fac-input>
 
+  <fac-input
+    label="Confirmar contraseña"
+    placeholder="Confirmar contraseña"
+    icon="lock-closed-outline"
+    type="password"
+    formControlName="confirmPassword">
+  </fac-input>
 
-          <fac-input formControlName="phones" label="phones" type="phones" placeholder="+57" icon="call-outline"></fac-input>
-          <p class="error-text" *ngIf="registerForm.get('phones')?.invalid && (registerForm.get('phones')?.touched || registerForm.get('phones')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'phones') }}
-            </ion-label>
-          </p>
+  <fac-input
+    label="Fecha de nacimiento"
+    placeholder="Fecha de nacimiento"
+    icon="calendar-outline"
+    type="date"
+    formControlName="birth">
+  </fac-input>
+  <fac-radio
+    label="Género"
+    icon="male-female-outline"
+    formControlName="gender"
+    [options]="genderOptions">
+  </fac-radio>
+  <ion-button expand="block" class="login-button" type="submit" (click)="submitRegister()">
+    REGISTRARSE
+  </ion-button>
 
-          <fac-input formControlName="email" label="Email" type="email" placeholder="name@domain.com" icon="mail"></fac-input>
-          <p class="error-text" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.touched || registerForm.get('email')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'email') }}
-            </ion-label>
-          </p>
-
-          <fac-input formControlName="password" label="Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
-          <p class="error-text" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.touched || registerForm.get('password')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'password') }}
-            </ion-label>
-          </p>
-
-
-          <fac-input formControlName="confirmPassword" label="Confirm Password" type="password" placeholder="*******" icon="lock-closed"></fac-input>
-          <p class="error-text" *ngIf="registerForm.get('confirmPassword')?.invalid && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'confirmPassword') }}
-            </ion-label>
-          </p>
-
-          <p class="error-text" *ngIf="registerForm.hasError('mismatch') && (registerForm.get('confirmPassword')?.touched || registerForm.get('confirmPassword')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getPasswordMismatchError(registerForm) }}
-            </ion-label>
-          </p>
-
-
-          <fac-date formControlName="birth" label="Fecha de Nacimiento" type="date" icon="calendar"></fac-date>
-          <p class="error-text" *ngIf="registerForm.get('birth')?.invalid && (registerForm.get('birth')?.touched || registerForm.get('birth')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'birth') }}
-            </ion-label>
-          </p>
-
-          <fac-radio
-            label="Sexo"
-            icon="male-female"
-            [options]="genderOptions"
-            formControlName="gender">
-          </fac-radio>
-          <p class="error-text" *ngIf="registerForm.get('gender')?.invalid && (registerForm.get('gender')?.touched || registerForm.get('gender')?.dirty)">
-            <ion-label class="red-text">
-              {{ validationUsersService.getErrorMessage(registerForm, 'gender') }}
-            </ion-label>
-          </p>
-
-
-          <fac-btn 
-            label="Register" 
-            color="primary" 
-            customClass="primary-btn" 
-            expand="block"
-            type="submit"
-            [disabled]="registerForm.invalid"
-            (clicked)="onRegister()">  
-          </fac-btn>
-
-          <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
-
-
-          <p class="signup-text">
-            Already have an account?&nbsp;
-            <a [routerLink]="['/auth/login']">Login</a>
-          </p>
-
-        </form>
-      </div>
-    </ion-card-content>
-  </ion-card>
-</ion-content>
+  <div class="register-text">
+    ¿Ya tienes una cuenta? <a (click)="goToLogin()">Iniciar sesión</a>
+  </div>
+</form>

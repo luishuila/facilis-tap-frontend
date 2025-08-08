@@ -1,60 +1,45 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>Settings</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="ion-padding">
 
-<ion-content class="ion-padding center-avatar">
-  <ion-title><ion-avatar class="avatar-size  center-avatarC">
-    <img alt="Silhouette of a person's head" src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-
-  </ion-avatar>
- {{data.name}}  {{data.username}}
-</ion-title>
-<samp>uiid:{{data.uiid}} </samp>
-  <!-- Menú Personalizado -->
-  <div class="custom-menu" [class.open]="menuOpen">
-    <ion-list>
-      <ng-container *ngFor="let item of menuItems">
-        <!-- Elementos principales del menú -->
-        <ion-item *ngIf="item.link" button [routerLink]="item.link">
-          <ion-icon slot="start" [name]="item.icon"></ion-icon>
-          <ion-label>{{ item.label }}</ion-label>
-        </ion-item>
-  
-        <ion-accordion-group *ngIf="!item.link">
-          <ion-accordion [value]="item.label">
-            <ion-item slot="header">
-              <ion-icon slot="start" [name]="item.icon"></ion-icon>
-              <ion-label>{{ item.label }}</ion-label>
-            </ion-item>
-            <div slot="content">
-              <ion-list>
-                <ion-item *ngFor="let subItem of item.item" button [routerLink]="subItem.link">
-                  <ion-icon slot="start" [name]="subItem.icon"></ion-icon>
-                  <ion-label>{{ subItem.label }}</ion-label>
-                </ion-item>
-              </ion-list>
-            </div>
-          </ion-accordion>
-        </ion-accordion-group>
-      </ng-container>
-    </ion-list>
+  <!-- Perfil centrado -->
+  <div class="profile-container">
+    <ion-avatar class="avatar-large">
+      <img src="https://picsum.photos/600/300?random=18" alt="Avatar" />
+    </ion-avatar>
+    <h2 class="name"> {{data?.name}}  {{data?.lastname}}</h2>
+    <p class="username">uiid:{{data?.uiid}}</p>
   </div>
-  
-  
+
+  <!-- Botones tipo segmento -->
+  <ion-segment value="profile-options" class="profile-segment" mode="md">
+    <ion-segment-button value="privacy">
+      <ion-icon name="lock-closed-outline"></ion-icon>
+      <ion-label>Privacidad</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="profile">
+      <ion-icon name="person-circle-outline"></ion-icon>
+      <ion-label>Perfil</ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="contacts">
+      <ion-icon name="people-outline"></ion-icon>
+      <ion-label>Contactos</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- Lista de configuraciones -->
+  <ion-list class="menu-list">
+    <ion-item *ngFor="let item of menuItems" [routerLink]="item.link">
+      <ion-icon [name]="item.icon" slot="start"></ion-icon>
+      <ion-label>{{ item.label }}</ion-label>
+    </ion-item>
+  </ion-list>
 
 </ion-content>
-<ion-footer class="ion-no-border">
-  <ion-toolbar>
-    <ion-item button (click)="logout()">
-      <ion-icon slot="start" name="log-out-outline"></ion-icon>
-      <ion-label>Cerrar Sesión</ion-label>
-    </ion-item>
-    <ion-title></ion-title>
-  </ion-toolbar>
-  <ion-footer class="ion-no-border">
-    <ion-toolbar>
-      <ion-title></ion-title>
-    </ion-toolbar>
+
+<!-- Footer fijo para cerrar sesión -->
+<ion-footer class="logout-footer">
+  <ion-item lines="none" (click)="logout()" button class="logout-button">
+    <ion-icon name="log-out-outline" slot="start" class="logout-icon"></ion-icon>
+    <ion-label class="logout-text">Cerrar sesión</ion-label>
+  </ion-item>
 </ion-footer>
+

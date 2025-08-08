@@ -4,8 +4,7 @@ import { genderObject } from 'src/app/core/constant/constants';
 import { idUsers, usersData } from 'src/app/core/generate/idData';
 import { Address } from 'src/app/core/models/address/Address';
 import { AddressDtoI } from 'src/app/core/models/address/AddressI';
-import { UserDto, UserUpdateI } from 'src/app/core/models/User/UserI';
-import { UserUpdate } from 'src/app/core/models/User/User';
+import { UserDto, UserUpdate, UserUpdateI } from 'src/app/core/models/User/User';
 import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
 import { initializeAddressForm } from 'src/app/core/util/initializeAddressForm';
@@ -16,7 +15,7 @@ import { initializeAddressForm } from 'src/app/core/util/initializeAddressForm';
   standalone: false,
 })
 export class UsersUpdatePage implements OnInit {
-
+  segmentValue: string = 'first';
   addressForm!: FormGroup;
   userForm!: FormGroup;
   validate: boolean  = false;

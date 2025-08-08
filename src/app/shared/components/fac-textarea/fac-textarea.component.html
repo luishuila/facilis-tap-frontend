@@ -1,6 +1,7 @@
-<fieldset class="input-item" [ngClass]="{'has-error': hasError}">
+<fieldset class="input-item" [ngClass]="{ 'has-error': hasError }">
   <legend *ngIf="label">{{ label }}</legend>
-  <ion-item class="custom-textarea">
+
+  <ion-item class="custom-textarea" lines="none">
     <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
 
     <ion-textarea

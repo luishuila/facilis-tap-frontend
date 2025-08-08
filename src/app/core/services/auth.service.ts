@@ -3,9 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { IUser } from '../models/User/UserI';
+
 import { ApiResponse } from '../models/api/apiResponse';
 import { loginResponse } from '../models/auth/auth';
+import { IUser } from '../models/User/User';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,6 @@ export class AuthService {
     return this.http.post<ApiResponse<loginResponse>>(`${this.apiUrl}auth/login`, body).pipe(
       tap((response: ApiResponse<loginResponse>) => {
         if (response.data && response.data.access_token) {
-          console.log('response.data.access_token--->', response.data.access_token);
           this.saveAccessToken(response.data)
         }
       })

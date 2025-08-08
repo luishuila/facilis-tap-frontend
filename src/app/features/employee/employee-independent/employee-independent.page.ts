@@ -14,7 +14,8 @@ import { ContractTypeEnum } from 'src/app/core/constant/enum';
 import { ProviderCreate } from 'src/app/core/models/provider/Provider';
 import { usersData } from 'src/app/core/generate/idData';
 import { genderObject } from 'src/app/core/constant/constants';
-import { UserDto } from 'src/app/core/models/User/UserI';
+import { UserDto } from 'src/app/core/models/User/User';
+
 @Component({
   selector: 'app-employee-Independent',
   templateUrl: './employee-Independent.page.html',
@@ -113,11 +114,11 @@ export class EmployeeIndependentPage implements OnInit {
     this.employee = event;
     console.log('event', event)
     if ('address' in event && event.address) { 
-      this.addressId = event.address.id;
-      this.addressForm.patchValue({
-        ...event.address,
-        cityStates: event.address.cityStates?.id ?? null
-      });
+      // this.addressId = event.address.id;
+      // this.addressForm.patchValue({
+      //   ...event.address,
+      //   cityStates: event.address.cityStates?.id ?? null
+      // });
       this.addressFormComponent.evento(); 
     }
   }
@@ -126,7 +127,7 @@ export class EmployeeIndependentPage implements OnInit {
       console.log('findIndependent-->', data)
       this.employeeForm.patchValue({
         employeeCode:data.employeeCode,
-        usersId:data.usersId,
+        // usersId:data.usersId,
         idcard:data.idcard,
         department:data.department,
         position:data.position,

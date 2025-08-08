@@ -17,15 +17,13 @@ interface MenuItem {
 })
 export class SettingsPage implements OnInit {
   menuOpen: boolean = false; // Controla la apertura/cierre del menú
-  menuItems: MenuItem[] = [
-    { label: 'Home', link: '/navigation/home', icon: 'home', item:[ ] , key:''},
-    { label: 'Search', link: '/navigation/search', icon: 'search',item:[] , key:''},
-    { label: 'Configuracion', link: '/navigation/personalinformation', icon: 'search' ,item:[], key:''},
-    { label: 'Settings', link: '/settings', icon: 'settings' ,item:[],  key:''},
-    { label: 'Centro de Gestión', link: null,  icon: 'library' , key:'' , item:[
-      { label: 'Inicia tu Negocio', link: '/navigation/admin', icon: 'settings' ,item:[] ,  key:'administrator'},
-      { label: 'Servicio independiente', link: '/navigation/employee-independent', icon: 'settings' ,item:[] ,  key:'administrator'}
-    ]},
+  menuItems = [
+    { label: 'Home', link: '/navigation/home', icon: 'home', item: [], key: '' },
+    { label: 'Search', link: '/navigation/search', icon: 'search', item: [], key: '' },
+    { label: 'Configuración', link: '/navigation/personalinformation', icon: 'settings', item: [], key: '' },
+    { label: 'Settings', link: '/settings', icon: 'settings', item: [], key: '' },
+    { label: 'Inicia tu Negocio', link: '/navigation/admin', icon: 'briefcase-outline', item: [], key: 'administrator' },
+    { label: 'Servicio independiente', link: '/navigation/employee-independent', icon: 'construct-outline', item: [], key: 'administrator' },
   ];
   data:any
   constructor(private authService: AuthService, private router: Router) {}

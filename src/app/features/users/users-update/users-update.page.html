@@ -1,42 +1,53 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>Informacion Personal</ion-title>
+    <ion-title class="ion-text-center">Información Personal</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-segment>
-  <ion-segment-button value="first" content-id="first">
-    <ion-label>Datos </ion-label>
-  </ion-segment-button>
-  <ion-segment-button value="second" content-id="second">
-    <ion-label>Direccion</ion-label>
-  </ion-segment-button>
-  <ion-segment-button value="third" content-id="third">
-    <ion-label>Credeciales</ion-label>
-  </ion-segment-button>
-</ion-segment>
-<ion-segment-view>
-  <ion-segment-content id="first">
+<ion-content [fullscreen]="true" class="profile-content">
 
-    <app-update-users-information 
-    *ngIf="validateUsers"
-    [userForm]="userForm"
-    [isDisabled]="userForm.invalid"
-    [genderOptions]="genderOptions"
-    (userSaved)="onUserSaved($event)">
-  </app-update-users-information>
+  <!-- Segmento de navegación con 3 botones -->
+  <ion-segment [(ngModel)]="segmentValue" mode="md" class="tab-segment">
+    <ion-segment-button value="first">
+      <ion-icon name="create-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="second">
+      <ion-icon name="navigate-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="third">
+      <ion-icon name="lock-closed-outline"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
 
+  <!-- Contenido dinámico por cada tab -->
+  <div [ngSwitch]="segmentValue" class="tab-content">
 
-  </ion-segment-content>
-  <ion-segment-content id="second">
-    <app-address-form *ngIf="validate"
-    [addressForm]="addressForm"
-    [propertyType]="propertyType"
-    [isDisabled]="false"
-    (addressSaved)="onAddressSaved($event)">
-  </app-address-form>
-  </ion-segment-content>
-  <ion-segment-content id="third">   
-     <app-update-users-credentials></app-update-users-credentials>
-  </ion-segment-content>
-</ion-segment-view>
+    <!-- Información -->
+    <ng-container *ngSwitchCase="'first'">
+      <app-update-users-information 
+        *ngIf="validateUsers"
+        [userForm]="userForm"
+        [isDisabled]="userForm.invalid"
+        [genderOptions]="genderOptions"
+        (userSaved)="onUserSaved($event)">
+      </app-update-users-information>
+    </ng-container>
+
+    <!-- Dirección -->
+    <ng-container *ngSwitchCase="'second'">
+      <app-address-form 
+        *ngIf="validate"
+        [addressForm]="addressForm"
+        [propertyType]="propertyType"
+        [isDisabled]="false"
+        (addressSaved)="onAddressSaved($event)">
+      </app-address-form>
+    </ng-container>
+
+    <!-- Credenciales -->
+    <ng-container *ngSwitchCase="'third'">
+      <app-update-users-credentials></app-update-users-credentials>
+    </ng-container>
+
+  </div>
+</ion-content>

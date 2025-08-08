@@ -1,0 +1,58 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Empresa</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="no-scroll">
+  <div class="profile-header"  >
+    <div class="profile-top">
+      <ion-avatar class="avatar-border">
+        <img alt="Company logo" [src]="profile?.img || 'https://picsum.photos/600/300?random=5'" />
+      </ion-avatar>
+      <div class="username">
+        <h2>{{ profile?.name }}</h2>
+        <p>{{ company.type }}</p>
+      </div>
+    </div>
+
+    <div class="company-info">
+      <ion-text>
+        <p><strong>Descripción:</strong> {{ profile?.description }}</p>
+        <p><strong>Teléfono:</strong> {{ profile?.phone }}</p>
+        <p><strong>Web:</strong>
+          <a [href]="company.url" target="_blank">{{ profile?.website }}</a>
+        </p>
+        <!-- <p><strong>Ubicación:</strong> {{ profile?.addresses[0]?.race }}</p> -->
+        <p><strong>Ciudad:</strong> {{ profile?.phone }}</p>
+      </ion-text>
+    </div>
+
+    <div class="highlights">
+      <div class="highlight" *ngFor="let story of profile?.employees ">
+        <ion-avatar>
+          <img [src]="story?.users?.img || 'https://picsum.photos/600/300?random=5'" alt="story" />
+        </ion-avatar>
+        <p>{{ story?.users?.name }}</p>
+      </div>
+    </div>
+  </div>
+
+  <ion-segment [(ngModel)]="selectedTab" class="tab-segment" mode="md">
+    <ion-segment-button value="cita">
+      <ion-icon name="calendar-outline"></ion-icon>
+    </ion-segment-button>
+    <ion-segment-button value="mapa">
+      <ion-icon name="map-outline"></ion-icon>
+    </ion-segment-button>
+  </ion-segment>
+
+  <div [ngSwitch]="selectedTab" class="tab-content">
+    <div *ngSwitchCase="'cita'">
+      <app-appointment-schedule></app-appointment-schedule>
+    </div>
+    <div *ngSwitchCase="'mapa'">
+      <p><strong>Aquí irá la vista de mapa</strong></p>
+    </div>
+  </div>
+</ion-content>

@@ -32,19 +32,11 @@ export class NavigationPage implements OnInit {
     this.menuService.menuTabs$.subscribe(tabs => {
       this.tabItems = tabs;
     });
-    // const storedUser = localStorage.getItem('users');
-    // if (storedUser) {
-    //   this.menu = JSON.parse(storedUser);
-    //   this.userRoles = this.menu.roles.map((r: any) => r.role); 
-    // }
 
-    // this.loadTabs();
   }
 
   private loadTabs() {
-    // this.tabItems = this.allTabs.filter(tab =>
-    //   tab.roles.some(role => this.userRoles.includes(role))
-    // );
-    
+
+  
   }
 }

@@ -4,16 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AppointmentPageRoutingModule } from './appointment-routing.module';
 
 import { AppointmentPage } from './appointment.page';
+import { AppointmentRoutingModule } from './appointment-routing.module';
+
+
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    AppointmentPageRoutingModule
+    AppointmentRoutingModule
   ],
   declarations: [AppointmentPage]
 })

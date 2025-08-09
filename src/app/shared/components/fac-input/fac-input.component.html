@@ -1,12 +1,25 @@
-<fieldset class="fac-field" [class.has-error]="hasError" [class.disabled]="disabled">
+<fieldset 
+  class="fac-field" 
+  [class.has-error]="hasError" 
+  [class.disabled]="disabled">
+
+  <!-- Etiqueta -->
   <legend *ngIf="label">{{ label }}</legend>
 
+  <!-- Campo de entrada -->
   <ion-item class="field-item" lines="none">
-    <ion-icon *ngIf="icon" slot="start" [name]="icon" aria-hidden="true"></ion-icon>
+    <!-- Icono al inicio -->
+    <ion-icon 
+      *ngIf="icon" 
+      slot="start" 
+      [name]="icon" 
+      aria-hidden="true">
+    </ion-icon>
 
+    <!-- Input -->
     <ion-input
       class="input-element"
-      [type]="getInputType()"
+      [type]="inputType"
       [placeholder]="placeholder"
       [value]="value"
       [clearInput]="clearable"
@@ -15,22 +28,34 @@
       [maxlength]="maxlength || null"
       [disabled]="disabled"
       (ionInput)="onIonInput($event)"
-      (ionBlur)="onTouched()">
+      (ionBlur)="onBlur()"
+      [attr.aria-invalid]="hasError ? 'true' : 'false'"
+      [attr.aria-describedby]="hasError ? formControlName + '-error' : null">
     </ion-input>
 
+    <!-- Botón mostrar/ocultar contraseña -->
     <ion-button
       *ngIf="type === 'password'"
       slot="end"
       fill="clear"
       size="small"
       class="password-toggle"
-      (click)="togglePasswordVisibility()">
+      (click)="togglePasswordVisibility()"
+      [attr.aria-label]="isPasswordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'">
       <ion-icon [name]="isPasswordVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
     </ion-button>
   </ion-item>
 
+  <!-- Mensajes de ayuda o error -->
   <div class="hint-row">
-    <ion-note class="helper" *ngIf="!hasError && helperText">{{ helperText }}</ion-note>
-    <ion-note class="error" *ngIf="hasError">{{ errorText || defaultError }}</ion-note>
+    <ion-note class="helper" *ngIf="!hasError && helperText">
+      {{ helperText }}
+    </ion-note>
+    <ion-note 
+      class="error" 
+      *ngIf="hasError" 
+      [id]="formControlName + '-error'">
+      {{ errorMessage }}
+    </ion-note>
   </div>
 </fieldset>

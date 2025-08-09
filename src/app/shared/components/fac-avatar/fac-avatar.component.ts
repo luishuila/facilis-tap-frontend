@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, Output, HostBinding } from '@angular/core';
+import { Component, EventEmitter, Input, Output, HostBinding, ViewChild, ElementRef } from '@angular/core';
+import { GalleryPermissionsService } from 'src/app/core/services/genericService/gallery-permissions.service';
+import { LocationService } from 'src/app/core/services/genericService/location.service';
 
 type AvatarMode = 'view' | 'edit' | 'auto';
 type AvatarSize = 'sm' | 'md' | 'lg';
@@ -12,22 +14,16 @@ type AvatarSize = 'sm' | 'md' | 'lg';
 export class FacAvatarComponent {
   /** URL de imagen (dataURL o remota) */
   @Input() avatarUrl: string | null = null;
-
   /** Placeholder por si no hay imagen */
   @Input() placeholder: string = 'assets/img/avatar-placeholder.png';
-
-  /** 'view' | 'edit' | 'auto' (auto = view si hay url, edit si no) */
+  /** 'view' | 'edit' | 'auto' */
   @Input() mode: AvatarMode = 'view';
-
   /** Tamaño: sm | md | lg */
   @Input() size: AvatarSize = 'md';
-
   /** Anillo/marco visual */
   @Input() ring = true;
-
   /** Texto para iniciales (si falla imagen) */
   @Input() nameForInitials: string = '';
-
   /** Texto alternativo accesible */
   @Input() alt: string = 'Avatar';
 
@@ -37,6 +33,11 @@ export class FacAvatarComponent {
   /** Estado de carga/errores */
   isLoading = false;
   isError = false;
+
+  /** Ref al input de fallback web */
+  @ViewChild('fileInput', { static: false }) fileInput?: ElementRef<HTMLInputElement>;
+
+  constructor(private gallery: GalleryPermissionsService,     private locationService: LocationService) {}
 
   /** CSS host classes (para tamaño) */
   @HostBinding('class.size-sm') get isSm() { return this.size === 'sm'; }
@@ -55,21 +56,36 @@ export class FacAvatarComponent {
     return parts.map(p => p[0]?.toUpperCase() ?? '').join('');
   }
 
-  onStartLoading() {
-    this.isLoading = true;
-    this.isError = false;
+  onStartLoading() { this.isLoading = true; this.isError = false; }
+  onLoadOk()       { this.isLoading = false; this.isError = false; }
+  onLoadError()    { this.isLoading = false; this.isError = true; }
+
+  /** Abrir galería (nativo) o fallback web */
+  async openGalleryFromAvatar() {
+    if (this.effectiveMode !== 'edit') return;
+
+    // Detecta entorno. Con Capacitor 5 puedes usar getPlatform()
+    const isWeb = (window as any).Capacitor?.getPlatform?.() === 'web';
+
+    if (isWeb) {
+      // Fallback web: dispara el input file
+      this.fileInput?.nativeElement.click();
+      return;
+    }
+
+    try {
+      this.onStartLoading();
+      const { file, webPath } = await this.gallery.pickOneFromGallery(); // servicio global
+      this.avatarUrl = webPath;        // previsualiza
+      this.imageSelected.emit(file);   // emite al padre
+      this.onLoadOk();
+    } catch (e) {
+      console.warn('openGalleryFromAvatar error:', e);
+      this.onLoadError();
+    }
   }
 
-  onLoadOk() {
-    this.isLoading = false;
-    this.isError = false;
-  }
-
-  onLoadError() {
-    this.isLoading = false;
-    this.isError = true;
-  }
-
+  /** Fallback web: manejar el input type="file" */
   onFileSelected(ev: Event) {
     const input = ev.target as HTMLInputElement;
     const file = input.files?.[0];
@@ -85,5 +101,8 @@ export class FacAvatarComponent {
     };
     reader.onerror = () => this.onLoadError();
     reader.readAsDataURL(file);
+
+    // Limpia el input para permitir volver a seleccionar el mismo archivo
+    input.value = '';
   }
 }

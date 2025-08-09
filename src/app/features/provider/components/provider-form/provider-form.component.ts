@@ -5,6 +5,7 @@ import { CategoryService } from 'src/app/core/services/category/category.service
 import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
 import { contributor } from 'src/app/core/constant/constants';
 
+
 @Component({
   selector: 'app-provider-form',
   templateUrl: './provider-form.component.html',
@@ -22,23 +23,25 @@ export class ProviderFormComponent implements OnInit {
   @Output() providerSaved = new EventEmitter<{
     data: any,
     avatarFile?: File | null,
-    covanFile?: File | null
+    covanFile?: File | null,
+    fileItems?: any[] | null  
   }>();
 
-  // data UI
+  // Data UI
   contributor = contributor;
   selectModal: any[] = [];
-
-  // archivos / previews
+  files: any[] = [];
+  // Archivos / Previews
   avatarFile: File | null = null;
   avatarPreview: string | null = null;
 
   covanFile: File | null = null;
   covanPreview: string | null = null;
 
+  fileItems: any = []; // Archivos subidos por el usuario
+
   constructor(
     private categoryService: CategoryService,
-    private servicesTypeService: ServicesTypeService
   ) {}
 
   ngOnInit(): void {
@@ -60,10 +63,10 @@ export class ProviderFormComponent implements OnInit {
     reader.onload = (e: any) => (this.avatarPreview = e.target.result);
     reader.readAsDataURL(file);
 
-    // Si quieres guardar el archivo en el form:
-    // this.providerForm.get('logoUrl')?.setValue(file); // usualmente enviarás como multipart
   }
-
+  onImg (event:any){
+    this.fileItems = event;
+  }
   // ---- Covan ----
   isImage(preview: string | null) {
     return preview && preview !== 'pdf';
@@ -86,15 +89,13 @@ export class ProviderFormComponent implements OnInit {
 
   // ---- Submit ----
   onSubmit() {
-    // Marca todo si quieres forzar validación visual:
-    // Object.values(this.providerForm.controls).forEach(c => c.markAsTouched());
 
     if (this.providerForm.invalid) return;
 
     this.providerSaved.emit({
       data: this.providerForm.value,
       avatarFile: this.avatarFile,
-      covanFile: this.covanFile
+      fileItems: this.fileItems 
     });
   }
 }

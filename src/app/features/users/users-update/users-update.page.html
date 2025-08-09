@@ -1,27 +1,35 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title class="ion-text-center">Información Personal</ion-title>
+  <!-- iOS: título grande -->
+  <ion-toolbar class="toolbar-main">
+    <ion-title>Información Personal</ion-title>
+  </ion-toolbar>
+
+  <!-- iOS: título grande al colapsar -->
+  <!-- <ion-toolbar collapse="condense" class="toolbar-condense">
+    <ion-title size="large">Información Personal</ion-title>
+  </ion-toolbar> -->
+
+  <!-- Tabs/Segment bajo el header -->
+  <ion-toolbar class="toolbar-segment">
+    <ion-segment [(ngModel)]="segmentValue" class="tab-segment">
+      <ion-segment-button value="first">
+        <ion-icon name="create-outline"></ion-icon>
+        <ion-label>Perfil</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="second">
+        <ion-icon name="navigate-outline"></ion-icon>
+        <ion-label>Dirección</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="third">
+        <ion-icon name="lock-closed-outline"></ion-icon>
+        <ion-label>Seguridad</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="profile-content">
-
-  <!-- Segmento de navegación con 3 botones -->
-  <ion-segment [(ngModel)]="segmentValue" mode="md" class="tab-segment">
-    <ion-segment-button value="first">
-      <ion-icon name="create-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="second">
-      <ion-icon name="navigate-outline"></ion-icon>
-    </ion-segment-button>
-    <ion-segment-button value="third">
-      <ion-icon name="lock-closed-outline"></ion-icon>
-    </ion-segment-button>
-  </ion-segment>
-
-  <!-- Contenido dinámico por cada tab -->
   <div [ngSwitch]="segmentValue" class="tab-content">
-
     <!-- Información -->
     <ng-container *ngSwitchCase="'first'">
       <app-update-users-information 
@@ -48,6 +56,5 @@
     <ng-container *ngSwitchCase="'third'">
       <app-update-users-credentials></app-update-users-credentials>
     </ng-container>
-
   </div>
 </ion-content>

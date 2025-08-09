@@ -1,19 +1,21 @@
 // src/app/features/home/home.page.ts
-import { Component, ViewChild, ElementRef, OnDestroy  } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnDestroy ,  } from '@angular/core';
 import { Router } from '@angular/router';
 import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
 import { CategoryService } from 'src/app/core/services/category/category.service';
 import { ShareDataService } from 'src/app/core/services/DataShareService/shareDataService';
 import { HomeService } from 'src/app/core/services/home/home.service';
 import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
-import {  ViewWillLeave } from '@ionic/angular';
+import {  ViewWillLeave, ViewWillEnter } from '@ionic/angular';
+import { LocationService } from 'src/app/core/services/genericService/location.service';
+import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomePage implements  ViewWillLeave  {
+export class HomePage implements  ViewWillLeave, ViewWillEnter  {
   @ViewChild('miCard', { static: false, read: ElementRef }) cardRef!: ElementRef;
   showHeader: boolean = true;
   lastScrollPosition: number = 0;
@@ -29,8 +31,10 @@ export class HomePage implements  ViewWillLeave  {
   categoryId?: number ;
   subcategoryId?: number;
   hasMore = true;
+  private locSub?: Subscription;
   constructor(private router: Router, private categoryService:CategoryService, 
-    private homeService:HomeService, private sharedData: ShareDataService) {
+    private homeService:HomeService, private sharedData: ShareDataService,
+    private locationService: LocationService) {
     
     this.categoryService.findAllCategory().subscribe(data=>{
       this.categoryAll = data
@@ -53,7 +57,12 @@ export class HomePage implements  ViewWillLeave  {
   ionViewWillLeave() {
     this.subcategoryId = undefined;
     this.categoryId = undefined;
+    
     this.resetData();
+
+   
+    this.locSub?.unsubscribe();                     // ⬅️ limpia sub
+    this.locationService.stop();    
   }
   enfocarCard() {
     const element = this.cardRef.nativeElement;
@@ -65,7 +74,7 @@ export class HomePage implements  ViewWillLeave  {
     }, 1500);
   }
   ionViewDidEnter() {
-    this.loadHome();
+  //  this.loadHome();
   }
   resetData() {
     this.items = [];
@@ -117,11 +126,24 @@ export class HomePage implements  ViewWillLeave  {
         if (event) event.target.complete();
       });
   }
-  ionViewWillEnter() {
+
+
+
+
+  async  ionViewWillEnter() {
     this.resetPage();
      this.hasMore = true;
      this.subCategory = [];
-    this.loadHome()
+     await this.locationService.start();      
+     this.locSub = this.locationService.coords$.subscribe(c => {
+       if (!c) return;
+       this.lat = c.lat;
+       this.lon = c.lon;
+       this.resetData();
+       this.loadHome();
+     });
+   
+ 
   }
   onCategory(event:any){
     console.log('event-->', event)

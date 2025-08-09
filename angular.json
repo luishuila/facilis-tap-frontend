@@ -33,7 +33,7 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
+              "src/theme/theme.scss",
               "node_modules/leaflet/dist/leaflet.css",
                "src/styles/swiper-bundle.css"
             ],
@@ -60,18 +60,6 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "node_modules/swiper/modules/navigation.css",
-                  "with": "src/styles/empty.css"
-                },
-                {
-                  "replace": "node_modules/swiper/modules/pagination.css",
-                  "with": "src/styles/empty.css"
-                },
-                {
-                  "replace": "node_modules/swiper/swiper.css",
-                  "with": "src/styles/empty.css"
                 }
               ],
               "outputHashing": "all"
@@ -133,7 +121,7 @@
             ],
             "styles": [
               "src/global.scss",
-              "src/theme/variables.scss",
+              "src/theme/theme.scss",
               "src/styles/swiper-bundle.css"
             ],
             "scripts": []

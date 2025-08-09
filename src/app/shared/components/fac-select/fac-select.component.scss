@@ -1,13 +1,15 @@
-/* ===== Base del field (mismo diseño que inputs anteriores) ===== */
+/* Ocupa todo el ancho del contenedor */
 .fac-field {
+  display: block;
+  width: 100%;
   border: none;
-  margin-bottom: 12px;
+  margin: 0 0 12px;
 
   legend {
     font-size: 14px;
     font-weight: 500;
     color: #444;
-    margin-bottom: 6px;
+    margin: 0 0 6px;
   }
 
   &.has-error .field-item {
@@ -24,64 +26,71 @@
   .error { color: #eb445a; font-size: 12px; }
 }
 
-/* ===== Cápsula gris nativa ===== */
-/* Mismo color que el input nativo */
+/* Cápsula gris nativa (mismo fondo que tus inputs) */
 .field-item.custom-select {
-  --background: #f7f7fb !important; /* gris claro igual al input */
-  background: #f7f7fb;              /* fallback */
+  width: 100%;
+  --background: #f2f2f7 !important;   /* gris del input */
+  background: #f2f2f7;                /* fallback */
   --border-radius: 9999px;
   --inner-border-width: 0;
-  --padding-start: 10px;
-  --padding-end: 10px;
+  --padding-start: 12px;
+  --padding-end: 12px;
   --min-height: 48px;
 
   border-radius: 9999px;
   display: flex;
   align-items: center;
   margin: 6px 0;
-
-  ion-icon[slot="start"] {
-    color: #007aff;
-    font-size: 18px;
-  }
-
-  .chevron {
-    opacity: .55;
-    font-size: 18px;
-  }
-
-  ion-select.select-el {
-    flex: 1;
-    margin-left: 8px;
-    --placeholder-color: #9aa0a6;
-
-    &::part(text) {
-      color: #555;
-      font-size: 14px;
-    }
-  }
-}
-
-
-/* Focus visual (teclado/lector pantalla) */
-.field-item.custom-select:focus-within {
-  outline: 2px solid #007aff33;
-}
-
-/* iOS vs Android matices ligeros */
-:host-context(.ios) .field-item.custom-select {
-  --min-height: 46px;
+  gap: 8px;
 }
 :host-context(.md) .field-item.custom-select {
-  --min-height: 50px;
+  width: 100%;
+  --background: #eeeeee !important;   /* gris del input */
+  background: #eeeeee;                /* fallback */
+  --border-radius: 9999px;
+  --inner-border-width: 0;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --min-height: 48px;
+
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  margin: 6px 0;
+  gap: 8px;
+}
+.field-item.custom-select ion-icon[slot="start"] {
+  color: #007aff;
+  font-size: 18px;
 }
 
-/* Evita que el select “salte” el layout */
+/* El chevron a la derecha sin romper el layout */
+.field-item.custom-select .chevron {
+  opacity: .55;
+  font-size: 18px;
+}
+
+/* El select se estira al 100% y no desborda */
 ion-select.select-el {
-  min-width: 0;
+  flex: 1 1 auto;     /* ocupa el espacio restante */
+  width: 100%;        /* asegura ancho completo */
+  min-width: 0;       /* permite truncar si es necesario */
+  margin-left: 0;
+
+  &::part(text) {
+    color: #555;
+    font-size: 14px;
+  }
+
+  --placeholder-color: #9aa0a6;
 }
 
-/* Para listas MUY largas (Modal custom) el item también es cápsula */
-#select-modal-trigger.field-item {
-  cursor: pointer;
-}
+/* iOS vs Android: pequeñas diferencias de altura */
+:host-context(.ios) .field-item.custom-select { --min-height: 46px; }
+:host-context(.md)  .field-item.custom-select { --min-height: 50px; }
+
+/* Modal trigger con mismo look de cápsula */
+#select-modal-trigger.field-item { cursor: pointer; }
+
+/* Si el padre usa grid/cols, asegúrate de que el item pueda expandirse */
+:host, .fac-field, .field-item { max-width: 100%; }

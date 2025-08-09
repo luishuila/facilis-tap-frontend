@@ -1,6 +1,7 @@
 <div class="avatar-center">
   <!-- Contenedor del avatar -->
   <div class="avatar-wrap" [attr.aria-label]="alt" role="img">
+
     <!-- Skeleton mientras carga -->
     <ion-skeleton-text *ngIf="isLoading" class="skeleton"></ion-skeleton-text>
 
@@ -22,29 +23,30 @@
       <ion-avatar class="avatar-img">
         <img [src]="placeholder" [alt]="alt" />
       </ion-avatar>
-
-      <div *ngIf="showInitials" class="initials" aria-hidden="true">{{ showInitials }}</div>
+      <div *ngIf="showInitials" class="initials" aria-hidden="true">
+        {{ showInitials }}
+      </div>
     </ng-container>
 
-    <!-- Overlay cámara en modo edit -->
-    <label
+    <!-- Overlay cámara en modo edit (llama al servicio global) -->
+    <div
       *ngIf="effectiveMode === 'edit'"
       class="avatar-overlay"
-      for="avatar-upload"
       tabindex="0"
       [attr.aria-label]="'Cambiar foto de perfil'"
+      (click)="openGalleryFromAvatar()"
     >
       <ion-icon name="camera"></ion-icon>
-    </label>
+    </div>
 
+    <!-- Fallback web: input file oculto -->
     <input
+      #fileInput
       id="avatar-upload"
       type="file"
       accept="image/*"
-      capture="user"
       (change)="onFileSelected($event)"
       hidden
-      [disabled]="effectiveMode !== 'edit'"
     />
   </div>
 </div>

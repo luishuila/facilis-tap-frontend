@@ -1,19 +1,28 @@
-import { Injectable } from '@angular/core';
-import { AbstractControl, ControlContainer } from '@angular/forms';
+import { Inject, Injectable } from '@angular/core';
+import { ControlContainer, FormGroup } from '@angular/forms';
+import { ERROR_MESSAGES, ErrorMessagesMap } from '../validate/validation.tokens';
 
-@Injectable({
-  providedIn: 'root' // ✅ Asegura que Angular pueda inyectarlo
-})
+@Injectable({ providedIn: 'root' })
 export class ValidationService {
-  
-  constructor() {}
+  constructor(@Inject(ERROR_MESSAGES) private messages: ErrorMessagesMap) {}
 
+  // Verifica si hay errores en el campo y si fue tocado o modificado
+  hasError(container: ControlContainer, controlName: string): boolean {
+    const ctrl = (container.control as FormGroup)?.get(controlName);
+    if (!ctrl) return false;
+    return (ctrl.touched || ctrl.dirty) && !!ctrl.errors;
+  }
 
-  hasError(controlContainer: ControlContainer, formControlName: string): boolean {
-    if (!controlContainer || !formControlName) return false;
-
-    const control: AbstractControl | null = controlContainer.control?.get(formControlName) ?? null;
-    return control?.invalid && control?.touched || false;
+  // Obtiene el mensaje de error según el tipo de error en el control
+  getErrorMessage(container: ControlContainer, controlName: string): string {
+    const ctrl = (container.control as FormGroup)?.get(controlName);
+    if (!ctrl || !ctrl.errors) return '';
+    
+    const priority = ['required', 'minlength', 'maxlength', 'email', 'pattern', 'passwordMismatch'];
+    const keys = Object.keys(ctrl.errors);
+    const key = priority.find(p => keys.includes(p)) ?? keys[0];
+    
+    const resolver = this.messages[key];
+    return resolver ? resolver(ctrl.errors[key]) : 'Revisa este campo';
   }
 }
- 

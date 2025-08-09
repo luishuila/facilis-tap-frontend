@@ -1,0 +1,43 @@
+.profile-content {
+  --background: #f9f9f9;
+
+  .tab-segment,
+  .tab-subsegment {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+
+    ion-segment-button {
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      --color: #666;
+      --color-checked: #007aff;
+      background: transparent;
+      position: relative;
+    }
+
+    ion-segment-button.ion-activated::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 25%;
+      width: 50%;
+      height: 2px;
+      background-color: #007aff;
+      border-radius: 2px;
+    }
+  }
+
+  .tab-content {
+    padding: 1rem;
+  }
+
+  .disabled-segment {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}

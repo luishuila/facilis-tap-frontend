@@ -34,6 +34,7 @@ export class AdministratorMenuPage implements OnInit {
   validateUsers: boolean = false;
   propertyType:TypeItem<string>[]|[] = [];
   imgFile: File | any;
+  fileCova: File[] | any;
   userValidate = true;
   addressValidate = true;
   addProveder = false;
@@ -218,9 +219,9 @@ export class AdministratorMenuPage implements OnInit {
   onSegmentChanger(event:any,expr:number){
     console.log('event-onSegmentChanger->', event)
 
-    this.dataProvider = new ProviderCreate({ ...event ,userId:usersData().id })
-    this.imgFile = event.logoUrl;
-
+    this.dataProvider = new ProviderCreate({ ...event.data ,userId:usersData().id })
+    this.imgFile = event.avatarFile;
+    this.fileCova = event.fileItems;
     console.log('event-->', event)
     this.onProviderSaved( this.dataProvider)
     // switch (expr) {
@@ -264,17 +265,20 @@ export class AdministratorMenuPage implements OnInit {
     const data = new ProviderCreate({ ...provider ,userId:usersData().id })
     this.addProveder = true;
     data.toJson().logoUrl = null;
+    console.log('create-->')
     this.providerService.create(data).subscribe((response:ProviderDto) => {
+      console.log('create-->')
       localStorage.setItem('users', JSON.stringify(response.users[0] ?? {})); 
-      this.providerService.updateImage(this.imgFile, response.id).subscribe(data=>{
-        this.menuService.loadInitialMenu();
-        this.onSegment('addressProvider')
-        this.router.navigate([`navigation/services/${response.id}`]); 
+      this.providerService.updateImage(this.imgFile,this.fileCova, response.id).subscribe(data=>{
+        console.log('updateImage-->')
+        // this.menuService.loadInitialMenu();
+        // this.onSegment('addressProvider')
+        // this.router.navigate([`navigation/services/${response.id}`]); 
         this.addProveder = false;
       })
   
     },(erro)=>{console.log('erro',erro)})
-    this.addProveder = false;
+    // this.addProveder = false;
   }
 
   onSegment(event:string){

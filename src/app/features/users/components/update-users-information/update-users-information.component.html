@@ -1,59 +1,95 @@
 <div class="profile-content">
-
-  <!-- Encabezado compacto -->
+  <!-- Encabezado -->
   <div class="page-header">
     <h1>👤 Actualizar información</h1>
     <p>Actualiza los datos de tu perfil personal</p>
   </div>
 
-  <!-- Tarjeta/contendor con safe-area y padding nativo -->
-  <ion-card class="input-card">
-    <ion-card-content>
+  <form [formGroup]="userForm" (ngSubmit)="onSave()" class="form-grid">
+    <!-- Columna A -->
+    <div class="col">
+      <fac-input 
+        formControlName="name" 
+        label="Nombre" 
+        type="text" 
+        placeholder="John" 
+        icon="person">
+      </fac-input>
+      <fac-input 
+        formControlName="username" 
+        label="Usuario" 
+        type="text" 
+        placeholder="john_doe" 
+        icon="at">
+      </fac-input>
+      <fac-input 
+        formControlName="email" 
+        label="Correo electrónico" 
+        type="email" 
+        placeholder="correo@ejemplo.com" 
+        icon="mail">
+      </fac-input>
+      <fac-input 
+        formControlName="nickname" 
+        label="Apodo" 
+        type="text" 
+        placeholder="Johnny" 
+        icon="star">
+      </fac-input>
+    </div>
 
-      <form [formGroup]="userForm" (ngSubmit)="onSave()" class="form-grid">
+    <!-- Columna B -->
+    <div class="col">
+      <fac-input 
+        formControlName="lastname" 
+        label="Apellido" 
+        type="text" 
+        placeholder="Doe" 
+        icon="person">
+      </fac-input>
+      <fac-date 
+        formControlName="birth" 
+        label="Fecha de nacimiento" 
+        icon="calendar">
+      </fac-date>
+      <fac-input 
+        formControlName="nit" 
+        label="NIT" 
+        type="number" 
+        placeholder="1234567890" 
+        icon="barcode">
+      </fac-input>
+      <fac-input 
+        formControlName="phones" 
+        label="Teléfono" 
+        type="tel" 
+        placeholder="300 123 4567" 
+        icon="call">
+      </fac-input>
+    </div>
 
-        <!-- Columna A -->
-        <div class="col">
-          <fac-input formControlName="name"      label="Nombre"                 type="text"   placeholder="John"              icon="person"></fac-input>
-          <fac-input formControlName="username"  label="Usuario"                type="text"   placeholder="john_doe"          icon="at"></fac-input>
-          <fac-input formControlName="email"     label="Correo electrónico"     type="email"  placeholder="correo@ejemplo.com" icon="mail"></fac-input>
-          <fac-input formControlName="nickname"  label="Apodo"                  type="text"   placeholder="Johnny"            icon="star"></fac-input>
-        </div>
+    <!-- Full width -->
+    <div class="full">
+      <fac-radio 
+        label="Género" 
+        icon="male-female" 
+        [options]="genderOptions" 
+        formControlName="gender">
+      </fac-radio>
+    </div>
 
-        <!-- Columna B -->
-        <div class="col">
-          <fac-input formControlName="lastname"  label="Apellido"               type="text"   placeholder="Doe"               icon="person"></fac-input>
-          <fac-date  formControlName="birth"     label="Fecha de nacimiento"    icon="calendar"></fac-date>
-          <fac-input formControlName="nit"       label="NIT"                    type="number" placeholder="1234567890"        icon="barcode"></fac-input>
-          <fac-input formControlName="phones"    label="Teléfono"               type="tel"    placeholder="300 123 4567"      icon="call"></fac-input>
-        </div>
+    <!-- Espaciador -->
+    <div class="bottom-spacer" aria-hidden="true">
+      <fac-btn
+        label="Guardar cambios"
+        color="primary"
+        customClass="primary-btn"
+        expand="block"
+        type="submit"
+        [disabled]="isDisabled"
+        (clicked)="onSave()">
+      </fac-btn>
+    </div>
+  </form>
 
-        <!-- Full width -->
-        <div class="full">
-          <fac-radio label="Género" icon="male-female"
-                     [options]="genderOptions"
-                     formControlName="gender"></fac-radio>
-        </div>
-
-        <!-- Espaciador para que no tape la barra -->
-        <div class="bottom-spacer" aria-hidden="true">
-          <fac-btn
-          label="Guardar cambios"
-          color="primary"
-          customClass="primary-btn"
-          expand="block"
-          type="submit"
-          [disabled]="isDisabled"
-          (clicked)="onSave()">
-        </fac-btn>
-        </div>
-      </form>
-
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Barra de acción fija (estilo nativo) -->
-  <div class="sticky-actions">
-
-  </div>
 </div>

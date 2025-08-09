@@ -1,36 +1,52 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <!-- Toolbar principal -->
+  <ion-toolbar class="toolbar-main">
     <ion-title>Gestión de Proveedor</ion-title>
+  </ion-toolbar>
+
+  <!-- iOS: título grande al hacer scroll -->
+  <!-- <ion-toolbar collapse="condense" class="toolbar-condense">
+    <ion-title size="large">Gestión de Proveedor</ion-title>
+  </ion-toolbar> -->
+
+  <!-- Segment principal bajo el header -->
+  <ion-toolbar class="toolbar-segment">
+    <ion-segment [(ngModel)]="selectedSegment" class="tab-segment">
+      <ion-segment-button value="first" *ngIf="userValidate || addressValidate">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Datos</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="register" [class.disabled-segment]="userValidate || addressValidate">
+        <ion-icon name="briefcase-outline"></ion-icon>
+        <ion-label>Proveedor</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="addressProvider" [class.disabled-segment]="userValidate || addressValidate">
+        <ion-icon name="navigate-outline"></ion-icon>
+        <ion-label>Dirección</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <!-- Sub-segment solo cuando estás en "first" -->
+  <ion-toolbar *ngIf="selectedSegment === 'first'" class="toolbar-subsegment">
+    <ion-segment [(ngModel)]="subSegment" class="tab-subsegment">
+      <ion-segment-button value="usersId" *ngIf="userValidate">
+        <ion-label>Usuario</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="addressId" *ngIf="addressValidate" [class.disabled-segment]="userValidate">
+        <ion-label>Dirección</ion-label>
+      </ion-segment-button>
+    </ion-segment>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="profile-content" [fullscreen]="true">
-  <!-- SEGMENTO PRINCIPAL -->
-  <ion-segment [(ngModel)]="selectedSegment" mode="md" class="tab-segment">
-    <ion-segment-button value="first" *ngIf="userValidate || addressValidate">
-      <ion-label>Datos personales</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="register" [class.disabled-segment]="userValidate || addressValidate">
-      <ion-label>Registrar proveedor</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="addressProvider" [class.disabled-segment]="userValidate || addressValidate">
-      <ion-label>Dirección proveedor</ion-label>
-    </ion-segment-button>
-  </ion-segment>
-
-  <!-- CONTENIDO SEGMENTO -->
   <div class="tab-content">
-    <!-- Actualización de datos personales -->
+    <!-- Datos personales -->
     <ng-container *ngIf="selectedSegment === 'first'">
-      <ion-segment [(ngModel)]="subSegment" mode="md" class="tab-subsegment">
-        <ion-segment-button value="usersId" *ngIf="userValidate">
-          <ion-label>Usuario</ion-label>
-        </ion-segment-button>
-        <ion-segment-button value="addressId" *ngIf="addressValidate" [class.disabled-segment]="userValidate">
-          <ion-label>Dirección</ion-label>
-        </ion-segment-button>
-      </ion-segment>
-
       <div *ngIf="subSegment === 'usersId' && userValidate">
         <app-update-users-information
           *ngIf="validateUsers"

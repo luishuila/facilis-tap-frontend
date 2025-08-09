@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ValidationUsersService } from 'src/app/core/services/validate/validation-users-service';
+import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 @Component({
   selector: 'app-update-users-credentials',
@@ -20,16 +21,16 @@ export class UpdateUsersCredentialsComponent implements OnInit {
       username: ['', [Validators.required, Validators.minLength(4)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordsMatchValidator });
+    }, { validators: matchPasswords('password', 'confirmPassword') });
   }
 
   ngOnInit() {}
 
-  passwordsMatchValidator(group: FormGroup) {
-    const password = group.get('password')?.value;
-    const confirmPassword = group.get('confirmPassword')?.value;
-    return password === confirmPassword ? null : { mismatch: true };
-  }
+  // passwordsMatchValidator(group: FormGroup) {
+  //   const password = group.get('password')?.value;
+  //   const confirmPassword = group.get('confirmPassword')?.value;
+  //   return password === confirmPassword ? null : { mismatch: true };
+  // }
 
   updateCredentials() {
     if (this.credentialsForm.valid) {
@@ -40,4 +41,18 @@ export class UpdateUsersCredentialsComponent implements OnInit {
       this.errorMessage = 'Por favor, corrige los errores en el formulario.';
     }
   }
+}
+export function matchPasswords(passwordField: string, confirmPasswordField: string): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    const password = formGroup.get(passwordField)?.value;
+    const confirmPassword = formGroup.get(confirmPasswordField)?.value;
+
+    if (password !== confirmPassword) {
+      formGroup.get(confirmPasswordField)?.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    } else {
+      formGroup.get(confirmPasswordField)?.setErrors(null);
+      return null;
+    }
+  };
 }

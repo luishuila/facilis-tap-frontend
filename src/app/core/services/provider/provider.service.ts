@@ -2,10 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
-import { map, Observable } from 'rxjs';
+import { from, map, mergeMap, Observable } from 'rxjs';
 import { ApiResponse } from '../../models/api/apiResponse';
 import { ProviderCreateDto, ProviderDto } from '../../models/provider/ProviderI';
 import { UserDto, UserUpdateI } from '../../models/User/User';
+import { buildFormData } from '../util/form-data-builder.util';
 
 @Injectable({
   providedIn: 'root'
@@ -40,11 +41,10 @@ export class ProviderService {
       map((response: ApiResponse<UserDto>) => response.data)
     );
   }
-  updateImage( imgFile: File, id?: number): Observable<any> {
-    const formData = new FormData();
-    formData.append('img', imgFile, imgFile.name); 
-    return this.http.patch<any>(`${this.apiUrl}providers/img/${id}`, formData);
-
+  updateImage(avanta: any, cova: any, id?: number): Observable<any> {
+    return from(buildFormData({ avanta, cova })).pipe( // 👈 pásalo como objeto
+      mergeMap(fd => this.http.patch<any>(`${this.apiUrl}providers/img/${id}`, fd))
+    );
   }
   findOneAll() : Observable<ProviderDto[]> {
     return this.http.get<ApiResponse<ProviderDto[]>>(`${this.apiUrl}providers/one-all`).pipe(

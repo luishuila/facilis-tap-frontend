@@ -6,134 +6,109 @@
     <p>Ingrese la información del proveedor</p>
   </div>
 
-  <ion-card class="input-card">
-    <ion-card-content>
+  <!-- Avatar -->
+  <div class="avatar-center">
+    <fac-avatar
+      [avatarUrl]="avatarPreview || 'https://picsum.photos/600/300?random=18'"
+      mode="edit"
+      (imageSelected)="onImageFileSelected($event)">
+    </fac-avatar>
+  </div>
 
-      <div class="avatar-center">
-        <fac-avatar
-          [avatarUrl]="avatarPreview || 'https://picsum.photos/600/300?random=18'"
-          mode="edit"
-          (imageSelected)="onImageFileSelected($event)">
-        </fac-avatar>
+  <!-- Formulario en grid -->
+  <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="form-grid">
+
+    <div class="full" *ngIf="independent">
+      <fac-radio
+        label="Presta servicios"
+        icon="construct-outline"
+        [options]="contributor"
+        formControlName="independent">
+      </fac-radio>
+    </div>
+
+    <div class="col">
+      <fac-input formControlName="name" label="Nombre" type="text"
+        placeholder="Ingrese el nombre del proveedor" icon="person"></fac-input>
+    </div>
+
+    <div class="col">
+      <fac-input formControlName="email" label="Correo electrónico" type="email"
+        placeholder="ejemplo@correo.com" icon="mail"></fac-input>
+    </div>
+
+    <div class="col">
+      <fac-input formControlName="phone" label="Teléfono" type="tel"
+        placeholder="+57 321 1234567" icon="call"></fac-input>
+    </div>
+
+    <div class="col">
+      <fac-input formControlName="website" label="Sitio web" type="url"
+        placeholder="https://example.com" icon="globe"></fac-input>
+    </div>
+
+    <div class="full">
+      <fac-input formControlName="img" label="Imagen URL" type="url"
+        placeholder="https://example.com/logo.png" icon="image"></fac-input>
+    </div>
+
+    <ng-container *ngIf="!providerForm.get('independent')?.value">
+      <div class="col">
+        <fac-input formControlName="nit" label="NIT" type="number"
+          placeholder="Ingrese el NIT" icon="business"></fac-input>
       </div>
 
-      <!-- 👇 Cambiamos a GRID -->
-      <form [formGroup]="providerForm" (ngSubmit)="onSubmit()" class="form-grid">
+      <div class="col">
+        <fac-input formControlName="invima" label="Invima"
+          placeholder="Ingrese el código Invima" icon="clipboard"></fac-input>
+      </div>
 
-        <!-- Radio independiente (fila completa) -->
-        <div class="full" *ngIf="independent">
-          <fac-radio
-            label="Presta servicios"
-            icon="construct-outline"
-            [options]="contributor"
-            formControlName="independent">
-          </fac-radio>
-        </div>
+      <div class="full">
+        <fac-input formControlName="companyIdentifier" label="Identificador de empresa"
+          placeholder="Ingrese el identificador" icon="pricetag"></fac-input>
+      </div>
+    </ng-container>
 
-        <!-- Datos básicos -->
-        <div class="col">
-          <fac-input formControlName="name" label="Nombre" type="text"
-            placeholder="Ingrese el nombre del proveedor" icon="person"></fac-input>
-        </div>
+    <div class="full">
+      <fac-textarea formControlName="description" label="Descripción"
+        placeholder="Ingrese una descripción" icon="document-text"></fac-textarea>
+    </div>
 
-        <div class="col">
-          <fac-input formControlName="email" label="Correo electrónico" type="email"
-            placeholder="ejemplo@correo.com" icon="mail"></fac-input>
-        </div>
+    <div class="full">
+      <fac-select
+        label="Servicios"
+        title="Seleccione servicios"
+        [items]="selectModal"
+        [labelField]="'name'"
+        [valueField]="'id'"
+        [selectedItems]="providerForm.get('categories')?.value"
+        [selectModal]="true"
+        (selectionChange)="onServicesChanged($event)"
+        formControlName="categories">
+      </fac-select>
+    </div>
 
-        <div class="col">
-          <fac-input formControlName="phone" label="Teléfono" type="tel"
-            placeholder="+57 321 1234567" icon="call"></fac-input>
-        </div>
+    <div class="full">
+      <fac-file
+        mode="image"
+        [multiple]="false"
+        [maxSizeMB]="200"
+        [maxFiles]="1"
+        (itemsChange)="onImg($event)">
+      </fac-file>
+    </div>
 
-        <div class="col">
-          <fac-input formControlName="website" label="Sitio web" type="url"
-            placeholder="https://example.com" icon="globe"></fac-input>
-        </div>
+    <div class="full bottom-spacer" aria-hidden="true">
+      <fac-btn
+        label="Registrar"
+        color="primary"
+        customClass="primary-btn"
+        expand="block"
+        type="submit"
+        icon="save-outline">
+      </fac-btn>
+    </div>
 
-        <!-- Imagen / logo (URL) -->
-        <div class="full">
-          <fac-input formControlName="img" label="Imagen URL" type="url"
-            placeholder="https://example.com/logo.png" icon="image"></fac-input>
-        </div>
-
-        <!-- Campos empresa (solo si NO es independiente) -->
-        <ng-container *ngIf="!providerForm.get('independent')?.value">
-          <div class="col">
-            <fac-input formControlName="nit" label="NIT" type="number"
-              placeholder="Ingrese el NIT" icon="business"></fac-input>
-          </div>
-
-          <div class="col">
-            <fac-input formControlName="invima" label="Invima"
-              placeholder="Ingrese el código Invima" icon="clipboard"></fac-input>
-          </div>
-
-          <div class="full">
-            <fac-input formControlName="companyIdentifier" label="Identificador de empresa"
-              placeholder="Ingrese el identificador" icon="pricetag"></fac-input>
-          </div>
-        </ng-container>
-
-        <!-- Descripción (fila completa) -->
-        <div class="full">
-          <fac-textarea formControlName="description" label="Descripción"
-            placeholder="Ingrese una descripción" icon="document-text"></fac-textarea>
-        </div>
-
-        <!-- Servicios (modal multi) (fila completa) -->
-        <div class="full">
-          <fac-select
-            label="Servicios"
-            title="Seleccione servicios"
-            [items]="selectModal"
-            [labelField]="'name'"
-            [valueField]="'id'"
-            [selectedItems]="providerForm.get('categories')?.value"
-            [selectModal]="true"
-            (selectionChange)="onServicesChanged($event)"
-            formControlName="categories">
-          </fac-select>
-        </div>
-
-        <!-- Subida de Covan (fila completa) -->
-        <div class="full upload-covan">
-          <label class="upload-label">
-            📄 Subir Covan (PDF/JPG/PNG)
-            <input type="file" accept=".pdf,image/*" (change)="onCovanSelected($event)" hidden>
-          </label>
-
-          <div *ngIf="covanPreview" class="covan-preview">
-            <ng-container *ngIf="isImage(covanPreview); else pdfIcon">
-              <img [src]="covanPreview" alt="Covan" />
-            </ng-container>
-            <ng-template #pdfIcon>
-              <ion-icon name="document-text-outline"></ion-icon>
-              <span>Archivo PDF</span>
-            </ng-template>
-          </div>
-        </div>
-
-        <!-- separador para que no tape el sticky -->
-        <div class="full bottom-spacer" aria-hidden="true">
-          <fac-btn
-          label="Registrar"
-          color="primary"
-          customClass="primary-btn"
-          expand="block"
-          type="button"
-          icon="save-outline"
-          (clicked)="onSubmit()">
-        </fac-btn>
-        </div>
-
-      </form>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Botón fijo inferior -->
-  <div class="sticky-actions">
- 
-  </div>
+  </form>
 
 </div>

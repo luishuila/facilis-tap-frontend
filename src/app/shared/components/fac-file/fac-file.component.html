@@ -1,0 +1,56 @@
+<fieldset class="fac-field" [class.has-error]="!!errorMsg" [class.disabled]="disabled">
+    <legend>{{ computedLabel }}</legend>
+  
+    <div class="uploader" (click)="triggerFile(fileInput)">
+      <ion-icon [name]="mode === 'video' ? 'videocam-outline' : 'image-outline'" slot="start"></ion-icon>
+      <div class="uploader-text">
+        <div class="title">Seleccionar archivos</div>
+        <div class="hint">{{ hintText }}</div>
+      </div>
+      <ion-spinner *ngIf="isLoading" name="lines-small"></ion-spinner>
+    </div>
+  
+    <input
+      #fileInput
+      type="file"
+      [attr.accept]="acceptAttr"
+      [attr.multiple]="multiple ? '' : null"
+      (change)="onFileSelected($event)"
+      hidden
+    />
+  
+    <div class="hint-row">
+      <ion-note class="helper" *ngIf="!errorMsg && helperText">{{ helperText }}</ion-note>
+      <ion-note class="error" *ngIf="errorMsg">{{ errorMsg }}</ion-note>
+    </div>
+  
+    <div class="gallery-card" *ngIf="items?.length; else emptyState">
+      <div class="grid">
+        <div class="cell" *ngFor="let it of items; let i = index">
+          <button class="remove" type="button" (click)="removeAt(i)">
+            <ion-icon name="close"></ion-icon>
+          </button>
+  
+          <!-- Imagen -->
+          <img *ngIf="it.type === 'image'" class="thumb" [src]="it.src" [alt]="it.name" loading="lazy"/>
+  
+          <!-- Video -->
+          <div *ngIf="it.type === 'video'" class="video-thumb">
+            <video [src]="it.src" preload="metadata" controls playsinline></video>
+            <div class="meta">
+              <ion-icon name="videocam-outline"></ion-icon>
+              <span>{{ it.durationSec ? (it.durationSec | number:'1.0-0') + 's' : 'Video' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #emptyState>
+      <div class="empty">
+        <ion-icon [name]="mode === 'video' ? 'videocam-outline' : 'images-outline'"></ion-icon>
+        <span>Sin {{ mode === 'video' ? 'videos' : (mode === 'image' ? 'imágenes' : 'archivos') }}</span>
+      </div>
+    </ng-template>
+  </fieldset>
+  

@@ -10,4 +10,4 @@ export class Address  extends BaseAddress implements AddressUdpatedDtoI {
       Object.assign(this, data);
     }
   }
-  
+

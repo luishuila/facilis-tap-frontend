@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
+import { ServicesService } from 'src/app/core/services/servicesType/services.service';
 
 @Component({
   selector: 'app-services-list',
@@ -11,7 +11,7 @@ import { ServicesTypeService } from 'src/app/core/services/servicesType/services
 export class ServicesListComponent implements OnInit {
   servicesList:any[]=[];
   @Input() isValidates:boolean = true;
-  constructor(private servicesTypeService: ServicesTypeService, private router: Router
+  constructor(private servicesTypeService: ServicesService, private router: Router
   
   ) {
 

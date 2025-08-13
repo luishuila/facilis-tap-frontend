@@ -119,7 +119,7 @@ export class EmployeeIndependentPage implements OnInit {
       //   ...event.address,
       //   cityStates: event.address.cityStates?.id ?? null
       // });
-      this.addressFormComponent.evento(); 
+      // this.addressFormComponent.evento(); 
     }
   }
   ngOnInit() {

@@ -8,6 +8,8 @@
   <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="form-grid">
     <!-- Columna A -->
     <div class="col">
+
+      <!-- País -->
       <fac-select
         formControlName="countryCode"
         label="País"
@@ -16,9 +18,10 @@
         [valueField]="'countryCode'"
         [labelField]="'countryName'"
         [items]="countries"
-        (ionChange)="onCountrySelected($event, null)">
+        [disabled]="isDisabled">
       </fac-select>
 
+      <!-- Departamento/Estado -->
       <fac-select
         formControlName="stateCode"
         label="Departamento/Estado"
@@ -27,9 +30,10 @@
         [valueField]="'stateCode'"
         [labelField]="'stateName'"
         [items]="departments"
-        (ionChange)="onDepartmentsSelected($event, null)">
+        [disabled]="isDisabled || !addressForm?.value?.countryCode">
       </fac-select>
 
+      <!-- Ciudad -->
       <fac-select
         formControlName="cityStates"
         label="Ciudad"
@@ -37,15 +41,18 @@
         icon="location"
         [valueField]="'id'"
         [labelField]="'cityName'"
-        [items]="cities">
+        [items]="cities"
+        [disabled]="isDisabled || !addressForm?.value?.stateCode">
       </fac-select>
 
+      <!-- Tipo de propiedad -->
       <fac-select
         formControlName="propertyType"
         label="Tipo de propiedad"
         placeholder="Selecciona una opción"
         icon="home"
-        [items]="propertyType">
+        [items]="propertyType"
+        [disabled]="isDisabled">
       </fac-select>
     </div>
 
@@ -85,7 +92,7 @@
         customClass="primary-btn"
         expand="block"
         type="submit"
-        [disabled]="isDisabled"
+        [disabled]="isDisabled || addressForm.invalid"
         icon="save-outline">
       </fac-btn>
     </div>

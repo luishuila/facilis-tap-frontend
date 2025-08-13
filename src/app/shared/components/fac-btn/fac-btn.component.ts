@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 
 type BtnVariant = 'solid' | 'outline' | 'clear';
 type BtnSize = 'default' | 'small' | 'large';
@@ -7,16 +7,17 @@ type BtnSize = 'default' | 'small' | 'large';
   selector: 'fac-btn',
   templateUrl: './fac-btn.component.html',
   styleUrls: ['./fac-btn.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: false,
 })
 export class FacBtnComponent  {
   @Input() label: string = 'Button';
-  @Input() icon: string = '';               // icono al inicio
-  @Input() iconEnd: string = '';            // icono al final
-  @Input() color: string = 'primary';
-  @Input() variant: BtnVariant = 'solid';   // solid | outline | clear
+  @Input() icon: string = '';
+  @Input() iconEnd: string = '';
+  @Input() color: string = 'primary';                 // ← hereda el primary de variables
+  @Input() variant: BtnVariant = 'solid';
   @Input() expand: 'full' | 'block' | 'default' = 'block';
-  @Input() size: BtnSize = 'default';       // default | small | large
+  @Input() size: BtnSize = 'default';
   @Input() customClass: string = '';
   @Input() disabled: boolean = false;
   @Input() loading: boolean = false;
@@ -24,13 +25,8 @@ export class FacBtnComponent  {
 
   @Output() clicked = new EventEmitter<void>();
 
-  // map variante -> fill de Ionic
-  get fill(): 'solid' | 'outline' | 'clear' {
-    return this.variant;
-  }
+  get fill(): 'solid' | 'outline' | 'clear' { return this.variant; }
+  get expandValue(): 'block' | 'full' | undefined { return this.expand === 'default' ? undefined : this.expand; }
 
-  onClick() {
-    if (this.disabled || this.loading) return;
-    this.clicked.emit();
-  }
+  onClick() { if (!this.disabled && !this.loading) this.clicked.emit(); }
 }

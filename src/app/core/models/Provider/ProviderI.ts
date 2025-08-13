@@ -42,11 +42,11 @@ export class ProviderDto {
   independent?: boolean;
   
   addresses?: any;
-  openingHours?: OpeningHourDto[];
-  services?: ServiceDto[];
-  appointments?: AppointmentDto[];
-  categories?: CategoryDto[];
-  employees?: EmployeeDto[];
+  openingHours?: any;
+  services?: any[];
+  appointments?: any[];
+  categories?: any[];
+  employees?: any[];
   users?: any;
 }
 

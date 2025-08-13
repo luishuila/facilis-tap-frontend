@@ -63,9 +63,12 @@ const routes: Routes = [
       //   path: 'services',
       //   loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
       // },
-
+     {
+        path: 'services/:providerId',
+        loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
+      },
       {
-        path: 'services/:id',
+        path: 'services/:providerId/edit/:serviceId',
         loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
       },
       {

@@ -5,19 +5,30 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
-
   <form [formGroup]="servicesForm" (ngSubmit)="onSubmit()">
-    <ion-list lines="full" class="service-list" formArrayName="data">
+    <!-- providerId oculto (se obtiene de la ruta) -->
+    <input type="hidden" formControlName="providerId" />
 
+    <ion-list lines="full" class="service-list" formArrayName="services">
       <ion-accordion-group expand="inset">
-        <ion-accordion *ngFor="let service of services.controls; let i = index" [value]="i" [formGroupName]="i">
+
+        <ion-accordion
+          *ngFor="let service of services.controls; let i = index; trackBy: trackByIndex"
+          [value]="i"
+          [formGroupName]="i">
+
           <ion-item slot="header" detail="true">
             <ion-label>
               <h2>Servicio {{ i + 1 }}</h2>
               <p>{{ (services.at(i).value?.name || 'Sin nombre') | slice:0:40 }}</p>
             </ion-label>
             <ion-buttons slot="end">
-              <ion-button fill="clear" color="danger" (click)="removeServiceForm(i)" type="button">
+              <ion-button
+                fill="clear"
+                color="danger"
+                (click)="removeService(i)"
+                type="button"
+                [disabled]="isEditMode && services.length === 1">
                 Eliminar
               </ion-button>
             </ion-buttons>
@@ -26,52 +37,44 @@
           <div class="accordion-content" slot="content">
             <ion-list class="group-fields" lines="none">
 
-              <ion-item *ngIf="isValidates">
-                <ion-label position="stacked">Proveedor</ion-label>
-                <fac-select
-                  formControlName="providers"
-                  placeholder="Seleccione proveedor"
-                  [valueField]="'id'"
-                  [labelField]="'name'"
-                  [items]="providerList"
-                  (ionChange)="onProvidersSelected($event)">
-                </fac-select>
-              </ion-item>
-
+              <!-- Categoría -->
               <ion-item>
                 <ion-label position="stacked">Categoría</ion-label>
                 <fac-select
-                  formControlName="category"
+                  formControlName="categoryId"
                   placeholder="Seleccione categoría"
                   [valueField]="'id'"
                   [labelField]="'name'"
                   [items]="categoryAll"
-                  (ionChange)="onSubCategory($event)">
+                  (ionChange)="onCategoryChange(i, $event)">
                 </fac-select>
               </ion-item>
 
+              <!-- Subcategoría (filtrada para no repetir) -->
               <ion-item>
                 <ion-label position="stacked">Subcategoría</ion-label>
                 <fac-select
-                  formControlName="subcategory"
+                  formControlName="subcategoryId"
                   placeholder="Seleccione subcategoría"
                   [valueField]="'id'"
                   [labelField]="'name'"
                   [items]="getAvailableSubcategories(i)"
-                  (ionChange)="onSelectItem($event,i)">
+                  (ionChange)="onSubcategoryChange(i, $event)">
                 </fac-select>
               </ion-item>
 
+              <!-- Nombre -->
               <ion-item>
                 <ion-label position="stacked">Nombre</ion-label>
                 <fac-input
                   formControlName="name"
                   type="text"
                   placeholder="Ingrese el nombre del servicio"
-                  icon="person">
+                  icon="pricetag">
                 </fac-input>
               </ion-item>
 
+              <!-- Descripción -->
               <ion-item>
                 <ion-label position="stacked">Descripción</ion-label>
                 <fac-textarea
@@ -84,39 +87,51 @@
               <div class="two-cols">
                 <ion-item>
                   <ion-label position="stacked">Tiempo (min)</ion-label>
-                  <fac-input
-                    formControlName="serviceTime"
-                    type="number"
-                    placeholder="Ej: 45">
-                  </fac-input>
+                  <fac-input formControlName="serviceTime" type="number" placeholder="Ej: 45"></fac-input>
                 </ion-item>
 
                 <ion-item>
                   <ion-label position="stacked">Precio</ion-label>
                   <fac-input
                     formControlName="price"
-                    type="number"
-                    placeholder="Ej: 50000">
+                    type="text"
+                    placeholder="Ej: 1.000"
+                    (input)="onPriceInput(i, $event)">
                   </fac-input>
+                </ion-item>
+              </div>
+
+              <!-- Empleados -->
+              <ion-item lines="none">
+                <ion-label>Empleados</ion-label>
+                <ion-button fill="outline" size="small" type="button" (click)="addEmployee(i)">+ Agregar</ion-button>
+              </ion-item>
+              <div formArrayName="employees">
+                <ion-item *ngFor="let _c of employeesFAAt(i).controls; let j = index; trackBy: trackByIndex">
+                  <ion-input [formControlName]="j" placeholder="email o id"></ion-input>
+                  <ion-button color="danger" fill="clear" type="button" (click)="removeEmployee(i, j)">Eliminar</ion-button>
                 </ion-item>
               </div>
 
             </ion-list>
           </div>
         </ion-accordion>
-      </ion-accordion-group>
 
+      </ion-accordion-group>
     </ion-list>
 
     <div class="stack-actions">
-      <ion-button expand="block" color="primary" type="button" (click)="addServiceForm()">
+      <ion-button expand="block" color="primary" type="button" (click)="addService()" [disabled]="isEditMode">
         + Agregar servicio
       </ion-button>
+      <!-- [disabled]="servicesForm.invalid || submitting" -->
+      <ion-button expand="block" color="primary" type="submit" >
+        {{ submitting ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Guardar todo') }}
+      </ion-button>
 
-      <ion-button expand="block" color="primary" type="submit" [disabled]="servicesForm.invalid">
-        Guardar
+      <ion-button expand="block" fill="clear" type="button" (click)="cancel()">
+        Cancelar
       </ion-button>
     </div>
   </form>
-
 </ion-content>

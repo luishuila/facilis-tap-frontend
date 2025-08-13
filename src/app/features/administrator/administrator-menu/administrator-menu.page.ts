@@ -1,4 +1,4 @@
-import { Component, OnInit , ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { genderObject } from 'src/app/core/constant/constants';
 import { usersData } from 'src/app/core/generate/idData';
@@ -8,7 +8,7 @@ import { AddressService } from 'src/app/core/services/address/address.service';
 import { UsersService } from 'src/app/core/services/user/users.service';
 import { Address } from 'src/app/core/models/address/Address';
 import { ProviderCreateDto, ProviderDto } from 'src/app/core/models/provider/ProviderI';
-import { IonSegment } from '@ionic/angular';
+import { IonSegment, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 import { MenuService } from 'src/app/core/services/util/menu.service';
 import { ProviderCreate } from 'src/app/core/models/provider/Provider';
@@ -16,47 +16,96 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GenericServiceService } from 'src/app/core/services/genericService/generic-service.service';
 import { TypeItem } from 'src/app/core/models/util/util';
 import { roleEnum } from 'src/app/core/constant/enum';
+import { Subscription, take } from 'rxjs';
+import { AddressCreate } from 'src/app/core/models/address/create-address.model';
+
 @Component({
   selector: 'app-administrator-menu',
   templateUrl: './administrator-menu.page.html',
   styleUrls: ['./administrator-menu.page.scss'],
   standalone: false
 })
-export class AdministratorMenuPage implements OnInit {
-  subSegment: string = 'usersId';
-  
-  addressForm!: FormGroup;
+export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLeave {
+  // Tabs
+  selectedSegment: 'first' | 'register' | 'addressProvider' = 'first';
+  subSegment: 'usersId' | 'addressId' = 'usersId';
+
+  // Forms
   userForm!: FormGroup;
+  addressForm!: FormGroup;
   providerForm!: FormGroup;
   addressProviderForm!: FormGroup;
-  validate: boolean = false;
+
+  // Render / gating
+  isUserReady = false;
+  isAddressReady = false;
+  isUserValid = false;
+  isUserAddressValid = false;
+  canOpenProvider = false;
+
+  // Data
   addressId: number | null = 0;
-  validateUsers: boolean = false;
-  propertyType:TypeItem<string>[]|[] = [];
-  imgFile: File | any;
-  fileCova: File[] | any;
-  userValidate = true;
-  addressValidate = true;
-  addProveder = false;
-  selectedSegment: string = 'register';
+  propertyType: TypeItem<string>[] | [] = [];
   genderOptions = genderObject;
   user!: UserDto;
+
+  // Proveedor
+  dataProvider: ProviderCreate = new ProviderCreate();
+  imgFile: File | null = null;
+  fileCova: File[] | null = null;
+  providerIdCreated?: number;
+  addProveder = false;
+
+  // Otros
   @ViewChild(IonSegment, { static: false }) segment!: IonSegment;
-   independent:boolean = true;;
-  constructor(private fb: FormBuilder, private userService: UsersService,
+  independent: boolean = true;
+  private isLoading = false;
+  private sub = new Subscription();
+
+  constructor(
+    private fb: FormBuilder,
+    private userService: UsersService,
     private addressService: AddressService,
     private providerService: ProviderService,
     private menuService: MenuService,
-    private _activatedRoute:ActivatedRoute,
-     private router: Router,
-     private genericServiceService: GenericServiceService
+    private route: ActivatedRoute,
+    private router: Router,
+    private genericService: GenericServiceService
   ) {
     this.independent = !usersData().validateRoles(roleEnum.INDEPENDENT);
-    this.genericServiceService.findAllPropertyType().subscribe(data => this.propertyType = data) 
-   }
+  }
 
+  // Construye formularios UNA vez
   ngOnInit() {
-    this.loadUser()
+    this.buildForms();
+  }
+
+  // 👉 Se dispara CADA VEZ que entras a la página
+  async ionViewWillEnter() {
+    await this.reloadAll();
+  }
+
+  // Limpia subs/flags si sales
+  ionViewWillLeave() {
+    this.sub.unsubscribe();
+    this.sub = new Subscription();
+    this.isLoading = false;
+  }
+
+  private buildForms() {
+    this.userForm = this.fb.group({
+      id: [{ value: '', disabled: true }],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      lastname: ['', [Validators.required, Validators.minLength(2)]],
+      username: ['', [Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email]],
+      nickname: ['', [Validators.minLength(2)]],
+      gender: ['', [Validators.required]],
+      birth: ['', [Validators.required]],
+      phones: ['', [Validators.required, Validators.minLength(5), Validators.pattern('^[0-9]+$')]],
+      nit: [null, [Validators.required, Validators.minLength(5), Validators.pattern('^[0-9]+$')]],
+    });
+
     this.addressForm = this.fb.group({
       countryCode: [''],
       stateCode: [''],
@@ -71,22 +120,9 @@ export class AdministratorMenuPage implements OnInit {
       propertyType: [''],
     });
 
-    this.userForm = this.fb.group({
-      id: [{ value: '', disabled: true }],
-      name: ['', [Validators.required, Validators.minLength(2)]],
-      lastname: ['', [Validators.required, Validators.minLength(2)]],
-      username: ['', [Validators.minLength(4)]],
-      email: ['', [Validators.required, Validators.email]],
-      nickname: ['', [Validators.minLength(2)]],
-      gender: ['', [Validators.required]],
-      birth: ['', [Validators.required]],
-      phones: ['', [Validators.required, Validators.minLength(5), Validators.pattern('^[0-9]+$')]],
-      nit: [null, [Validators.required, Validators.minLength(5), Validators.pattern('^[0-9]+$')]]
-    });
-
     this.providerForm = this.fb.group({
-      name: [''],
-      email: [''],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      email: ['', [Validators.email]],
       phone: [''],
       img: [''],
       website: [''],
@@ -95,8 +131,8 @@ export class AdministratorMenuPage implements OnInit {
       companyIdentifier: [''],
       logoUrl: [''],
       description: [''],
-      categories:[[]],
-      independent:[!usersData().validateRoles(roleEnum.INDEPENDENT)]
+      categories: [[]],
+      independent: [!usersData().validateRoles(roleEnum.INDEPENDENT)],
     });
 
     this.addressProviderForm = this.fb.group({
@@ -111,183 +147,202 @@ export class AdministratorMenuPage implements OnInit {
       description: [''],
       zipcode: [''],
       propertyType: [''],
-      
-
-    }); 
- 
- 
-    if (this._activatedRoute.snapshot.paramMap.get('id')) {
-      console.log(this._activatedRoute.snapshot.paramMap.get('id'))
-    }
-    this.selectedSegment = this.userValidate || this.addressValidate ? 'first' : 'register';
-
-    this.subSegment = 'usersId';
-    console.log('this.userValidate-->', this.userValidate)
-    console.log('this.addressValidate-->', this.addressValidate)
-    if (this.userValidate && this.addressValidate) {
-      this.selectedSegment = 'register';
-    }
-  }
-
-  segmentChanged(event: any) {
-    this.selectedSegment = event.detail.value;
-  }
-  
-  loadUser() {
-    this.userService.findOne(usersData().id).subscribe((data: UserDto) => {
-      this.validate = true;
-
-      if (data) {
-        this.userForm.patchValue({
-          ...data,
-          birth: data.birth ? new Date(data.birth).toISOString().split('T')[0] : ''
-        });
-
-        const address = data.addresses?.[0] ?? {} as Partial<AddressDtoI>;
-        this.addressId = data.addresses?.[0].id || 0;
-        this.addressForm.patchValue({
-          ...address,
-          cityStates: address.cityStates?.id
-        });
-
-
-        this.userValidate = this.userForm.invalid
-        this.addressValidate = this.addressForm.invalid
-        this.validateUsers = true;
-
-        if (this.userForm.invalid) {
-          Object.values(this.userForm.controls).forEach(control => control.markAsTouched());
-          return;
-        }
-        if (this.addressForm.invalid) {
-          Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
-          return;
-        }
-      }
     });
-
-
   }
 
-  onUserSaved(userData?: UserUpdateI) {
+  // 🔁 Recarga TODO al entrar
+  private async reloadAll() {
+    if (this.isLoading) return;
+    this.isLoading = true;
 
+    // Forzar re-montaje de hijos (para que corran sus ngOnInit otra vez)
+    this.isUserReady = false;
+    this.isAddressReady = false;
 
-    if (this.userForm.invalid) {
-      Object.values(this.userForm.controls).forEach(control => control.markAsTouched());
+    // (re)carga catálogos que necesites siempre
+    this.genericService.findAllPropertyType().pipe(take(1)).subscribe(d => this.propertyType = d);
+
+    // Carga de usuario + dirección
+    this.sub.add(
+      this.userService.findOne(usersData().id).pipe(take(1)).subscribe({
+        next: (data: UserDto) => {
+          if (!data) return;
+
+          // PERFIL
+          this.userForm.reset(); // limpia antes de parchear
+          this.userForm.patchValue({
+            ...data,
+            birth: data.birth ? new Date(data.birth).toISOString().split('T')[0] : '',
+          });
+          this.isUserReady = true; // ↩️ remonta <app-update-users-information>
+
+          // DIRECCIÓN
+          const address = (data.addresses?.[0] ?? {}) as Partial<AddressDtoI>;
+          this.addressId = data.addresses?.[0]?.id ?? 0;
+
+          this.addressForm.reset();
+          this.addressForm.patchValue({
+            countryCode: address.countryCode ?? '',
+            stateCode: address.stateCode ?? '',
+            cityStates: address.cityStates?.id ?? null,
+            lat: address.lat ?? '',
+            lon: address.lon ?? '',
+            street: address.street ?? '',
+            race: address.race ?? '',
+            neighborhood: address.neighborhood ?? '',
+            description: address.description ?? '',
+            zipcode: address.zipcode ?? '',
+            propertyType: address.propertyType ?? '',
+          });
+          this.isAddressReady = true; // ↩️ remonta <app-address-form>
+
+          // Valida flujos
+          this.refreshValidityAndGating(true); // con autoruteo
+        },
+        error: (e) => console.error('Error cargando usuario', e),
+        complete: () => (this.isLoading = false),
+      })
+    );
+  }
+
+  private refreshValidityAndGating(autoRoute = false) {
+    this.isUserValid = this.userForm.valid;
+    this.isUserAddressValid = this.addressForm.valid;
+    this.canOpenProvider = this.isUserValid && this.isUserAddressValid;
+
+    if (!autoRoute) {
+      if (!this.canOpenProvider) {
+        this.selectedSegment = 'first';
+        this.subSegment = !this.isUserValid ? 'usersId' : 'addressId';
+      }
       return;
     }
 
-    const data = new UserUpdate({ ...userData })
-    this.userService.update(usersData().id, data).subscribe(data => {
-      console.log(data)
-    })
-    this.userValidate = this.userForm.invalid
+    // Autoruteo
+    if (!this.isUserValid) {
+      this.selectedSegment = 'first';
+      this.subSegment = 'usersId';
+      return;
+    }
+    if (!this.isUserAddressValid) {
+      this.selectedSegment = 'first';
+      this.subSegment = 'addressId';
+      return;
+    }
+    // Ambos válidos
+    this.onSegment('register');
+  }
 
+  segmentChanged(event: any) {
+    const value = event?.detail?.value as typeof this.selectedSegment;
+    if ((value === 'register' || value === 'addressProvider') && !this.canOpenProvider) {
+      this.selectedSegment = 'first';
+      this.subSegment = !this.isUserValid ? 'usersId' : 'addressId';
+      return;
+    }
+    if (value === 'first') {
+      this.subSegment = !this.isUserValid ? 'usersId' : 'addressId';
+    }
+    this.selectedSegment = value;
+  }
+
+  // === Guardados (sin cambios relevantes) ===
+  onUserSaved(userData?: UserUpdateI) {
+    if (this.userForm.invalid) {
+      this.userForm.markAllAsTouched();
+      return;
+    }
+    const payload = new UserUpdate({ ...userData });
+    this.userService.update(usersData().id, payload).pipe(take(1)).subscribe(() => {
+      this.refreshValidityAndGating(true);
+    });
   }
 
   onAddressSaved(address?: AddressDtoI) {
     if (this.addressForm.invalid) {
-      Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
+      this.addressForm.markAllAsTouched();
       return;
     }
-    const data = new Address({ ...address })
+    const payload = new Address({ ...address });
+    const obs =
+      this.addressId && this.addressId !== 0
+        ? this.addressService.update(this.addressId, payload)
+        : this.addressService.post(payload);
 
-    if(this.addressId != 0){
-      this.addressService.update(this.addressId, data).subscribe(dat => {
-        console.log('dat', dat)
-      })
-    }else{
-      this.addressService.post(data).subscribe(dat => {
-        console.log('dat', dat)
-      })
-    }
-
-    this.addressValidate = this.addressForm.invalid
-    console.log('data', data)
+    obs.pipe(take(1)).subscribe((res: any) => {
+      if (!this.addressId || this.addressId === 0) this.addressId = res?.id ?? this.addressId;
+      this.refreshValidityAndGating(true);
+    });
   }
 
-
-  onAddressProviderSaved(addressProvider?: AddressDtoI) {
-
-    if (this.addressProviderForm.invalid) {
-      Object.values(this.addressProviderForm.controls).forEach(control => control.markAsTouched());
+  onProviderFormSubmit(event: any) {
+    if (this.providerForm.invalid) {
+      this.providerForm.markAllAsTouched();
       return;
     }
-    const data = new Address({ ...addressProvider })
+    this.imgFile = event?.avatarFile ?? null;
+    this.fileCova = event?.fileItems ?? null;
+    this.dataProvider = new ProviderCreate({ ...(event?.data ?? {}), userId: usersData().id });
+    this.createProvider(this.dataProvider);
   }
-  dataProvider:ProviderCreate = new ProviderCreate() ; 
-  onSegmentChanger(event:any,expr:number){
-    console.log('event-onSegmentChanger->', event)
 
-    this.dataProvider = new ProviderCreate({ ...event.data ,userId:usersData().id })
-    this.imgFile = event.avatarFile;
-    this.fileCova = event.fileItems;
-    console.log('event-->', event)
-    this.onProviderSaved( this.dataProvider)
-    // switch (expr) {
-    //   case 1:
-    //     if (this.providerForm.invalid) {
-    //       Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
-    //       return;
-    //     }
-    //     this.dataProvider = new ProviderCreate({ ...event ,userId:usersData().id })
-    //     this.selectedSegment = 'addressProvider'
-    //     break;
-    //   case 2:
-    //     if (this.addressProviderForm.invalid) {
-    //       Object.values(this.addressProviderForm.controls).forEach(control => control.markAsTouched());
-    //       return;
-    //     }
-    //     const data = new Address({ ...event })
-    //     if (!this.dataProvider.addresses) {
-    //       this.dataProvider.addresses = [];
-    //     }
-    //     console.log('onSegmentChanger--->',data)
-    //     this.dataProvider.addresses = [data]
-    //     console.log('dataProvider--->',this.dataProvider)
-    //     this.onProviderSaved( this.dataProvider)
-    //     break
-    // }
-    // console.log('dataProvider',this.dataProvider)
-  }
-  onProviderSaved(provider: ProviderCreateDto) {
-
-  //   if (this.providerForm.invalid) {
-  //     Object.values(this.providerForm.controls).forEach(control => control.markAsTouched());
-  //     return;
-  //   }
-  //  this.selectedSegment = 'addressProvider'
-  //   if (this.addressForm.invalid) {
-  //     Object.values(this.addressForm.controls).forEach(control => control.markAsTouched());
-  //     return;
-  //   }
-    
-    const data = new ProviderCreate({ ...provider ,userId:usersData().id })
+  private createProvider(provider: ProviderCreateDto) {
+    if (!this.canOpenProvider) return;
+    const payload = new ProviderCreate({ ...provider, userId: usersData().id });
     this.addProveder = true;
-    data.toJson().logoUrl = null;
-    console.log('create-->')
-    this.providerService.create(data).subscribe((response:ProviderDto) => {
-      console.log('create-->')
-      localStorage.setItem('users', JSON.stringify(response.users[0] ?? {})); 
-      this.providerService.updateImage(this.imgFile,this.fileCova, response.id).subscribe(data=>{
-        console.log('updateImage-->')
-        // this.menuService.loadInitialMenu();
-        // this.onSegment('addressProvider')
-        // this.router.navigate([`navigation/services/${response.id}`]); 
-        this.addProveder = false;
-      })
-  
-    },(erro)=>{console.log('erro',erro)})
-    // this.addProveder = false;
+    payload.toJson().logoUrl = null;
+
+    this.providerService.create(payload).pipe(take(1)).subscribe({
+      next: (response: ProviderDto) => {
+        this.providerIdCreated = response.id;
+        localStorage.setItem('users', JSON.stringify(response.users?.[0] ?? {}));
+        if (this.imgFile || this.fileCova) {
+          this.providerService.updateImage(this.imgFile as any, this.fileCova as any, response.id)
+            .pipe(take(1))
+            .subscribe({ next: () => this.afterProviderCreated(response.id), error: () => this.afterProviderCreated(response.id) });
+        } else {
+          this.afterProviderCreated(response.id);
+        }
+      },
+      error: (err) => { console.error('Error creando proveedor', err); this.addProveder = false; }
+    });
   }
 
-  onSegment(event:string){
+  private afterProviderCreated(providerId?: number) {
+    this.onSegment('addressProvider');
+    const addrUser = this.addressForm.getRawValue();
+    this.addressProviderForm.patchValue({
+      countryCode: addrUser.countryCode ?? '',
+      stateCode: addrUser.stateCode ?? '',
+      cityStates: addrUser.cityStates ?? null,
+      lat: addrUser.lat ?? '',
+      lon: addrUser.lon ?? '',
+      street: addrUser.street ?? '',
+      race: addrUser.race ?? '',
+      neighborhood: addrUser.neighborhood ?? '',
+      description: addrUser.description ?? '',
+      zipcode: addrUser.zipcode ?? '',
+      propertyType: addrUser.propertyType ?? '',
+    });
+    this.menuService.loadInitialMenu();
+    this.addProveder = false;
+  }
+
+  onProviderAddressSubmit(addressProvider?: AddressDtoI) {
+    if (this.addressProviderForm.invalid) {
+      this.addressProviderForm.markAllAsTouched();
+      return;
+    }
+    const payload = new AddressCreate({ ...(addressProvider ?? this.addressProviderForm.getRawValue()) });
+    payload.providerId =  this.providerIdCreated ;
+    this.addressService.post(payload).pipe(take(1)).subscribe();
+    if (this.providerIdCreated) this.router.navigate([`navigation/services/${this.providerIdCreated}`]);
+  }
+
+  onSegment(value: 'first' | 'register' | 'addressProvider') {
     setTimeout(() => {
-      if (this.segment) {
-        this.segment.value = event; 
-        this.selectedSegment = event;
-      }},1000)
+      if (this.segment) this.segment.value = value;
+      this.selectedSegment = value;
+    }, 150);
   }
 }
-
-

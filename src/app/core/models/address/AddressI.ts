@@ -65,7 +65,17 @@ export interface AddressDtoI extends BaseAddressModel {
   countryCode?: string | null;
   employeeId?: number | null;
 }
-
+export interface CreateAddress {
+  latitude: string;
+  length?: string;      
+  street: string;
+  race: string;
+  neighborhood: string;
+  description?: string;
+  cityStateId: number;
+  providerId?: number;
+  employeeId?: number;
+}
 
 export interface AddressUdpatedDtoI extends BaseAddressModel {
 

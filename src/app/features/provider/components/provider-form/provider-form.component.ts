@@ -2,7 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter, ViewChild } from '@angu
 import { FormGroup } from '@angular/forms';
 import { IonModal } from '@ionic/angular';
 import { CategoryService } from 'src/app/core/services/category/category.service';
-import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
+
 import { contributor } from 'src/app/core/constant/constants';
 
 

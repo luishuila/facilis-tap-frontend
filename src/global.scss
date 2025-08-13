@@ -1,6 +1,6 @@
 /* ✅ Primero, `@use` debe estar antes de cualquier otro código */
 @use './theme/theme' as *;
-
+@use './theme/variables' as *;
 // @import 'swiper/css';
 // @import 'swiper/css/navigation';
 // @import 'swiper/css/pagination';

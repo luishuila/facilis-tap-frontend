@@ -1,11 +1,15 @@
-<form [formGroup]="registerForm" class="login-card">
+<form [formGroup]="registerForm"
+      (ngSubmit)="submitRegister()"      
+      class="login-card"
+      novalidate>                          <!-- evita validación nativa del browser -->
 
   <fac-input
     label="Nombre"
     placeholder="Nombre"
     icon="person-outline"
     type="text"
-    formControlName="name">
+    formControlName="name"
+  >
   </fac-input>
 
   <fac-input
@@ -13,7 +17,8 @@
     placeholder="Apellido"
     icon="person-outline"
     type="text"
-    formControlName="lastname">
+    formControlName="lastname"
+  >
   </fac-input>
 
   <fac-input
@@ -21,7 +26,8 @@
     placeholder="Correo electrónico"
     icon="mail-outline"
     type="email"
-    formControlName="email">
+    formControlName="email"
+  >
   </fac-input>
 
   <fac-input
@@ -29,7 +35,8 @@
     placeholder="Contraseña"
     icon="lock-closed-outline"
     type="password"
-    formControlName="password">
+    formControlName="password"
+  >
   </fac-input>
 
   <fac-input
@@ -47,17 +54,25 @@
     type="date"
     formControlName="birth">
   </fac-input>
+
   <fac-radio
     label="Género"
     icon="male-female-outline"
     formControlName="gender"
     [options]="genderOptions">
   </fac-radio>
-  <ion-button expand="block" class="login-button" type="submit" (click)="submitRegister()">
+
+  <!-- Botón: solo type="submit", sin (click) -->
+  <ion-button expand="block" class="login-button" type="submit">
     REGISTRARSE
   </ion-button>
 
   <div class="register-text">
-    ¿Ya tienes una cuenta? <a (click)="goToLogin()">Iniciar sesión</a>
+    ¿Ya tienes una cuenta?
+    <a (click)="goToLogin()">Iniciar sesión</a>
   </div>
+
+  <ion-text color="danger" *ngIf="errorMessage">
+    <p>{{ errorMessage }}</p>
+  </ion-text>
 </form>

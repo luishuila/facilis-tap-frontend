@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { exampleData } from '../home/home.page';
+
 
 @Component({
   selector: 'app-search',

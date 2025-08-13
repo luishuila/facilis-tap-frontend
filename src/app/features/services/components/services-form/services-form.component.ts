@@ -1,149 +1,313 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { usersData } from 'src/app/core/generate/idData';
+import { ActivatedRoute, Router } from '@angular/router';
+import { of, forkJoin } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+
 import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
-import { ServiceCreate } from 'src/app/core/models/services/Service';
+import { ProviderDto } from 'src/app/core/models/provider/ProviderI';
 import { ServiceCreateDto } from 'src/app/core/models/services/ServiceCreateDto';
+
 import { CategoryService } from 'src/app/core/services/category/category.service';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
-import { ServicesTypeService } from 'src/app/core/services/servicesType/services-type.service';
+import { ServicesService } from 'src/app/core/services/servicesType/services.service';
 
 @Component({
   selector: 'app-services-form',
   templateUrl: './services-form.component.html',
   styleUrls: ['./services-form.component.scss'],
-  standalone: false
+  standalone: false,
 })
-export class ServicesFormComponent  implements OnInit {
-
+export class ServicesFormComponent implements OnInit {
   servicesForm!: FormGroup;
-  servicesType:any[] =[];
-  categoryAll:CategoryDto[] =[];
-  providerList:any[] =[];
-  subCategory:SubcategoryDto[] = []
-  @Input() isValidates:boolean = true;
 
-  proveder:any
+  // Estado
+  isEditMode = false;                 // true cuando viene :serviceId
+  serviceId: number | null = null;
+  providerId: number | null = null;
+  loading = false;
+  submitting = false;
 
-  constructor(private fb: FormBuilder, private servicesTypeService:ServicesTypeService,
-    private providerService:ProviderService,   private route: ActivatedRoute,
-    private categoryService:CategoryService
-  ) {
-    console.log('this.route.snapshot.paramMap.get-->', this.route.snapshot.paramMap.get('id'))
-    // this.categoryService.findAllCategory().subscribe(data=>this.categoryAll = data)
+  // Catálogos
+  providerInfo: ProviderDto | null = null;
+  categoryAll: CategoryDto[] = [];
 
-    this.providerService.findOneProvedor(Number(this.route.snapshot.paramMap.get('id'))).subscribe((data:any)=>{
-      this.proveder = data
-      this.categoryAll = data.categories
-      console.log('data--->', data)
+  /** Subcategorías por índice del item */
+  subcategoriesByIndex: SubcategoryDto[][] = [];
+
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private providerService: ProviderService,
+    private categoryService: CategoryService,
+    private servicesService: ServicesService
+  ) {}
+
+  ngOnInit(): void {
+    this.buildForm();
+
+    // Rutas: /services/:providerId (crear array) | /services/:providerId/edit/:serviceId (editar 1)
+    this.providerId = this.toNumber(this.route.snapshot.paramMap.get('providerId'));
+    this.serviceId = this.toNumber(this.route.snapshot.paramMap.get('serviceId'));
+    this.isEditMode = !!this.serviceId;
+
+    if (this.providerId) {
+      this.servicesForm.patchValue({ providerId: this.providerId });
+      // Si prefieres, puedes deshabilitarlo: this.servicesForm.get('providerId')?.disable();
+    }
+
+    this.loading = true;
+
+    forkJoin({
+      provider: this.providerId ? this.providerService.findOneProvedor(this.providerId) : of(null),
+      categories: this.categoryService.findAllCategory(),
     })
-    if(this.route.snapshot.paramMap.get('id')){
-      this.isValidates = false;
-    
-      //  this.servicesTypeService.findAll().subscribe(data=>{
-      //   this.servicesType=data
-      // })
-    }
-    if(this.isValidates){
-      this.providerService.findOneAll().subscribe(data=>{
-        this.providerList = data
-      })
-    }
+      .pipe(
+        tap(({ provider, categories }) => {
+          this.providerInfo = provider;
+          this.categoryAll = categories ?? [];
+        }),
+        switchMap(() => {
+          if (this.servicesFA.length === 0) this.addService();
+          if (!this.isEditMode || !this.serviceId) return of(null);
 
+          // Edición: cargo el servicio en el primer item
+          return this.servicesService.findOne(this.serviceId).pipe(
+            tap(service => this.patchServiceGroupFromModel(0, service))
+          );
+        })
+      )
+      .subscribe({
+        next: () => (this.loading = false),
+        error: (err) => { console.error(err); this.loading = false; }
+      });
   }
-  ngOnInit() {
+
+  // ===== Form root =====
+  private buildForm(): void {
     this.servicesForm = this.fb.group({
-      data: this.fb.array([this.createServiceForm()])
+      providerId: [null, Validators.required], // raíz, aplica a todos
+      services: this.fb.array([]),
     });
   }
-  onSelectItem(itemEvent:any, index: number){
-    const subcategoryId = itemEvent.detail.value;
 
-    const selectedService = this.proveder.services.find(
-      (service:any) => service.subcategory?.id == subcategoryId
-    );
-    const formArray = this.servicesForm.get('data') as FormArray;
-
-    if (selectedService) {
-      const formGroup = formArray.at(index) as FormGroup;
-  
-      formGroup.patchValue({
-        name: selectedService.name,
-        serviceTime: selectedService.serviceTime,
-        price: selectedService.price,
-        img: selectedService.img || '',
-        description:selectedService.description,
-        subcategory: subcategoryId 
-      });
-  
-      console.log('Servicio cargado en el formulario:', selectedService);
-    }
-   
+  // ===== Helpers =====
+  private toNumber(value: string | null): number | null {
+    if (value == null) return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
   }
 
-  getAvailableSubcategories(currentIndex: number): any[] {
-    const formArray = this.servicesForm.get('data') as FormArray;
-  
-    const selectedIds = formArray.controls
-      .map((fg, i) => i !== currentIndex ? fg.get('subcategory')?.value : null)
-      .filter(id => id !== null);
-  
-
-    return this.subCategory.filter(sub => !selectedIds.includes(sub.id));
+  get servicesFA(): FormArray {
+    return this.servicesForm.get('services') as FormArray;
   }
   get services(): FormArray {
-    return this.servicesForm.get('data') as FormArray;
+    return this.servicesFA;
   }
 
-  createServiceForm(): FormGroup {
+  private createServiceGroup(data?: Partial<ServiceCreateDto>): FormGroup {
     return this.fb.group({
-      name: ['', Validators.required],
-      description: ['', Validators.required],
-      serviceTime: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0)]],
-      providers: [null, this.isValidates ? Validators.required : []],
-      category: [null, Validators.required],
-      subcategory:[null,Validators.required],
+      categoryId: [null, Validators.required],
+      subcategoryId: [data?.subcategory ?? null, Validators.required],
+      name: [data?.name ?? '', [Validators.required, Validators.maxLength(120)]],
+      description: [data?.description ?? '', Validators.required],
+      serviceTime: [data?.serviceTime ?? '', Validators.required],
+      price: [data?.price ?? 0, [Validators.required, Validators.min(0)]],
+      img: [data?.img ?? ''],
+      employees: this.fb.array<string>([]),
     });
   }
 
-  addServiceForm() {
-    this.services.push(this.createServiceForm());
+  addService(prefill?: Partial<ServiceCreateDto>): void {
+    const fg = this.createServiceGroup(prefill);
+    this.servicesFA.push(fg);
+    this.subcategoriesByIndex.push([]);
   }
 
-  removeServiceForm(index: number) {
-    if (this.services.length > 1) {
-      this.services.removeAt(index);
+  removeService(i: number): void {
+    this.servicesFA.removeAt(i);
+    this.subcategoriesByIndex.splice(i, 1);
+  }
+
+  employeesFAAt(i: number): FormArray {
+    return (this.servicesFA.at(i) as FormGroup).get('employees') as FormArray;
+  }
+  addEmployee(i: number, value = ''): void {
+    this.employeesFAAt(i).push(this.fb.control(value));
+  }
+  removeEmployee(i: number, j: number): void {
+    this.employeesFAAt(i).removeAt(j);
+  }
+
+  // ===== Unicidad de subcategorías =====
+  /** IDs de subcategorías ya elegidas en otros ítems */
+  private getSelectedSubcategoryIds(excludeIndex?: number): number[] {
+    const ids: number[] = [];
+    this.servicesFA.controls.forEach((ctrl, idx) => {
+      if (excludeIndex != null && idx === excludeIndex) return;
+      const id = (ctrl as FormGroup).get('subcategoryId')?.value;
+      if (id != null) ids.push(Number(id));
+    });
+    return ids;
+  }
+
+  /** Lista filtrada para el item i (oculta subcategorías ya usadas en otros ítems) */
+  getAvailableSubcategories(i: number): SubcategoryDto[] {
+    const taken = new Set(this.getSelectedSubcategoryIds(i));
+    return (this.subcategoriesByIndex[i] ?? []).filter(sc => !taken.has(Number(sc.id)));
+  }
+
+  private isSubcategoryTaken(id: number, excludeIndex: number): boolean {
+    return this.getSelectedSubcategoryIds(excludeIndex).includes(Number(id));
+  }
+
+  // ===== Dependencias =====
+  onCategoryChange(i: number, ev: any): void {
+    const categoryId = Number(ev?.detail?.value ?? ev?.target?.value);
+    const itemFG = this.servicesFA.at(i) as FormGroup;
+
+    if (!categoryId) {
+      this.subcategoriesByIndex[i] = [];
+      itemFG.patchValue({ subcategoryId: null }, { emitEvent: false });
+      return;
+    }
+
+    this.categoryService.findAllSubCategory(categoryId).subscribe((subs: SubcategoryDto[]) => {
+      this.subcategoriesByIndex[i] = subs ?? [];
+      // reset subcategoría al cambiar categoría
+      itemFG.patchValue({ subcategoryId: null }, { emitEvent: false });
+    });
+  }
+
+  /** Evita elegir una subcategoría duplicada; si ya está tomada, revierte a null */
+  onSubcategoryChange(i: number, ev: any): void {
+    const subcategoryId = Number(ev?.detail?.value ?? ev?.target?.value);
+    const itemFG = this.servicesFA.at(i) as FormGroup;
+    if (!subcategoryId) return;
+
+    if (this.isSubcategoryTaken(subcategoryId, i)) {
+      // ya está usada en otro item: revertimos
+      itemFG.patchValue({ subcategoryId: null }, { emitEvent: false });
+      // opcional: aquí podrías mostrar un toast
+      console.warn('Esa subcategoría ya fue seleccionada en otro servicio.');
     }
   }
 
-  onSubmit() {
-    console.log('this.servicesForm.valid →', this.servicesForm.valid);
-    console.log('this.servicesForm →', this.servicesForm);
-    if (this.servicesForm.valid) {
-      let serviceCreate:ServiceCreate[] = this.servicesForm.value.data.map((item:ServiceCreateDto) =>{ 
-            return new ServiceCreate(item);
-        })  
-      console.log('Formulario completo serviceCreate →', serviceCreate);
-      this.servicesTypeService.create(serviceCreate).subscribe(data=>{
-        console.log('create--->',data )
-      })
+  // ===== Mapeo para edición (item 0) =====
+  private patchServiceGroupFromModel(i: number, model: any): void {
+    const itemFG = this.servicesFA.at(i) as FormGroup;
+    const categoryId = model?.subcategory?.category?.id ?? model?.categoryId ?? null;
+
+    const patchEmployees = () => {
+      const fa = this.employeesFAAt(i);
+      fa.clear();
+      (model?.employees ?? []).forEach((e: string) => fa.push(this.fb.control(e)));
+    };
+
+    if (categoryId) {
+      this.categoryService.findAllSubCategory(categoryId).subscribe((subs) => {
+        this.subcategoriesByIndex[i] = subs ?? [];
+        itemFG.patchValue({
+          categoryId,
+          subcategoryId: model?.subcategory?.id ?? model?.subcategoryId ?? null,
+          name: model?.name ?? '',
+          description: model?.description ?? '',
+          serviceTime: model?.serviceTime ?? '',
+          price: Number(model?.price ?? 0),
+          img: model?.img ?? '',
+        }, { emitEvent: false });
+        patchEmployees();
+      });
     } else {
-      this.servicesForm.markAllAsTouched();
+      itemFG.patchValue({
+        categoryId: null,
+        subcategoryId: null,
+        name: model?.name ?? '',
+        description: model?.description ?? '',
+        serviceTime: model?.serviceTime ?? '',
+        price: Number(model?.price ?? 0),
+        img: model?.img ?? '',
+      }, { emitEvent: false });
+      this.subcategoriesByIndex[i] = [];
+      patchEmployees();
     }
   }
 
-  onProvidersSelected(event:any){
-    this.servicesType = []
-    this.servicesType  =  this.providerList.find(data=>data.id === event.detail?.value).servicesTypes
-  }
-  onSubCategory(event: any) {
-    this.categoryService.findAllSubCategory(event.detail.value).subscribe(data=>{
+  // ===== Precio (formatea visualmente, guarda número) =====
+  onPriceInput(i: number, event: any): void {
+    let rawValue = typeof event === 'string' ? event : event?.target?.value ?? '';
+    const numericValue = rawValue.replace(/\D/g, '');
+    const valueAsNumber = numericValue ? parseFloat(numericValue) : 0;
+    const formatted = numericValue ? valueAsNumber.toLocaleString('es-CO') : '';
+    if (event?.target) event.target.value = formatted;
 
-      this.subCategory = data
-    
-    })
+    const itemFG = this.servicesFA.at(i) as FormGroup;
+    itemFG.get('price')?.setValue(valueAsNumber, { emitEvent: false });
   }
- 
+
+  // ===== Build DTOs =====
+  private buildDtos(): ServiceCreateDto[] {
+    const root = this.servicesForm.getRawValue();
+    const providerId = root.providerId ? Number(root.providerId) : this.providerId;
+
+    // DEVUELVE UN ARRAY PURO: ServiceCreateDto[]
+    return (root.services ?? []).map((v: any) => ({
+      name: v.name?.trim(),
+      description: v.description?.trim() || null,
+      serviceTime: v.serviceTime || null,
+      price: v.price != null ? Number(v.price) : null,
+      img: v.img || null,
+      providers: providerId ?? null,
+      subcategory: v.subcategoryId ? Number(v.subcategoryId) : null,
+      employees: (v.employees ?? []).filter((e: string) => !!e && e.trim().length > 0),
+    } as ServiceCreateDto));
+  }
+
+  private buildDtoAt(index = 0): ServiceCreateDto {
+    const dtos = this.buildDtos();
+    return dtos[index];
+  }
+
+  // ===== Guardar =====
+  onSubmit(): void {
+    if (this.servicesForm.invalid) {
+      this.servicesForm.markAllAsTouched();
+      return;
+    }
+
+    this.submitting = true;
+
+    if (this.isEditMode && this.serviceId) {
+      // EDITA SOLO EL PRIMER ITEM
+      const dto = this.buildDtoAt(0);
+      this.servicesService.update(this.serviceId, dto).subscribe({
+        next: () => { this.submitting = false; this.router.navigate(['/services']); },
+        error: (err) => { console.error('Error actualizando servicio', err); this.submitting = false; }
+      });
+      return;
+    }
+
+    // CREA EN MASA (ARRAY PURO)
+    const dtos = this.buildDtos(); // <- AQUÍ ESTÁ EL ARRAY []
+    console.log('dtos--->', dtos)
+    if (!dtos.length) { this.submitting = false; return; }
+
+    const anyService = this.servicesService as any;
+    const req$ = typeof anyService.createMany === 'function'
+      ? anyService.createMany(dtos)                    // POST body = []
+      : forkJoin(dtos.map((d: ServiceCreateDto) => this.servicesService.create(d))); // fallback
+
+    req$.subscribe({
+      next: () => { this.submitting = false; this.router.navigate(['/services']); },
+      error: (err: any) => { console.error('Error guardando servicios', err); this.submitting = false; }
+    });
+  }
+
+  cancel(): void {
+    this.router.navigate(['/services']);
+  }
+
+  // trackBy para rendimiento
+  trackByIndex = (_: number, __: any) => _;
 }

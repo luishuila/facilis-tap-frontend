@@ -1,33 +1,193 @@
-import { Component, OnInit , Input } from '@angular/core';
+// src/app/features/home/home.page.ts
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Router } from '@angular/router';
+import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
+import { CategoryService } from 'src/app/core/services/category/category.service';
+import { ShareDataService } from 'src/app/core/services/DataShareService/shareDataService';
+import { HomeService } from 'src/app/core/services/home/home.service';
+import { ViewWillLeave, ViewWillEnter } from '@ionic/angular';
+import { LocationService } from 'src/app/core/services/genericService/location.service';
+import { Subscription } from 'rxjs';
+import { take } from 'rxjs/operators';
 
-interface MenuItem {
-  label: string;
-  link: string;
-  icon: string;
-}
 @Component({
-  selector: 'app-homedos',
-  templateUrl: './homedos.page.html',
-  styleUrls: ['./homedos.page.scss'],
+  selector: 'app-home',
+  templateUrl: 'home.page.html',
+  styleUrls: ['home.page.scss'],
   standalone: false,
 })
-export class HomedosPage implements OnInit {
-  menuOpen: boolean = false; // Controla la apertura/cierre del menú
-  menuItems: MenuItem[] = [
-    { label: 'Home', link: '/layout/navigation/home', icon: 'home' },
-    { label: 'Quote', link: '/layout/navigation/quote', icon: 'chatbubble-ellipses-outline' },
-    { label: 'Radio', link: '/layout/navigation/radio', icon: 'radio' },
-    { label: 'Library', link: '/layout/navigation/library', icon: 'library' },
-    { label: 'Search', link: '/layout/navigation/search', icon: 'search' },
-    { label: 'Settings', link: '/settings', icon: 'settings' }
-  ];
+export class HomePage implements ViewWillLeave, ViewWillEnter {
+  @ViewChild('miCard', { static: false, read: ElementRef }) cardRef!: ElementRef;
 
-  constructor() {}
+  showHeader = true;
+  lastScrollPosition = 0;
+  headerOpacity = 1;
+  headerOffset = 0;
 
-  ngOnInit() {}
+  categoryAll: CategoryDto[] = [];
+  subCategory: SubcategoryDto[] = [];
+  items: any[] = [];
 
-  toggleMenu() {
-    this.menuOpen = !this.menuOpen; // Alterna la visibilidad del menú
+  page = 1;
+  limit = 50;
+  lat = 8.1003879;
+  lon = -76.7220969;
+  categoryId?: number;
+  subcategoryId?: number;
+  hasMore = true;
+
+  // 🔒 Guardas
+  private isLoading = false;
+  private locSub?: Subscription;
+
+  constructor(
+    private router: Router,
+    private categoryService: CategoryService,
+    private homeService: HomeService,
+    private sharedData: ShareDataService,
+    private locationService: LocationService
+  ) {}
+
+  // ========== Ciclo de vida ==========
+  async ionViewWillEnter() {
+    this.resetPage();
+    this.hasMore = true;
+    this.subCategory = [];
+
+    // Cargar categorías una sola vez al entrar
+    this.categoryService.findAllCategory().subscribe(data => (this.categoryAll = data));
+
+    // Arranca ubicación si tu servicio lo requiere
+    await this.locationService.start();
+
+    // ✅ SOLO UNA VEZ: toma la primera coordenada disponible y carga
+    this.locSub = this.locationService.coords$.pipe(take(1)).subscribe((c) => {
+      if (c) {
+        this.lat = c.lat;
+        this.lon = c.lon;
+      }
+      this.resetData();
+      this.loadHome();
+    });
   }
 
+  ionViewWillLeave() {
+    this.subcategoryId = undefined;
+    this.categoryId = undefined;
+    this.resetData();
+
+    this.locSub?.unsubscribe();
+    this.locationService.stop();
+  }
+
+  // ========== UI helpers ==========
+  enfocarCard() {
+    const element = this.cardRef.nativeElement;
+    element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    element.classList.add('resaltado');
+    setTimeout(() => element.classList.remove('resaltado'), 1500);
+  }
+
+  onScroll(event: any) {
+    const currentScrollPosition = event.detail.scrollTop;
+    const diff = currentScrollPosition - this.lastScrollPosition;
+
+    if (diff > 0) {
+      this.headerOpacity = Math.max(0, this.headerOpacity - diff * 0.005);
+      this.headerOffset = Math.min(50, this.headerOffset + diff * 0.1);
+    } else {
+      this.headerOpacity = Math.min(1, this.headerOpacity - diff * 0.01);
+      this.headerOffset = Math.max(0, this.headerOffset + diff * 0.2);
+    }
+    this.lastScrollPosition = currentScrollPosition;
+  }
+
+  handleRefresh(event: CustomEvent) {
+    this.resetData();
+    this.loadHome(event);
+  }
+
+  resetPage() {
+    this.headerOpacity = 1;
+    this.headerOffset = 0;
+    this.lastScrollPosition = 0;
+    document.querySelector('ion-content')?.scrollToTop(0);
+  }
+
+  // ========== Filtros ==========
+  onCategory(event: any) {
+    this.categoryId = event.id;
+    this.subCategory = [];
+    this.subcategoryId = undefined;
+
+    this.resetData();
+    this.loadHome();
+
+    this.categoryService.findAllSubCategory(event.id).subscribe(data => (this.subCategory = data));
+  }
+
+  onSubCategory(event: any) {
+    this.subcategoryId = event.id;
+    this.resetData();
+    this.loadHome();
+  }
+
+  // ========== Paginación / Data ==========
+  resetData() {
+    this.items = [];
+    this.page = 1;
+    this.hasMore = true;
+  }
+
+  loadMore(event: any) {
+    this.loadHome(event);
+  }
+
+  // 👇 Nada de window.location.reload()
+  reloadPage() {
+    this.resetData();
+    this.loadHome();
+  }
+
+  loadHome(event?: any) {
+    if (!this.hasMore || this.isLoading) {
+      if (event) event.target.complete();
+      return;
+    }
+
+    this.isLoading = true;
+
+    this.homeService.getHome(this.lat, this.lon, this.page, this.limit, this.categoryId, this.subcategoryId)
+      .subscribe({
+        next: (data: any) => {
+          const newItems = Array.isArray(data?.items) ? data.items : [];
+          this.items = this.page === 1 ? newItems : [...this.items, ...newItems];
+
+          // ✅ hasMore correcto usando la página que regresa
+          if (newItems.length < this.limit) {
+            this.hasMore = false;
+          } else {
+            this.page++;
+          }
+        },
+        error: (err) => {
+          console.error('Error cargando datos:', err);
+        },
+        complete: () => {
+          this.isLoading = false;
+          if (event) event.target.complete();
+        }
+      });
+  }
+
+  // ========== Navegación ==========
+  navegate(event: any, items: any) {
+    this.sharedData.data = {
+      idProveder: items.idprov,
+      categoryId: this.categoryId,
+      subcategoryId: this.subcategoryId,
+      item: items
+    };
+    this.router.navigate(['navigation/profile-services']);
+  }
 }

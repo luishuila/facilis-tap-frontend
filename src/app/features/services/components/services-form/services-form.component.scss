@@ -1,67 +1,151 @@
-:host {
-    --gap: 12px;
+:host { --gap: 12px; }
+
+.profile-content {
+  --background: var(--ion-background-color, #FAFAFA);
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --padding-top: 8px;
+  /* Ya NO reservamos espacio para botones, el footer se encarga */
+}
+
+/* Toolbar superior */
+.toolbar-segment {
+  background: var(--ion-background-color);
+  :host-context(.ios) & { box-shadow: none; }
+  :host-context(.md)  & { box-shadow: 0 1px 2px rgba(0,0,0,.06); }
+}
+
+.service-list { margin-top: var(--gap); }
+
+.service-header {
+  --background: #fff;
+  position: relative;
+  h2 { margin: 0; font-size: 16px; font-weight: 700; color: var(--ion-text-color, #222); }
+  p  { margin: 2px 0 0; font-size: 13px; color: var(--ion-color-medium, #6b6b6b); }
+}
+
+.accordion-content {
+  padding: 8px 12px 16px;
+  background: #fff;
+  border-bottom-left-radius: 14px;
+  border-bottom-right-radius: 14px;
+}
+
+.group-fields { display: grid; gap: 10px; }
+
+.two-cols {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+@media (max-width: 480px) { .two-cols { grid-template-columns: 1fr; } }
+
+/* iOS */
+:host-context(.ios) {
+  ion-item {
+    --inner-padding-top: 8px;
+    --inner-padding-bottom: 8px;
+    --background: #fff;
+
   }
-  
-  .service-list {
-    margin-top: var(--gap);
-  }
-  
+  ion-accordion-group { --ion-item-background: #fff; }
+  .accordion-content { background: #fff; box-shadow: 0 0.5px 0 rgba(0,0,0,.08); }
+}
+
+/* Material */
+:host-context(.md) {
+  ion-accordion-group { --ion-item-background: var(--ion-color-step-50, #fff); }
   .accordion-content {
-    padding: 8px 12px 16px 12px;
     background: var(--ion-color-step-50, #fff);
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    box-shadow: 0 1px 2px rgba(0,0,0,.06);
   }
-  
-  .group-fields {
-    display: grid;
-    gap: 10px;
+  .service-header::after {
+    content: ""; position: absolute; left: 16px; right: 16px; bottom: 0;
+    height: 1px; background: rgba(0,0,0,.06);
   }
-  
-  .two-cols {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  
-  .stack-actions {
-    margin-top: 16px;
-    display: grid;
-    gap: 10px;
-  }
-  
-  /* iOS look */
-  :host-context(.ios) {
-    ion-item {
-      --inner-padding-top: 8px;
-      --inner-padding-bottom: 8px;
-    }
-  
-    ion-accordion-group {
-      --ion-item-background: #fff;
-    }
-  
-    .accordion-content {
-      background: #fff;
-      box-shadow: 0 0.5px 0 rgba(0,0,0,.1);
-    }
-  }
-  
-  /* Android (Material) look */
-  :host-context(.md) {
-    ion-accordion-group {
-      --ion-item-background: var(--ion-color-step-50);
-    }
-  
-    .accordion-content {
-      background: var(--ion-color-step-50);
-    }
-  }
-  
-  /* Responsive */
-  @media (max-width: 480px) {
-    .two-cols {
-      grid-template-columns: 1fr;
-    }
-  }
-  
+}
+
+/* Label stacked */
+ion-label[position="stacked"] {
+  color: var(--ion-color-medium, #6b6b6b);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Footer de acciones compacto */
+.footer-actions {
+  backdrop-filter: saturate(140%) blur(10px); /* iOS bonito */
+}
+
+.action-toolbar {
+  --background: var(--ion-background-color, #FAFAFA);
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --min-height: 64px; /* compacto */
+  border-top: 1px solid rgba(0,0,0,.06);
+  margin-top: 0.5em;
+  margin-bottom: 2.5em;
+}
+
+.actions {
+  display: grid; gap: 8px;
+  grid-template-columns: 1fr;  /* apilados en móvil */
+}
+
+/* Botón primario consistente */
+.primary-btn {
+  --border-radius: 12px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+/* Opcional: en pantallas anchas, lado a lado */
+@media (min-width: 520px) {
+  .actions { grid-template-columns: 1fr 1fr; }
+}
+/* ===== Footer limpio, sin “card” ===== */
+
+/* Reset común */
+.footer-actions,
+.action-toolbar {
+  margin: 0 !important;
+  --padding-start: 0;
+  --padding-end: 0;
+}
+
+/* Contenedor de botones */
+.actions {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: 1fr;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+}
+
+/* iOS: translucency sutil (nativo) */
+:host-context(.ios) .footer-actions {
+  --background: rgba(255,255,255,.8);
+  backdrop-filter: saturate(140%) blur(10px);
+  -webkit-backdrop-filter: saturate(140%) blur(10px);
+  border-top: 0.5px solid rgba(0,0,0,.12);
+}
+
+/* ANDROID (Material): plano, sin tarjeta */
+:host-context(.md) .footer-actions,
+:host-context(.md) .action-toolbar {
+  --background: var(--ion-background-color);  /* igual que la página */
+  background: var(--ion-background-color) !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Botón consistente */
+.primary-btn {
+  --border-radius: 12px;
+  font-weight: 600;
+  text-transform: none;
+}
+
+/* Opcional: en pantallas anchas, lado a lado */
+@media (min-width: 520px) {
+  .actions { grid-template-columns: 1fr 1fr; }
+}

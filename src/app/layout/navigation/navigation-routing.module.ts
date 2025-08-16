@@ -71,18 +71,19 @@ const routes: Routes = [
         path: 'services/:providerId/edit/:serviceId',
         loadChildren: () => import('../../features/services/services.module').then(m => m.ServicesPageModule)
       },
+   
       {
         path: 'personalinformation',
         loadChildren: () => import('../../features/users/users-update/users-update.module').then( m => m.UsersUpdatePageModule)
       },
     
       {
-        path: 'profile-services',
+        path: 'profile/:idProveder',
         loadChildren: () => import('../../features/profile/profile.module').then( m => m.ProfilePageModule)
       },
-      {
-        path: 'profiles/:id',
-        loadChildren: () => import('../../features/profile-users/profile-users.module').then( m => m.ProfileUsersPageModule)
+     {
+        path: 'profile/:idProveder/users/:userId',
+        loadChildren: () => import('../../features/profile/profile.module').then( m => m.ProfilePageModule)
       },
       {
         path: '',

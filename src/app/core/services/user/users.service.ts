@@ -19,6 +19,11 @@ export class UsersService {
     );
   }
 
+  findByEmailPhone(users: string): Observable<UserDto> {
+    return this.http.post<ApiResponse<UserDto>>(`${this.apiUrl}user/byEmailPhone`, {emailPhone:users}).pipe(
+      map((response:ApiResponse<UserDto>) => response.data) 
+    );
+  }
   update(id: string, data: UserUpdateI): Observable<UserDto> {
     return this.http.put<ApiResponse<UserDto>>(`${this.apiUrl}user/${id}`, data).pipe(
       map((response: ApiResponse<UserDto>) => response.data)

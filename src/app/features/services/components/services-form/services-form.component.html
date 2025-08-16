@@ -12,9 +12,7 @@
     <ion-list lines="full" class="service-list" formArrayName="services">
       <ion-accordion-group expand="inset">
 
-        <ion-accordion
-          *ngFor="let service of services.controls; let i = index; trackBy: trackByIndex"
-          [value]="i"
+        <ion-accordion *ngFor="let service of services.controls; let i = index; trackBy: trackByIndex" [value]="i"
           [formGroupName]="i">
 
           <ion-item slot="header" detail="true">
@@ -23,11 +21,7 @@
               <p>{{ (services.at(i).value?.name || 'Sin nombre') | slice:0:40 }}</p>
             </ion-label>
             <ion-buttons slot="end">
-              <ion-button
-                fill="clear"
-                color="danger"
-                (click)="removeService(i)"
-                type="button"
+              <ion-button fill="clear" color="danger" (click)="removeService(i)" type="button"
                 [disabled]="isEditMode && services.length === 1">
                 Eliminar
               </ion-button>
@@ -40,25 +34,16 @@
               <!-- Categoría -->
               <ion-item>
                 <ion-label position="stacked">Categoría</ion-label>
-                <fac-select
-                  formControlName="categoryId"
-                  placeholder="Seleccione categoría"
-                  [valueField]="'id'"
-                  [labelField]="'name'"
-                  [items]="categoryAll"
-                  (ionChange)="onCategoryChange(i, $event)">
+                <fac-select formControlName="categoryId" placeholder="Seleccione categoría" [valueField]="'id'"
+                  [labelField]="'name'" [items]="categoryAll" (ionChange)="onCategoryChange(i, $event)">
                 </fac-select>
               </ion-item>
 
               <!-- Subcategoría (filtrada para no repetir) -->
               <ion-item>
                 <ion-label position="stacked">Subcategoría</ion-label>
-                <fac-select
-                  formControlName="subcategoryId"
-                  placeholder="Seleccione subcategoría"
-                  [valueField]="'id'"
-                  [labelField]="'name'"
-                  [items]="getAvailableSubcategories(i)"
+                <fac-select formControlName="subcategoryId" placeholder="Seleccione subcategoría" [valueField]="'id'"
+                  [labelField]="'name'" [items]="getAvailableSubcategories(i)"
                   (ionChange)="onSubcategoryChange(i, $event)">
                 </fac-select>
               </ion-item>
@@ -66,10 +51,7 @@
               <!-- Nombre -->
               <ion-item>
                 <ion-label position="stacked">Nombre</ion-label>
-                <fac-input
-                  formControlName="name"
-                  type="text"
-                  placeholder="Ingrese el nombre del servicio"
+                <fac-input formControlName="name" type="text" placeholder="Ingrese el nombre del servicio"
                   icon="pricetag">
                 </fac-input>
               </ion-item>
@@ -77,10 +59,7 @@
               <!-- Descripción -->
               <ion-item>
                 <ion-label position="stacked">Descripción</ion-label>
-                <fac-textarea
-                  formControlName="description"
-                  placeholder="Ingrese una descripción"
-                  icon="document-text">
+                <fac-textarea formControlName="description" placeholder="Ingrese una descripción" icon="document-text">
                 </fac-textarea>
               </ion-item>
 
@@ -92,10 +71,7 @@
 
                 <ion-item>
                   <ion-label position="stacked">Precio</ion-label>
-                  <fac-input
-                    formControlName="price"
-                    type="text"
-                    placeholder="Ej: 1.000"
+                  <fac-input formControlName="price" type="text" placeholder="Ej: 1.000"
                     (input)="onPriceInput(i, $event)">
                   </fac-input>
                 </ion-item>
@@ -104,15 +80,49 @@
               <!-- Empleados -->
               <ion-item lines="none">
                 <ion-label>Empleados</ion-label>
-                <ion-button fill="outline" size="small" type="button" (click)="addEmployee(i)">+ Agregar</ion-button>
+                <ion-button fill="outline" size="small" type="button" (click)="addEmployee(i)">
+                  + Agregar
+                </ion-button>
               </ion-item>
-              <div formArrayName="employees">
-                <ion-item *ngFor="let _c of employeesFAAt(i).controls; let j = index; trackBy: trackByIndex">
-                  <ion-input [formControlName]="j" placeholder="email o id"></ion-input>
-                  <ion-button color="danger" fill="clear" type="button" (click)="removeEmployee(i, j)">Eliminar</ion-button>
-                </ion-item>
-              </div>
 
+              <!-- Lista de empleados -->
+              <div formArrayName="employees" class="employees-list">
+                <div *ngFor="let _c of employeesFAAt(i).controls; let j = index; trackBy: trackByIndex"
+                  class="employee-block">
+
+                  <!-- Primer input: email o id -->
+                  <ion-item class="employee-search-item" lines="inset">
+                    <ion-input [formControlName]="j" placeholder="email o id" class="employee-search-input"
+                      inputmode="text">
+                    </ion-input>
+
+                    <ion-buttons slot="end" class="employee-actions">
+                      <ion-button size="small" fill="clear" (click)="searchEmployee(i, j)">
+                        <ion-icon slot="start" name="search-outline"></ion-icon>
+                        Buscar
+                      </ion-button>
+                      <ion-button size="small" color="danger" fill="clear" type="button" (click)="removeEmployee(i, j)">
+                        <ion-icon slot="start" name="trash-outline"></ion-icon>
+                        Eliminar
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-item>
+
+                  <!-- Resultado: solo visible tras buscar -->
+                  <div *ngIf="isSearched(i, j)" class="employee-result">
+                    <ion-avatar class="employee-avatar">
+                      <img [src]="getEmployeeAvatar(i, j)" alt="avatar" />
+                    </ion-avatar>
+
+                    <div class="employee-info">
+                      <h3>{{ getEmployeeName(i, j) || 'Nombre' }}</h3>
+                      <ion-input placeholder="Ingrese el código" class="employee-code-input"  >
+                      </ion-input>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
             </ion-list>
           </div>
         </ion-accordion>
@@ -125,7 +135,7 @@
         + Agregar servicio
       </ion-button>
       <!-- [disabled]="servicesForm.invalid || submitting" -->
-      <ion-button expand="block" color="primary" type="submit" >
+      <ion-button expand="block" color="primary" type="submit">
         {{ submitting ? 'Guardando...' : (isEditMode ? 'Actualizar' : 'Guardar todo') }}
       </ion-button>
 

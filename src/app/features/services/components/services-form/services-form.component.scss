@@ -149,3 +149,40 @@ ion-label[position="stacked"] {
 @media (min-width: 520px) {
   .actions { grid-template-columns: 1fr 1fr; }
 }
+
+
+
+.employee-block { margin-bottom: 10px; }
+
+.employee-search-item {
+  --inner-padding-end: 0;
+}
+
+.employee-actions ion-button {
+  --padding-start: 6px;
+  --padding-end: 6px;
+  font-weight: 500;
+}
+
+.employee-result {
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.employee-avatar {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(0,0,0,.08);
+  margin-right: 10px;
+}
+
+.employee-info h3 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.employee-code-input {
+  min-width: 180px;
+}

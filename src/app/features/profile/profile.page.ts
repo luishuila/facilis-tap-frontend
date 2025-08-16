@@ -1,5 +1,5 @@
 import { Component,  ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProviderDto, ProviderDtoI } from 'src/app/core/models/provider/ProviderI';
 import { ShareDataService } from 'src/app/core/services/DataShareService/shareDataService';
 
@@ -28,26 +28,33 @@ export class ProfilePage  implements ViewWillEnter {
   private daysInitialized = false;
 
 
+          // 1) Lee el obligatorio desde el path
+    idProveder:any 
+    categoryId :any 
+    subcategoryId :any 
+    userId:any 
 
-
-    constructor(private router: Router,   private sharedData: ShareDataService<{idProveder?:number,categoryId?:number, subcategoryId?:number, item:any}>, 
+    constructor( private route: ActivatedRoute,  private sharedData: ShareDataService<{idProveder?:number,categoryId?:number, subcategoryId?:number, item:any}>, 
       
       private homeService:HomeService) {
-        // this.sharedData.data?.idProveder??
-        console.log('this.sharedData.data?.categoryId', this.sharedData.data?.categoryId)
-      this.homeService.profile( this.sharedData.data?.idProveder, this.sharedData.data?.categoryId, this.sharedData.data?.subcategoryId).
-      subscribe(data=>{console.log(data); this.profile =data})
-      
-      console.log('sharedData-1->',this.profile)
+  
     }
     ionViewWillEnter() {
+         this.idProveder = Number(this.route.snapshot.paramMap.get('idProveder'));
+      this.userId = this.route.snapshot.paramMap.get('userId');
+    // 2) Lee los opcionales desde query params
+      let qp = this.route.snapshot.queryParamMap;
+      this.categoryId = qp.has('categoryId') ? Number(qp.get('categoryId')) : undefined;
+      this.subcategoryId = qp.has('subcategoryId') ? Number(qp.get('subcategoryId')) : undefined;
+
       this.profile = this.sharedData.data;
-      console.log('this.sharedData.data?.categoryId', this.sharedData.data?.categoryId)
-      this.homeService.profile( this.sharedData.data?.idProveder, this.sharedData.data?.categoryId, this.sharedData.data?.subcategoryId).
+    
+      this.homeService.profile(this.idProveder,  this.categoryId, this.subcategoryId ).
       subscribe(data=>{console.log(data); this.profile =data})
-      
-      console.log('sharedData-1->',this.profile)
+       console.log('sharedData-1->',this.userId)
+      console.log('sharedData-1->',this.idProveder)
     }
+
     // ngOnInit() {
     //   console.log('this.profile-->', this.profile)
     // }e?.users?.name || e?.name

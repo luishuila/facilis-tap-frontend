@@ -46,7 +46,7 @@ export class HomePage implements ViewWillLeave, ViewWillEnter {
     private homeService: HomeService,
     private sharedData: ShareDataService,
     private locationService: LocationService
-  ) {}
+  ) { }
 
   // ========== Ciclo de vida ==========
   async ionViewWillEnter() {
@@ -201,6 +201,10 @@ export class HomePage implements ViewWillLeave, ViewWillEnter {
       subcategoryId: this.subcategoryId,
       item: items
     };
-    this.router.navigate(['navigation/profile-services']);
+    this.router.navigate(
+      ['navigation/profile', items.idprov],
+      { queryParams: { categoryId: this.categoryId, subcategoryId: this.subcategoryId } }
+    );
+    // this.router.navigate(['navigation/profile']);
   }
 }

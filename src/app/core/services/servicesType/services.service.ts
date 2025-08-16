@@ -25,6 +25,7 @@ export class ServicesService {
     );
   }
   createMany(dtos: any[]) {
+    console.log('dtos--->', dtos);
     return this.http.post(`${this.apiUrl}service`, dtos, { headers: { 'X-Raw-Body': '1' }});
   }
   create(data: any) {

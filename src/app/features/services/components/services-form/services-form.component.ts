@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, forkJoin } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { usersData } from 'src/app/core/generate/idData';
 
 import { CategoryDto, SubcategoryDto } from 'src/app/core/models/category/category.dto';
 import { ProviderDto } from 'src/app/core/models/provider/ProviderI';
@@ -11,6 +12,7 @@ import { ServiceCreateDto } from 'src/app/core/models/services/ServiceCreateDto'
 import { CategoryService } from 'src/app/core/services/category/category.service';
 import { ProviderService } from 'src/app/core/services/provider/provider.service';
 import { ServicesService } from 'src/app/core/services/servicesType/services.service';
+import { UsersService } from 'src/app/core/services/user/users.service';
 
 @Component({
   selector: 'app-services-form',
@@ -34,15 +36,19 @@ export class ServicesFormComponent implements OnInit {
 
   /** Subcategorías por índice del item */
   subcategoriesByIndex: SubcategoryDto[][] = [];
-
+  private employeesNameMap: Record<string, string> = {};
+  private employeesAvatarMap: Record<string, string> = {};
+  private searchedPaths = new Set<string>();
+  employeeCodes: Record<string, string> = {};
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private providerService: ProviderService,
     private categoryService: CategoryService,
-    private servicesService: ServicesService
-  ) {}
+    private servicesService: ServicesService,
+    private userService: UsersService
+  ) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -58,10 +64,13 @@ export class ServicesFormComponent implements OnInit {
     }
 
     this.loading = true;
-
+    let providerData = this.providerId ? this.providerService.findOneProvedor(this.providerId ?? 0) : of<ProviderDto | null>(null)
+    const categories = providerData.pipe(
+      map((p) => p?.categories ?? [] as CategoryDto[])
+    );
     forkJoin({
-      provider: this.providerId ? this.providerService.findOneProvedor(this.providerId) : of(null),
-      categories: this.categoryService.findAllCategory(),
+      provider: this.providerId ? providerData : of(null),
+      categories: categories,
     })
       .pipe(
         tap(({ provider, categories }) => {
@@ -291,6 +300,7 @@ export class ServicesFormComponent implements OnInit {
     // CREA EN MASA (ARRAY PURO)
     const dtos = this.buildDtos(); // <- AQUÍ ESTÁ EL ARRAY []
     console.log('dtos--->', dtos)
+    //profiles/:providerId/users/:userId
     if (!dtos.length) { this.submitting = false; return; }
 
     const anyService = this.servicesService as any;
@@ -299,7 +309,7 @@ export class ServicesFormComponent implements OnInit {
       : forkJoin(dtos.map((d: ServiceCreateDto) => this.servicesService.create(d))); // fallback
 
     req$.subscribe({
-      next: () => { this.submitting = false; this.router.navigate(['/services']); },
+      next: () => { this.submitting = false; this.router.navigate([`navigation/profile/${this.providerId}/users/${usersData().id}`]); },
       error: (err: any) => { console.error('Error guardando servicios', err); this.submitting = false; }
     });
   }
@@ -310,4 +320,54 @@ export class ServicesFormComponent implements OnInit {
 
   // trackBy para rendimiento
   trackByIndex = (_: number, __: any) => _;
+
+  private ctrlPath(i: number, j: number): string { return `${i}:${j}`; }
+  private normalizeKey(v: any): string { return (v ?? '').toString().trim().toLowerCase(); }
+  private getEmployeeRawValue(i: number, j: number): string {
+    return (this.employeesFAAt(i).at(j)?.value ?? '').toString();
+  }
+
+  isSearched(i: number, j: number): boolean {
+    return this.searchedPaths.has(this.ctrlPath(i, j));
+  }
+
+  searchEmployee(i: number, j: number): void {
+    
+    const raw = this.getEmployeeRawValue(i, j);
+    const key = this.normalizeKey(raw);
+    console.log('Buscar empleado:', { raw, key });
+
+    this.userService.findByEmailPhone(key).subscribe({
+      next: (user) => { 
+        console.log('Usuario encontrado:', user);
+      }})
+    this.searchedPaths.add(this.ctrlPath(i, j));
+      
+    if (!key) return;
+    let users = null;
+    this.userService.findByEmailPhone(key).subscribe({
+      next: (user) => {
+        users = user; 
+       this.submitting = false; 
+       this.employeesNameMap[key] = `Nombre ${user.name.toUpperCase()} ${user.nickname?.toUpperCase()}`;
+       this.employeesAvatarMap[key] = `${user.img}`; 
+        console.log('Usuario encontrado:', user);
+      }})
+    // Aquí conectar tu servicio real
+    // setTimeout(() => {
+    //   this.employeesNameMap[key] = `Empleado ${key.toUpperCase()}`;
+    //   this.employeesAvatarMap[key] = 'assets/img/avatar-placeholder.png'; // o URL real
+    // }, 300);
+  }
+
+  getEmployeeName(i: number, j: number): string {
+    const key = this.normalizeKey(this.getEmployeeRawValue(i, j));
+    return this.employeesNameMap[key] || '';
+  }
+
+  getEmployeeAvatar(i: number, j: number): string {
+    const key = this.normalizeKey(this.getEmployeeRawValue(i, j));
+    return this.employeesAvatarMap[key] || 'assets/img/avatar-placeholder.png';
+  }
+
 }

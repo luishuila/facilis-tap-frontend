@@ -10,6 +10,8 @@ export class AesService {
 
 
   encryptData<T>(data: T , secretKey:string = 'MY_SECRET_KEY_32_BYTES' ): any {
+    console.log('🔐 Encriptando datos:', data)
+    ;
     const parsedData: ApiResponse<T> = typeof data === 'string' ? JSON.parse(data) : data;
      return parsedData;
     try {

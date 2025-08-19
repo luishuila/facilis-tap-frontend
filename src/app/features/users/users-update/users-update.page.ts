@@ -67,7 +67,7 @@ export class UsersUpdatePage implements ViewWillEnter {
       nickname: ['', [Validators.minLength(2)]],
       gender: ['', [Validators.required]],
       birth: ['', [Validators.required]],
-      phones: ['', [Validators.minLength(5), Validators.pattern('^[0-9]+$')]],
+      phone: ['', [Validators.minLength(5), Validators.pattern('^[0-9]+$')]],
       nit: [null, [Validators.minLength(5), Validators.pattern('^[0-9]+$')]],
     });
   }
@@ -85,6 +85,7 @@ export class UsersUpdatePage implements ViewWillEnter {
 
     this.userService.findOne(usersData().id).subscribe({
       next: (data: UserDto) => {
+       
         if (!data) {
           this.validateUsers = false;
           this.validate = false;

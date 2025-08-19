@@ -1,14 +1,19 @@
 <ion-button
   class="native-button"
-  [ngClass]="[customClass, 'size-' + size, loading ? 'is-loading' : '']"
-  [color]="color"
+  [ngClass]="[
+    customClass,
+    'size-' + size,
+    loading ? 'is-loading' : '',
+    neutral ? 'is-neutral' : ''
+  ]"
+  [color]="computedColor"
   [fill]="fill"
   [expand]="expandValue"
   [disabled]="disabled || loading"
   [attr.type]="type"
   [attr.aria-busy]="loading"
   [attr.aria-disabled]="disabled || loading ? true : null"
-  (click)="onClick()"
+  (click)="onClick($event)"
   shape="round"
 >
   <ion-icon *ngIf="icon && !loading" [name]="icon" slot="start"></ion-icon>

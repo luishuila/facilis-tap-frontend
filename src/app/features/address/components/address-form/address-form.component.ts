@@ -18,7 +18,7 @@ export class AddressFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() propertyType: { value: string; label: string }[] = [];
   @Input() isDisabled = false;
   @Output() addressSaved = new EventEmitter<any>();
-
+  @Input() isUpdate = false;
   countries: CountryVm[] = [];
   departments: DeptVm[] = [];
   cities: CityVm[] = [];

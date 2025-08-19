@@ -2,8 +2,12 @@
 
   <!-- Encabezado -->
   <div class="page-header">
-    <h1>🏢 Registrar Proveedor</h1>
-    <p>Ingrese la información del proveedor</p>
+    <h1>
+      🏢 {{ isUpdate ? 'Actualizar Proveedor' : 'Registrar Proveedor' }}
+    </h1>
+    <p>
+      {{ isUpdate ? 'Actualiza la información del proveedor.' : 'Ingrese la información del proveedor.' }}
+    </p>
   </div>
 
   <!-- Avatar -->
@@ -98,17 +102,17 @@
       </fac-file>
     </div>
 
+    <!-- CTA -->
     <div class="full bottom-spacer" aria-hidden="true">
       <fac-btn
-        label="Registrar"
+        [label]="isUpdate ? 'Actualizar' : 'Registrar'"
+        [icon]="isUpdate ? 'refresh-outline' : 'save-outline'"
         color="primary"
         customClass="primary-btn"
         expand="block"
-        type="submit"
-        icon="save-outline">
+        type="submit">
       </fac-btn>
     </div>
 
   </form>
-
 </div>

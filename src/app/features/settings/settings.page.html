@@ -10,12 +10,10 @@
   <div class="hero">
     <!-- <div class="avatar-wrap"> -->
 
-      <fac-avatar
-  [avatarUrl]="'https://picsum.photos/600/300?random=44'"
-  alt="Foto de perfil de {{data?.name}}">
-</fac-avatar>
+    <fac-avatar [avatarUrl]="'https://picsum.photos/600/300?random=44'" alt="Foto de perfil de {{data?.name}}">
+    </fac-avatar>
 
-    
+
     <!-- </div> -->
 
     <h2 class="name">{{ data?.name }} {{ data?.lastname }}</h2>
@@ -50,19 +48,16 @@
 
 </ion-content>
 
+
+
 <!-- Footer con botón pequeño -->
 <ion-footer class="logout-footer">
   <ion-toolbar>
     <div class="logout-btn-wrap">
-      <ion-button
-        size="small"
-        shape="round"
-        fill="outline"
-        class="logout-btn"
-        (click)="logout()">
-        <ion-icon slot="start" name="log-out-outline"></ion-icon>
-        Cerrar sesión
-      </ion-button>
+
+      <fac-btn label="Cerrar sesión" icon="log-out-outline" variant="outline" size="small" color="danger"
+        customClass="logout-btn pill" (clicked)="logout()">
+      </fac-btn>
     </div>
   </ion-toolbar>
 </ion-footer>

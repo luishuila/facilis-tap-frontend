@@ -1,7 +1,22 @@
-<ion-content [fullscreen]="true" color="light">
-      <div class="container" *ngIf="providerList.length>0">
-        <fac-item-list [items]="providerList" [valueOptional]="'name'"> </fac-item-list>
+<!-- <ion-content [fullscreen]="true" color="light">
+  <div class="container" *ngIf="providerList.length>0">
+    <fac-item-list [items]="providerList" [valueOptional]="'name'"> </fac-item-list>
+  </div>
+</ion-content> -->
 
-        <!-- <fac-item-sliding [items]="providerList" [valueOptional]="'name'"> </fac-item-sliding>  -->
-      </div>
+<ion-content [fullscreen]="true">
+<fac-list
+  [items]="providerList"
+  [fieldMap]="{ name: 'name', id: 'id', description: 'city', text: 'email', imgUrl: 'img' }"
+  [labels]="{ id: 'xxxxxxid', description: 'Ciudad', text: 'Correo' }"
+  [actions]="[
+    { id:'update', label:'Actualizar', icon:'refresh-outline', variant:'solid', color:'primary' },
+    { id:'register', label:'Registrar servicio', icon:'construct-outline', variant:'outline', color:'primary' },
+    { id:'create', label:'Crear empleado', icon:'person-add-outline', variant:'outline', color:'primary', neutral:true }
+  ]"
+  (select)="onSelectProvider($event)"
+  (chevron)="onChevronProvider($event)"
+  (action)="onProviderAction($event)">
+</fac-list>
+
 </ion-content>

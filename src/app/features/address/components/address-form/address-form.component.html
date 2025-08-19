@@ -1,8 +1,8 @@
 <div class="profile-content">
   <!-- Encabezado -->
   <div class="page-header">
-    <h1>📍 Registrar dirección</h1>
-    <p>Ingresa la información de tu dirección</p>
+    <h1>📍 {{ isUpdate ? 'Actualizar dirección' : 'Registrar dirección' }}</h1>
+    <p>{{ isUpdate ? 'Actualiza la información de tu dirección' : 'Ingresa la información de tu dirección' }}</p>
   </div>
 
   <form [formGroup]="addressForm" (ngSubmit)="saveAddress()" class="form-grid">
@@ -86,14 +86,14 @@
 
     <!-- Botón -->
     <div class="full bottom-spacer" aria-hidden="true">
-      <fac-btn
-        label="Guardar dirección"
+    <fac-btn
+        [label]="isUpdate ? 'Actualizar dirección' : 'Guardar dirección'"
+        [icon]="isUpdate ? 'refresh-outline' : 'save-outline'"
         color="primary"
         customClass="primary-btn"
         expand="block"
         type="submit"
-        [disabled]="isDisabled || addressForm.invalid"
-        icon="save-outline">
+        [disabled]="isDisabled || addressForm.invalid">
       </fac-btn>
     </div>
   </form>

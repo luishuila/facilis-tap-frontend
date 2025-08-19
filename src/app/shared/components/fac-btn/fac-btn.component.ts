@@ -13,8 +13,8 @@ type BtnSize = 'default' | 'small' | 'large';
 export class FacBtnComponent  {
   @Input() label: string = 'Button';
   @Input() icon: string = '';
-  @Input() iconEnd: string = '';
-  @Input() color: string = 'primary';                 // ← hereda el primary de variables
+  @Input() iconEnd: string = ' ';
+  @Input() color: string = 'primary';
   @Input() variant: BtnVariant = 'solid';
   @Input() expand: 'full' | 'block' | 'default' = 'block';
   @Input() size: BtnSize = 'default';
@@ -23,10 +23,21 @@ export class FacBtnComponent  {
   @Input() loading: boolean = false;
   @Input() type: 'button' | 'submit' | 'reset' = 'submit';
 
+  /** Deja el outline en gris (quita el azul) sin tocar el tema global */
+  @Input() neutral: boolean = false;
+
   @Output() clicked = new EventEmitter<void>();
 
   get fill(): 'solid' | 'outline' | 'clear' { return this.variant; }
-  get expandValue(): 'block' | 'full' | undefined { return this.expand === 'default' ? undefined : this.expand; }
+  get expandValue(): 'block' | 'full' | undefined {
+    return this.expand === 'default' ? undefined : this.expand;
+  }
+  get computedColor(): string {
+    return this.neutral ? 'medium' : this.color;
+  }
 
-  onClick() { if (!this.disabled && !this.loading) this.clicked.emit(); }
+  onClick(ev?: Event) {
+    ev?.stopPropagation(); // evita que dispare el click de la card/lista
+    if (!this.disabled && !this.loading) this.clicked.emit();
+  }
 }

@@ -186,3 +186,11 @@ ion-label[position="stacked"] {
 .employee-code-input {
   min-width: 180px;
 }
+.header-invalid { color: var(--ion-color-danger); font-weight: 600; }
+.header-valid   { color: var(--ion-color-success); font-weight: 600; }
+
+.lbl-invalid { color: var(--ion-color-danger); }
+.lbl-valid   { color: var(--ion-color-success); }
+
+/* opcional */
+.two-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }

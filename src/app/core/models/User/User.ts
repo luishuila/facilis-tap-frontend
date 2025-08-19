@@ -55,14 +55,14 @@ export class User extends BaseUser implements IUser {
 export interface UserUpdateI extends BaseUserModel {
   nickname?: string;
   nit?: number | null;
-  phones?: string;
+  phone?: string;
   username?: string;
 }
 
 export class UserUpdate extends BaseUser implements UserUpdateI {
   nickname?: string = '';
   nit?: number | null = null;
-  phones?: string = '';
+  phone?: string = '';
   username?: string = '';
 
   constructor(data: Partial<UserUpdateI> = {}) {
@@ -88,7 +88,7 @@ export class UserDto implements BaseUserModel {
   username!: string;
   nickname?: string;
   nit?: number;
-  phones!: string;
+  phone!: string;
   appointments?: any;
   roles?: any;
   providers?: any;

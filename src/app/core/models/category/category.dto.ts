@@ -14,5 +14,11 @@ export interface CategoryDto {
     isAssete: boolean;
     img?: string;
     category?: CategoryDto;
+    subcategoryServices?:SubcategoryServiceDto[];
   }
   
+ export interface SubcategoryServiceDto {
+  name: string;
+  description?: string | null;
+  subcategory:SubcategoryDto;
+}

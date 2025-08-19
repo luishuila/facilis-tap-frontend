@@ -1,0 +1,88 @@
+<ion-header [translucent]="true">
+  <ion-toolbar class="toolbar-main">
+    <ion-title>Gestión de Proveedor</ion-title>
+  </ion-toolbar>
+
+  <ion-toolbar class="toolbar-segment">
+    <ion-segment [(ngModel)]="selectedSegment" (ionChange)="segmentChanged($event)" class="tab-segment">
+      <!-- Datos: solo visible mientras NO esté todo válido -->
+      <ion-segment-button *ngIf="!canOpenProvider" value="first">
+        <ion-icon name="person-circle-outline"></ion-icon>
+        <ion-label>Datos</ion-label>
+      </ion-segment-button>
+
+      <ion-segment-button value="register" [disabled]="!canOpenProvider">
+        <ion-icon name="briefcase-outline"></ion-icon>
+        <ion-label>Proveedor</ion-label>
+      </ion-segment-button>
+      <!-- -->
+      <ion-segment-button value="addressProvider"  [disabled]="!canOpenProvider || !providerIdCreated ">
+        <ion-icon name="navigate-outline"></ion-icon>
+        <ion-label>Dirección</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+
+  <!-- Sub-segment solo si aún se muestran “Datos” -->
+  <ion-toolbar *ngIf="selectedSegment === 'first' && !canOpenProvider " class="toolbar-subsegment">
+    <ion-segment [(ngModel)]="subSegment" class="tab-subsegment">
+      <ion-segment-button value="usersId">
+        <ion-label>Usuario</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="addressId">
+        <ion-label>Dirección</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="profile-content" [fullscreen]="true">
+  <div class="tab-content">
+
+    <!-- Datos personales: solo si NO está todo válido -->
+    <ng-container *ngIf="selectedSegment === 'first' && !canOpenProvider">
+      <div *ngIf="subSegment === 'usersId'">
+        <app-update-users-information
+          *ngIf="isUserReady"
+          [userForm]="userForm"
+          [genderOptions]="genderOptions"
+          (userSaved)="onUserSaved($event)">
+        </app-update-users-information>
+      </div>
+
+      <div *ngIf="subSegment === 'addressId'">
+        <app-address-form
+          *ngIf="isAddressReady"
+          [addressForm]="addressForm"
+          [propertyType]="propertyType"
+          [isDisabled]="false"
+          [isUpdate]="!!addressId"  
+          (addressSaved)="onAddressSaved($event)">
+        </app-address-form>
+      </div>
+    </ng-container>
+
+    <!-- Registrar proveedor -->
+    <ng-container *ngIf="selectedSegment === 'register'">
+      <app-provider-form
+        [providerForm]="providerForm"
+        [isDisabled]="false"
+        [independent]="independent"
+         [isUpdate]="!!providerId" 
+        (providerSaved)="onProviderFormSubmit($event)">
+      </app-provider-form>
+    </ng-container>
+
+    <!-- Dirección proveedor  -->
+    <ng-container *ngIf="selectedSegment === 'addressProvider'">
+      <app-address-form
+        [addressForm]="addressProviderForm"
+        [propertyType]="propertyType"
+        [isDisabled]="addProveder"
+        [isUpdate]="!!addressIdProvider"  
+        (addressSaved)="onProviderAddressSubmit($event)">
+      </app-address-form>
+    </ng-container>
+
+  </div>
+</ion-content>

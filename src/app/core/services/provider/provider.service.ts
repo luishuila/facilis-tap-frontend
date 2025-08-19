@@ -30,15 +30,20 @@ export class ProviderService {
       map((response:ApiResponse<ProviderDto>) => response.data) 
     );
   }
-  findOne(id: string): Observable<UserDto> {
+  findOne2(id: string): Observable<UserDto> {
     return this.http.get<ApiResponse<UserDto>>(`${this.apiUrl}user/${id}`).pipe(
       map((response:ApiResponse<UserDto>) => response.data) 
     );
+  
   }
-
-  update(id: string, data: UserUpdateI): Observable<UserDto> {
-    return this.http.put<ApiResponse<UserDto>>(`${this.apiUrl}user/${id}`, data).pipe(
-      map((response: ApiResponse<UserDto>) => response.data)
+  findOne(id: string): Observable<ProviderDto> {
+    return this.http.get<ApiResponse<ProviderDto>>(`${this.apiUrl}providers/${id}`).pipe(
+      map((response:ApiResponse<ProviderDto>) => response.data) 
+    );
+  }
+  update(id: string, data: ProviderCreateDto): Observable<ProviderCreateDto> {
+    return this.http.put<ApiResponse<ProviderCreateDto>>(`${this.apiUrl}providers/${id}`, data).pipe(
+      map((response: ApiResponse<ProviderCreateDto>) => response.data)
     );
   }
   updateImage(avanta: any, cova: any, id?: number): Observable<any> {

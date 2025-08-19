@@ -43,13 +43,14 @@ const routes: Routes = [
         path: 'employee-independent',
         loadChildren: () => import('../../features/employee/employee-independent/employee-independent.module').then( m => m.EmployeeIndependentPageModule)
       },
+
       {
-        path: 'admin',
-        loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
+        path: 'provider-admin',
+        loadChildren: () => import('../../features/provider/provider-admin/provider-admin.module').then(m => m.ProviderAdminPageModule)
       },
       {
-        path: 'admin-edite/:id',
-        loadChildren: () => import('../../features/administrator/administrator-menu/administrator-menu.module').then(m => m.AdministratorMenuPageModule)
+        path: 'provider-admin/:providerId',
+        loadChildren: () => import('../../features/provider/provider-admin/provider-admin.module').then(m => m.ProviderAdminPageModule)
       },
       {
         path: 'settings',

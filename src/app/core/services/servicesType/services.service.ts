@@ -20,7 +20,7 @@ export class ServicesService {
 
 
   findOne(id: number): Observable<any[]> {
-    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}servicesType/one-all/${id}`).pipe(
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}service/one-all/${id}`).pipe(
       map((response: ApiResponse<any[]>) => response.data)
     );
   }

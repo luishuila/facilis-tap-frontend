@@ -1,0 +1,48 @@
+<ion-list lines="none" class="tag-list" *ngIf="items?.length">
+  <ion-card *ngFor="let it of items; trackBy: trackById" class="tag-card ion-activatable" (click)="onSelect(it)">
+    <!-- Header -->
+    <div class="header">
+      <div class="media">
+        <div class="thumb" *ngIf="read(it, fieldMap.imgUrl) as src">
+          <img [src]="src" alt="thumb" (error)="onThumbError($event)" />
+        </div>
+
+
+        <div class="meta">
+          <div class="tag">{{ read(it, fieldMap.name) }}</div>
+          <div class="id" *ngIf="read(it, fieldMap.id) as idv">
+            <span class="muted">{{ labels.id || 'id' }}:</span> {{ idv }}
+          </div>
+        </div>
+      </div>
+
+      <ion-button *ngIf="showChevron" fill="clear" size="small" class="chevron-btn" aria-label="Abrir detalle"
+        (click)="onChevron(it, $event)">
+        <ion-icon slot="icon-only" name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Body -->
+    <div class="body">
+      <div class="row" *ngIf="read(it, fieldMap.description) as description">
+        <span class="row-label" *ngIf="labels.description">{{ labels.description }}:</span>
+        <span class="row-value">{{ description }}</span>
+      </div>
+     <div class="row" *ngIf="read(it, fieldMap.text) as text">
+        <span class="row-label" *ngIf="labels.text">{{ labels.text }}:</span>
+        <span class="row-value">{{ text }}</span>
+      </div>
+      <!-- Acciones -->
+      <div class="actions" *ngIf="actions?.length" role="group" aria-label="Acciones">
+        <fac-btn *ngFor="let a of actions" [label]="a.label || ''" [icon]="a.icon || ''" [iconEnd]="a.iconEnd || ''"
+          [variant]="a.variant || 'outline'" [size]="a.size || 'small'" [color]="a.color || 'primary'"
+          [neutral]="a.neutral || false" [customClass]="a.customClass || 'pill'" [expand]="'default'"
+          (clicked)="onActionClick(a, it)"></fac-btn>
+      </div>
+    </div>
+
+    <ion-ripple-effect></ion-ripple-effect>
+  </ion-card>
+</ion-list>

@@ -1,0 +1,147 @@
+/* Lista sobre fondo suave definido en tus variables */
+.tag-list {
+  padding: 8px 10px 16px;
+  background: var(--background, #eeeeee);
+}
+
+/* Card con look nativo según plataforma */
+.tag-card {
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    0 1px 2px rgba(0,0,0,.06),
+    inset 0 0 0 1px rgba(0,0,0,.05);
+  padding: 12px;
+
+  /* Android (Material) un poco más recto y con sombra un toque más marcada */
+  :host-context(.md) & {
+    border-radius: 12px;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,.08),
+      inset 0 0 0 1px rgba(0,0,0,.06);
+  }
+
+  /* iOS más soft y redondeado */
+  :host-context(.ios) & {
+    border-radius: 16px;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.05);
+  }
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--ion-color-light-gray, #F4F4F8);
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+}
+
+/* Texto con tu paleta */
+.meta {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+
+  .tag {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--ion-color-primary, #1DAEFF);
+  }
+
+  .id {
+    margin-top: 2px;
+    font-size: 14px;
+    color: var(--ion-color-medium, #6b6b6b);
+  }
+}
+
+/* Separador fino usando tu gris claro */
+.divider {
+  height: 1px;
+  margin: 10px 0 12px;
+  background:
+    color-mix(in oklab, var(--ion-color-light-gray, #F4F4F8) 70%, #0000);
+}
+
+/* Cuerpo */
+.body .row {
+  font-size: 14px;
+  color: var(--ion-color-medium, #6b6b6b);
+  margin-bottom: 8px;
+}
+
+/* Estado pressed con la primaria (respetando tu variable) */
+.tag-card.ion-activated {
+  filter: brightness(.98);
+  box-shadow:
+    0 0 0 2px color-mix(in oklab, var(--ion-color-primary) 18%, transparent),
+    0 1px 2px rgba(0,0,0,.06),
+    inset 0 0 0 1px rgba(0,0,0,.05);
+}
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chevron-btn {
+  /* tap target cómodo y look nativo */
+  --padding-start: 6px;
+  --padding-end: 6px;
+  --background: transparent;
+  --ripple-color: var(--ion-color-medium, #6b6b6b);
+  width: 32px;
+  height: 32px;
+
+  ion-icon {
+    font-size: 22px;
+    color: var(--ion-color-medium, #bdbdbd); /* gris como en tu imagen */
+  }
+}
+
+.chevron-btn:focus-visible {
+  outline: 2px solid color-mix(in oklab, var(--ion-color-primary) 40%, transparent);
+  outline-offset: 2px;
+  border-radius: 50%;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.pill {
+  --border-radius: 9999px;
+  --padding-start: 12px;
+  --padding-end: 12px;
+  --background: var(--ion-color-primary);
+  --border-color: var(--ion-color-primary);
+}
+
+/* Ajustes sutiles por plataforma */
+:host-context(.md) .pill {
+  --border-radius: 12px;
+}

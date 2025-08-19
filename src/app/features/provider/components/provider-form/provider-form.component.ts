@@ -18,6 +18,7 @@ export class ProviderFormComponent implements OnInit {
   @Input() providerForm!: FormGroup;
   @Input() isDisabled: boolean = false;
   @Input() independent: boolean = true;
+  @Input() isUpdate: boolean = false;
 
   /** Emite todo el payload listo para enviar (incluye archivos si existen) */
   @Output() providerSaved = new EventEmitter<{
@@ -46,6 +47,7 @@ export class ProviderFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.categoryService.findAllCategory().subscribe(data => {
+      console.log('Categorías cargadas-->:', data);
       this.selectModal = data || [];
     });
   }

@@ -14,6 +14,7 @@ export class AddressService {
   constructor(private http: HttpClient) {}
 
   post(data: AddressUdpatedDtoI): Observable<AddressDtoI[]> {
+    console.log('AddressService post data:', data);
     return this.http.post<ApiResponse<AddressDtoI[]>>(`${this.apiUrl}address`, data).pipe(
       map((response: ApiResponse<AddressDtoI[]>) => response.data)
     );
@@ -39,6 +40,7 @@ export class AddressService {
   
 
   update(id: number | null | undefined, data: AddressUdpatedDtoI): Observable<AddressDtoI[]> {
+
     return this.http.put<ApiResponse<AddressDtoI[]>>(`${this.apiUrl}address/${id}`, data).pipe(
       map((response: ApiResponse<AddressDtoI[]>) => response.data)
     );

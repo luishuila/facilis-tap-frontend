@@ -1,11 +1,11 @@
 /* Base */
 .native-button{
-  --border-radius:14px;
+  --border-radius: 9999px; /* píldora */
   --padding-top:12px; --padding-bottom:12px;
   --padding-start:20px; --padding-end:20px;
 
   font-weight:600; font-size:16px; text-transform:none; letter-spacing:.2px;
-  transition:transform .06s ease, box-shadow .15s ease, filter .15s ease;
+  transition: transform .06s ease, filter .15s ease;
 
   .label{ display:inline-flex; align-items:center; }
   ion-icon{ font-size:20px; }
@@ -26,56 +26,48 @@
   font-size:17px; ion-icon{ font-size:22px; }
 }
 
-/* iOS (clean, sin sombra) */
-:host-context(.ios) .native-button{
-  --border-radius:14px; --box-shadow:none;
-  &.button-solid{
-    --background: var(--ion-color-primary);
-    --background-activated: var(--ion-color-primary-shade);
-    --color: var(--ion-color-primary-contrast);
-  }
-  &.button-outline{
-    --border-width:2px; --border-color: var(--ion-color-primary);
-    --color: var(--ion-color-primary); --background: transparent;
-  }
-  &.button-clear{ --color: var(--ion-color-primary); }
-  &:focus-visible{ outline:0; box-shadow:0 0 0 3px color-mix(in srgb,var(--ion-color-primary) 22%, transparent); }
-  &[disabled]{ opacity:.4; }
+/* ===== SOLID (igual a “Actualizar”) ===== */
+.native-button.button-solid{
+  --background: var(--ion-color-primary);
+  --background-activated: var(--ion-color-primary-shade);
+  --color: var(--ion-color-primary-contrast, #fff);
+  --box-shadow: none;  /* como la captura */
+}
+.native-button.button-solid ion-icon,
+.native-button.button-solid ion-spinner { color: currentColor; }
+
+/* ===== OUTLINE dinámico =====
+   - respeta el [color] y la clase .is-neutral
+   - borde del color del texto
+*/
+.native-button.button-outline{
+  --border-width: 2px;
+  --background: transparent;
+  --border-color: currentColor;           /* coincide con el color del texto */
+  --ripple-color: color-mix(in oklab, currentColor 18%, transparent);
 }
 
-/* Android (Material 3 vibe) */
-:host-context(.md) .native-button{
-  --border-radius:8px; /* más Material */
-  font-weight:500; letter-spacing:.1px;
-
-  &.button-solid{
-    --background: var(--ion-color-primary);              /* #5A7D92 */
-    --background-activated: var(--ion-color-primary-shade);
-    --color: var(--ion-color-primary-contrast);
-    --box-shadow:
-      0 1px 3px rgba(0,0,0,.26),
-      0 4px 8px rgba(0,0,0,.14);
-    --ripple-color: rgba(255,255,255,.16);
-  }
-  &.button-outline{
-    --border-width:1px; --border-color: var(--ion-color-primary);
-    --color: var(--ion-color-primary); --background: transparent;
-    --ripple-color: color-mix(in srgb, var(--ion-color-primary) 22%, transparent);
-  }
-  &.button-clear{
-    --color: var(--ion-color-primary);
-    --ripple-color: color-mix(in srgb, var(--ion-color-primary) 26%, transparent);
-  }
-
-  &:focus-visible{ outline:0; box-shadow:0 0 0 3px color-mix(in srgb,var(--ion-color-primary) 20%, transparent); }
-  &[disabled]{ opacity:.5; --box-shadow:none; }
+/* CLEAR (por si lo usas) */
+.native-button.button-clear{
+  --color: var(--ion-color-primary);
+  font-weight:600;
 }
 
-/* Ajustes variantes */
-.native-button.button-outline{ /* borde ya forzado arriba */ }
-.native-button.button-clear{ font-weight:600; }
+/* Estado tap / focus */
+.native-button.ion-activated{ filter: brightness(.96); }
+.native-button:focus-visible{
+  outline: 0;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ion-color-primary) 22%, transparent);
+}
 
-/* Safe area (footers en iPhone) */
-:host-context(.ios) .native-button.in-safe-area{
-  padding-bottom: calc(var(--padding-bottom,12px) + env(safe-area-inset-bottom,0));
+/* iOS/Android mantienen píldora */
+:host-context(.ios) .native-button{ --border-radius: 9999px; }
+:host-context(.md)  .native-button{ --border-radius: 9999px; --box-shadow: none; }
+
+/* ===== Neutral helper (quita azul sin tocar tema) =====
+   Funciona mejor en variant="outline"
+*/
+.native-button.is-neutral{
+  --color: var(--ion-color-medium);       /* texto gris */
+  /* el borde ya toma currentColor → gris */
 }

@@ -18,14 +18,15 @@ import { TypeItem } from 'src/app/core/models/util/util';
 import { roleEnum } from 'src/app/core/constant/enum';
 import { Subscription, take } from 'rxjs';
 import { AddressCreate } from 'src/app/core/models/address/create-address.model';
+import { data } from 'dom7';
 
 @Component({
-  selector: 'app-administrator-menu',
-  templateUrl: './administrator-menu.page.html',
-  styleUrls: ['./administrator-menu.page.scss'],
+  selector: 'app-provider-admin',
+  templateUrl: './provider-admin.page.html',
+  styleUrls: ['./provider-admin.page.scss'],
   standalone: false
 })
-export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLeave {
+export class ProviderAdminPage implements OnInit, ViewWillEnter, ViewWillLeave {
   // Tabs
   selectedSegment: 'first' | 'register' | 'addressProvider' = 'first';
   subSegment: 'usersId' | 'addressId' = 'usersId';
@@ -45,10 +46,11 @@ export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLea
 
   // Data
   addressId: number | null = 0;
+  addressIdProvider: number | null = 0;
   propertyType: TypeItem<string>[] | [] = [];
   genderOptions = genderObject;
   user!: UserDto;
-
+  providerId: number | undefined | null = null;
   // Proveedor
   dataProvider: ProviderCreate = new ProviderCreate();
   imgFile: File | null = null;
@@ -73,6 +75,7 @@ export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLea
     private genericService: GenericServiceService
   ) {
     this.independent = !usersData().validateRoles(roleEnum.INDEPENDENT);
+
   }
 
   // Construye formularios UNA vez
@@ -82,9 +85,59 @@ export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLea
 
   // 👉 Se dispara CADA VEZ que entras a la página
   async ionViewWillEnter() {
+    this.buildForms();
+    this.providerId = this.toNumber(this.route.snapshot.paramMap.get('providerId'));
+    console.log('Provider ID:', this.providerId);
+
     await this.reloadAll();
+    if (this.providerId) {
+      this.providerIdCreated = this.providerId;
+      await this.findOneProvider(this.providerId ? String(this.providerId) : null);
+    }
+
   }
 
+  private findOneProvider(providerId: string | null = '') {
+    this.providerService.findOne(providerId ?? '0').pipe(take(1)).subscribe({
+      next: (data: ProviderDto) => {
+        console.log('Provider data:', data);
+        if (!data) return;
+        this.providerForm.reset();
+        this.providerForm.patchValue({
+          ...data,
+          categories: data.categories?.map(c => c.id) ?? [],
+          independent: !usersData().validateRoles(roleEnum.INDEPENDENT),
+        });
+
+        this.addressProviderForm.reset();
+
+        const address = (data.addresses?.[0] ?? {}) as Partial<AddressDtoI>;
+        this.addressIdProvider = data.addresses?.[0]?.id ?? 0;
+        console.log('address.cityStates?.id --->:', address.cityStates);
+        this.addressProviderForm.patchValue({
+          ...address,
+          countryCode: address.countryCode ?? '',
+          stateCode: address.stateCode ?? '',
+          cityStates: address.cityStates?.id ?? null,
+          lat: address.lat ?? '',
+          lon: address.lon ?? '',
+          street: address.street ?? '',
+        });
+      },
+      error: (e) => console.error('Error cargando proveedor', e),
+      complete: () => {
+        this.isLoading = false;
+        this.refreshValidityAndGating(true);
+      }
+    })
+  }
+
+
+  private toNumber(value: string | null): number | null {
+    if (value == null) return null;
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
   // Limpia subs/flags si sales
   ionViewWillLeave() {
     this.sub.unsubscribe();
@@ -283,7 +336,55 @@ export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLea
     this.imgFile = event?.avatarFile ?? null;
     this.fileCova = event?.fileItems ?? null;
     this.dataProvider = new ProviderCreate({ ...(event?.data ?? {}), userId: usersData().id });
-    this.createProvider(this.dataProvider);
+    if (this.providerForm.invalid) {
+      this.providerForm.markAllAsTouched();
+      return;
+    }
+
+    const base = new ProviderCreate({
+      ...(event?.data ?? {}),
+      userId: usersData().id
+    });
+
+
+    if (this.providerId) {
+      this.updateProvider(this.providerId, base);
+    } else {
+      this.createProvider(base);
+    }
+  }
+  private updateProvider(providerId: number, provider: ProviderCreateDto) {
+    if (!this.canOpenProvider) return;
+
+    const payload = new ProviderCreate({ ...provider, userId: usersData().id });
+    this.addProveder = true;
+    delete payload.addresses;
+    this.providerService.update(this.providerId?.toString() ?? '', payload)
+      .pipe(take(1))
+      .subscribe({
+        next: (response: ProviderDto) => {
+          this.providerIdCreated = response.id ?? providerId;
+
+          if (this.imgFile || this.fileCova) {
+            this.providerService.updateImage(this.imgFile as any, this.fileCova as any, this.providerIdCreated)
+              .pipe(take(1))
+              .subscribe({
+                next: () => this.afterProviderCreated(this.providerIdCreated),
+                error: () => this.afterProviderCreated(this.providerIdCreated),
+              });
+          } else {
+            this.afterProviderCreated(this.providerIdCreated);
+          }
+        },
+        error: (err) => {
+          console.error('Error actualizando proveedor', err);
+          this.addProveder = false;
+        }
+      });
+
+    if (this.providerId) {
+      // this.router.navigate([`navigation/provider`]);
+    }
   }
 
   private createProvider(provider: ProviderCreateDto) {
@@ -334,9 +435,20 @@ export class AdministratorMenuPage implements OnInit, ViewWillEnter, ViewWillLea
       return;
     }
     const payload = new AddressCreate({ ...(addressProvider ?? this.addressProviderForm.getRawValue()) });
-    payload.providerId =  this.providerIdCreated ;
-    this.addressService.post(payload).pipe(take(1)).subscribe();
-    if (this.providerIdCreated) this.router.navigate([`navigation/services/${this.providerIdCreated}`]);
+    payload.providerId = this.providerId ?? this.providerIdCreated;
+    // this.addressService.post(payload).pipe(take(1)).subscribe();
+
+    console.log('this.payload--->:', payload);
+    this.addressIdProvider && this.addressIdProvider !== 0
+      ? this.addressService.update(this.addressIdProvider, payload).subscribe(data => { console.log('Address updated:', data); })
+      : this.addressService.post(payload).subscribe(data => { console.log('Address updated:', data); });
+    if (!this.providerId) {
+      if (this.providerIdCreated) this.router.navigate([`navigation/services/${this.providerIdCreated}`]);
+    } else {
+      this.router.navigate([`navigation/provider`]);
+    }
+
+
   }
 
   onSegment(value: 'first' | 'register' | 'addressProvider') {

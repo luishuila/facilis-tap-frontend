@@ -174,6 +174,7 @@ export class HomePage implements ViewWillLeave, ViewWillEnter {
     this.homeService.getHome(this.lat, this.lon, this.page, this.limit, this.categoryId, this.subcategoryId)
       .subscribe({
         next: (data: any) => {
+          console.log('Datos cargados:', data);
           const newItems = Array.isArray(data?.items) ? data.items : [];
           this.items = this.page === 1 ? newItems : [...this.items, ...newItems];
 

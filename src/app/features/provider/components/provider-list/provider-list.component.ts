@@ -92,6 +92,7 @@ export class ProviderListComponent implements OnInit {
   onRegisterService(item: ProviderDto, ev?: Event) {
     ev?.stopPropagation();
     console.log('Registrar servicio', item);
+      this.router.navigate([`navigation/services/${item.id}`]);
     // TODO
   }
 
